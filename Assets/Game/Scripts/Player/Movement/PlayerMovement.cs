@@ -4,11 +4,14 @@ namespace NuevaAndinia.Movement
 {
     using NuevaAndinia.Animation;
     using NuevaAndinia.Audio;
+    using NuevaAndinia.Controller;
     using NuevaAndinia.Core;
     using NuevaAndinia.Inputs;
+    using NuevaAndinia.Defeat;
+    using UnityEngine.UIElements;
 
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerMovement : MonoBehaviour
     {
         [Header("Movement Configuration")]
         private float moveSpeed = 2.0f;  // caminar
@@ -33,8 +36,10 @@ namespace NuevaAndinia.Movement
 
         private InputProvider _input;
         private PersonAnimationController _anim;
+        private PlayerController _playerController;
         private CharacterController _controller;
         private Camera _mainCamera;
+        private DefeatScreen defeatScreen;
 
         private float _speed;
         private float _animationBlend;
@@ -54,6 +59,8 @@ namespace NuevaAndinia.Movement
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<InputProvider>();
             _anim = GetComponent<PersonAnimationController>();
+            _playerController = GetComponent<PlayerController>();
+            defeatScreen = FindAnyObjectByType<DefeatScreen>();
 
             _mainCamera = Camera.main;
         }
@@ -223,6 +230,17 @@ namespace NuevaAndinia.Movement
 
             if (_verticalVelocity < _terminalVelocity)
                 _verticalVelocity += gravity * Time.deltaTime;
+        }
+        public void Death()
+        {
+            _playerController.vida = 0;
+            //_playerController.energy = 0;
+            //_anim?.SetDeath(true);
+            Debug.Log("se ejecuto la animacion");
+            _speed = 0f;
+            defeatScreen.Derrota.style.display = DisplayStyle.Flex;
+            Time.timeScale = 0f;
+
         }
     }
 }
