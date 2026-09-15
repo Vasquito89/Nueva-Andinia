@@ -61,7 +61,7 @@ public class MenuManager : MonoBehaviour
 
     public void StartMatchScene()
     {
-        SceneManager.LoadScene("ProBuilder");
+        SceneManager.LoadScene("Nivel");
     }
 
     public void StartOptionScene()
