@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/ButtonMenuPpal.uss?fileID=7433441132597879392&amp;guid=a8a18352365d1df4ab0d906fa2d79b08&amp;type=3#ButtonMenuPpal"/>
     <ui:VisualElement style="flex-grow: 1;">
-        <ui:VisualElement style="flex-grow: 1; background-color: rgb(38, 38, 38);">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgb(38, 38, 38); align-items: flex-start;">
             <ui:Button text="JUGAR" name="PlayButton" class="selection" style="position: absolute; top: 380px; left: 353px;"/>
             <ui:Button text="SALIR" name="ExitButton" class="selection" style="position: absolute; left: 353px; top: 449px;"/>
             <ui:Label text="nueva andinia" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Brush%20King.otf?fileID=12800000&amp;guid=64f16823e292293419fd4a33eaedfef7&amp;type=3#Brush King&quot;); color: rgb(171, 165, 165); font-size: 36px; position: absolute; top: 46px; left: 327px;"/>
