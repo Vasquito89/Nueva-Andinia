@@ -20,7 +20,7 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private InputActionAsset inputActions;
     private InputAction pauseAction;
 
-    public float end = 180f;
+    //public float end = 180f;
     private bool isPlaying = false;
 
     void Awake()
@@ -95,6 +95,6 @@ public class PauseMenuController : MonoBehaviour
     private void QuitToMainMenu()
     {
         Time.timeScale = 1f; // Restablecer siempre el tiempo antes de cambiar de escena
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Menu");
     }    
 }

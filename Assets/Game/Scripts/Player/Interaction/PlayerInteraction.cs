@@ -53,7 +53,7 @@ public class PlayerInteraction : MonoBehaviour
         if(_input)
         {
             Debug.Log("acceso a cargar agua");
-            _playerController.StartWaterFill();
+            //_playerController.StartWaterFill();
         }
     }
 

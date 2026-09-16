@@ -9,14 +9,9 @@ namespace NuevaAndinia.Controller
 
     public class PlayerController : MonoBehaviour
     {
-        [Header("Estado del Balde")]
-        public bool CubetaVacia = false;
-        public bool CargandoAgua = false;
-        public bool PuedeUsarAgua = false;
-
         [Header("Player Stats & Water")]
         public int vida = 20;
-        public float energy = 200;
+        /*public float energy = 200;
         [SerializeField] private float timeInvulnerable = 5f;
         public bool EstaCercaDelFuego = false;
         public bool estaCercaDeFruta = false;
@@ -26,7 +21,7 @@ namespace NuevaAndinia.Controller
         public int waterMax = 30;
 
         public GameObject bucket;
-        public GameObject waterBucket;
+        public GameObject waterBucket;*/
 
         private InputProvider _input;
         private PlayerMovement _playerMovement;
@@ -38,7 +33,7 @@ namespace NuevaAndinia.Controller
             _playerMovement = GetComponent<PlayerMovement>();
             _pauseMenuController = FindAnyObjectByType<PauseMenuController>();
         }
-        private void Start()
+        /*private void Start()
         {
             PuedeUsarAgua = false;
         }
@@ -144,6 +139,6 @@ namespace NuevaAndinia.Controller
             invulnerable = true;
             yield return new WaitForSeconds(timeInvulnerable);
             invulnerable = false;
-        }
+        }*/
     }
 }
