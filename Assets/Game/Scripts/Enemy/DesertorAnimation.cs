@@ -24,8 +24,8 @@ public class DesertorAnimation : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
-        SetAnimation("Muerte");
-        animator.SetTrigger("Muerte");
+        SetAnimation("Death");
+        animator.SetTrigger("Death");
 
         // Destruir el objeto tras 3 segundos de reproducir la muerte
         Destroy(gameObject, 3f);

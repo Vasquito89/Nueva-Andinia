@@ -12,17 +12,17 @@ public class HudController : MonoBehaviour
     private VisualElement Derrota;
     private VisualElement Victoria;
     private Label vidaPlayer;
-    private Label tiempoFuego;
-    private Label advertenciaLabel;
-    private Label vidaFuegoLabel;
-    private Label tiempoVidaLabel;
-    private Label energyLabel;
-    private Label waterLabel;
+    //private Label tiempoFuego;
+    //private Label advertenciaLabel;
+    //private Label vidaFuegoLabel;
+    //private Label tiempoVidaLabel;
+    //private Label energyLabel;
+    //private Label waterLabel;
 
     [SerializeField] private PlayerController player;
     private PlayerMovement playerMove;
 
-    public float end = 180f;
+    //public float end = 180f;
 
     private bool isPlaying = false;
 
@@ -45,8 +45,8 @@ public class HudController : MonoBehaviour
         Derrota.style.display = DisplayStyle.None;
         Victoria.style.display = DisplayStyle.None;
 
-        vidaPlayer = rootVisualElement.Q<Label>("VidaLabel");
-        tiempoFuego = rootVisualElement.Q<Label>("TiempoLabel");
+        vidaPlayer = rootVisualElement.Q<Label>("LifeLbl");
+        /*tiempoFuego = rootVisualElement.Q<Label>("TiempoLabel");
         advertenciaLabel = rootVisualElement.Q<Label>("AdvertenciaLabel");
         vidaFuegoLabel = rootVisualElement.Q<Label>("VidaFuegoLabel");
         tiempoVidaLabel = rootVisualElement.Q<Label>("TiempoVidaLabel");
@@ -62,7 +62,7 @@ public class HudController : MonoBehaviour
         if (tiempoVidaLabel != null)
         {
             isPlaying = true;
-        }
+        }*/
     }
 
     private void Update()
@@ -72,7 +72,7 @@ public class HudController : MonoBehaviour
         string vida = "Vida restante :";
         vidaPlayer.text = vida + vidaRestante;
 
-        energyLabel.text = "Energia :" + player.energy;
+        /*energyLabel.text = "Energia :" + player.energy;
 
         waterLabel.text = "Cantidad de Agua :" + player.water;
 
@@ -93,9 +93,9 @@ public class HudController : MonoBehaviour
                 LogicaTiempoTerminado();
                 playerMove.Death();
             }
-        }
+        }*/
     }
-    void ActualizarTexto(float tiempoEnSegundos)
+    /*void ActualizarTexto(float tiempoEnSegundos)
     {
         if (tiempoEnSegundos < 0f) tiempoEnSegundos = 0f;
 
@@ -110,5 +110,5 @@ public class HudController : MonoBehaviour
     void LogicaTiempoTerminado()
     {
         Debug.Log("¡Tiempo agotado!");
-    }
+    }*/
 }

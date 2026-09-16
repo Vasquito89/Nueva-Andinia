@@ -13,6 +13,8 @@ namespace NuevaAndinia.Inputs
         public bool JumpRequested { get; private set; }
         public bool SprintRequested { get; private set; }
         public bool AnalogMovement { get; private set; }
+        public bool AgarrarRequested { get; private set; }
+        public bool DatosRequested { get; private set; }
 
         private float sprintHoldTime = 0f;
         private const float sprintThreshold = 0.25f; // tiempo para activar sprint
@@ -50,6 +52,14 @@ namespace NuevaAndinia.Inputs
                 SprintRequested = false;
             }
         }
+        public void OnAgarrar(InputValue value)
+        {
+            AgarrarRequested = value.Get<float>() > 0.5f;
+        }
+        public void OnDatos(InputValue value)
+        {
+            DatosRequested = value.Get<bool>();
+        }
 
         private void Update()
         {
@@ -68,5 +78,8 @@ namespace NuevaAndinia.Inputs
         }
         public void ConsumeSprint()
         { SprintRequested = false; }
+
+        public void ConsumeAgarrar() { AgarrarRequested = false; }
+        public void ConsumeDatos() { DatosRequested = false; }
     }
 }
