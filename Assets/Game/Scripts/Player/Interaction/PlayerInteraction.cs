@@ -44,16 +44,9 @@ public class PlayerInteraction : MonoBehaviour
     private void Update()
     { 
         businessRaycast();
-        //if (_input.SecarRequested || _input.EatRequested)
-        if (_input)
+        if (_input.AgarrarRequested || _input.DatosRequested)
         {
             OnInteractInput();
-        }
-        //if(_input.BaldeRequested && _playerController.ICanCarryWater())
-        if(_input)
-        {
-            Debug.Log("acceso a cargar agua");
-            //_playerController.StartWaterFill();
         }
     }
 
@@ -86,10 +79,10 @@ public class PlayerInteraction : MonoBehaviour
             Debug.Log("Pulsaste la tecla para interactuar");
             _currentInteractable.Interact(_playerController);
 
-            //if(gameObject.CompareTag("Fire"))
-            //_input.ConsumeSecar();
-            //else if (gameObject.CompareTag("Frutapala") || gameObject.CompareTag("Murtilla"))
-            //_input.ConsumeEat();
+            if (gameObject.CompareTag("Pendrive"))
+                _input.ConsumeAgarrar();
+            else if (gameObject.CompareTag("Computer"))
+                _input.ConsumeDatos();
             //else if(gameObject.CompareTag("Murtilla"))
             //_input.ConsumeEat();
         }

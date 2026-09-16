@@ -4,9 +4,17 @@
             <ui:Button text="reanudar" name="ResumeButton" style="position: absolute; font-size: 29px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); width: 300px; height: 50px; top: 330px; left: 355px;"/>
             <ui:Button text="salir" name="QuitButton" style="left: 355px; position: absolute; top: 380px; width: 300px; height: 50px; font-size: 29px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;);"/>
         </ui:VisualElement>
-        <ui:VisualElement name="HUDVE" style="flex-grow: 1;">
+        <ui:VisualElement name="HUDVE" style="flex-grow: 1; display: none;">
             <ui:Label text="Label" name="LifeLbl" style="height: 40px; width: 200px; position: absolute; top: 23px; left: 22px; font-size: 28px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); color: rgb(183, 183, 183); -unity-text-outline-width: 1px; -unity-text-outline-color: rgb(0, 0, 0);"/>
             <ui:Label text="Label" name="PromptLabel" style="position: absolute; background-color: rgb(108, 108, 108); width: 400px; height: 50px; top: 219px; left: 41px; font-size: 28px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); -unity-text-align: middle-left;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="DerrotaVE" style="flex-grow: 1; width: 1024px; height: 768px; min-width: 1024px; min-height: 768px; max-width: 1024px; max-height: 768px; display: flex;">
+            <ui:Label text="Perdiste!" style="top: 118px; left: 360px; width: 200px; height: 50px; font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;);"/>
+            <ui:Button text="menu" name="MenuButton" style="top: 453px; left: 647px; width: 200px; height: 50px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 31px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="VictoriaVE" style="flex-grow: 1; width: 1024px; height: 768px; min-width: 1024px; min-height: 768px; max-width: 1024px; max-height: 768px; display: none;">
+            <ui:Label text="Has ganado!" style="font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); width: 200px; height: 50px; position: absolute; top: 118px; left: 360px;"/>
+            <ui:Button text="Aceptar" name="AceptarButton" style="position: absolute; width: 200px; height: 50px; font-size: 32px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); top: 453px; left: 647px;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

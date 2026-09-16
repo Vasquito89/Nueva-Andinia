@@ -9,8 +9,8 @@ public class HudController : MonoBehaviour
     private VisualElement rootVisualElement;
     private VisualElement pauseVE;
     private VisualElement HUDVE;
-    //private VisualElement Derrota;
-    //private VisualElement Victoria;
+    private VisualElement Derrota;
+    private VisualElement Victoria;
     private Label vidaPlayer;
     //private Label tiempoFuego;
     //private Label advertenciaLabel;
@@ -36,14 +36,14 @@ public class HudController : MonoBehaviour
         rootVisualElement = uiDocument.rootVisualElement;
         pauseVE = rootVisualElement.Q<VisualElement>("PauseVE");
         HUDVE = rootVisualElement.Q<VisualElement>("HUDVE");
-        //Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
-        //Victoria = rootVisualElement.Q<VisualElement>("VictoriaVE");
+        Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
+        Victoria = rootVisualElement.Q<VisualElement>("VictoriaVE");
 
         // Ocultar el menú al iniciar
         pauseVE.style.display = DisplayStyle.None;
         HUDVE.style.display = DisplayStyle.Flex;
-        //Derrota.style.display = DisplayStyle.None;
-        //Victoria.style.display = DisplayStyle.None;
+        Derrota.style.display = DisplayStyle.None;
+        Victoria.style.display = DisplayStyle.None;
 
         vidaPlayer = rootVisualElement.Q<Label>("LifeLbl");
         /*tiempoFuego = rootVisualElement.Q<Label>("TiempoLabel");

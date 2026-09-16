@@ -16,6 +16,8 @@ namespace NuevaAndinia.Animation
         private int _idJump;
         private int _idFreeFall;
         private int _idMotionSpeed;
+        private int _idAscendingStairs;
+        private int _idDeath;
 
         private void Awake()
         {
@@ -31,6 +33,8 @@ namespace NuevaAndinia.Animation
             _idJump = Animator.StringToHash("Jump");
             _idFreeFall = Animator.StringToHash("FreeFall");
             _idMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _idAscendingStairs = Animator.StringToHash("AscendingStairs");
+            _idDeath = Animator.StringToHash("Death");
         }
 
         public void UpdateMovement(float speedBlend, float motionSpeed)
@@ -42,6 +46,8 @@ namespace NuevaAndinia.Animation
         public void SetJump(bool value) => _anim.SetBool(_idJump, value);
         public void SetFreeFall(bool value) => _anim.SetBool(_idFreeFall, value);
         public void SetGrounded(bool value) => _anim.SetBool(_idGrounded, value);
+        public void SetAcendingStay (bool value) => _anim.SetBool(_idAscendingStairs, value);
+        public void SetDeath(bool value) => _anim.SetBool(_idDeath, value);
 
         private void OnFootstep(AnimationEvent evt)
         {

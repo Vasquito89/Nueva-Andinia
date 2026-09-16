@@ -9,6 +9,7 @@ namespace NuevaAndinia.Movement
     using NuevaAndinia.Inputs;
     using NuevaAndinia.Defeat;
     using UnityEngine.UIElements;
+    using System.Collections;
 
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement : MonoBehaviour
@@ -29,6 +30,7 @@ namespace NuevaAndinia.Movement
         private float jumpTimeout = 0.50f;
         private float fallTimeout = 0.15f;
 
+
         [Header("Ground Check")]
         private float groundedOffset = 0.25f;
         private float groundedRadius = 0.28f;
@@ -39,7 +41,10 @@ namespace NuevaAndinia.Movement
         private PlayerController _playerController;
         private CharacterController _controller;
         private Camera _mainCamera;
-        private DefeatScreen defeatScreen;
+
+        private UIDocument uiDocument;
+        private VisualElement rootVisualElement;
+        private VisualElement Derrota;
 
         private float _speed;
         private float _animationBlend;
@@ -60,11 +65,19 @@ namespace NuevaAndinia.Movement
             _input = GetComponent<InputProvider>();
             _anim = GetComponent<PersonAnimationController>();
             _playerController = GetComponent<PlayerController>();
-            defeatScreen = FindAnyObjectByType<DefeatScreen>();
 
             _mainCamera = Camera.main;
         }
+        private void OnEnable()
+        {
+            uiDocument = FindAnyObjectByType<UIDocument>();
+            rootVisualElement = uiDocument.rootVisualElement;
+            if (rootVisualElement != null)
+            {
+                Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
+            }
 
+        }
         private void Start()
         {
             _jumpTimeoutDelta = jumpTimeout;
@@ -99,7 +112,7 @@ namespace NuevaAndinia.Movement
         {
             Vector2 moveInput = _input.MoveInput;
             bool sprint = _input.SprintRequested;
-            
+
 
             float targetSpeed = GetTargetSpeed();
             if (moveInput == Vector2.zero) targetSpeed = 0f;
@@ -161,7 +174,7 @@ namespace NuevaAndinia.Movement
 
             _anim?.UpdateMovement(_animationBlend, inputMagnitude);
 
-            
+
         }
         private float GetTargetSpeed()
         {
@@ -235,10 +248,16 @@ namespace NuevaAndinia.Movement
         {
             _playerController.vida = 0;
             //_playerController.energy = 0;
-            //_anim?.SetDeath(true);
+            _anim?.SetDeath(true);
             Debug.Log("se ejecuto la animacion");
+            StartCoroutine(DeathSeg());
+
+        }
+        IEnumerator DeathSeg()
+        {
+            yield return new WaitForSeconds(3);
             _speed = 0f;
-            defeatScreen.Derrota.style.display = DisplayStyle.Flex;
+            Derrota.style.display = DisplayStyle.Flex;
             Time.timeScale = 0f;
 
         }

@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4884762929914579438}
   - component: {fileID: 2629883653365492385}
-  - component: {fileID: 7613039240374823824}
-  - component: {fileID: 2464465748440886361}
   - component: {fileID: 3313599759425267780}
   - component: {fileID: 1240607767527311188}
+  - component: {fileID: -5487441329522689558}
+  - component: {fileID: 3461841230897004447}
   m_Layer: 0
   m_Name: Desertor
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -59,7 +59,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!136 &7613039240374823824
+--- !u!114 &3313599759425267780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726081620918335318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 902aa07eea385e64b87cda92144d845a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DesertorEnemy
+  speed: 3.5
+  detectionRange: 10
+  raycastDistance: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &1240607767527311188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726081620918335318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 884271063afc9e04cb2366de8f65a2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DesertorAnimation
+  isDead: 0
+--- !u!136 &-5487441329522689558
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,10 +113,10 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 3.73062
+  m_Height: 3.3702912
   m_Direction: 1
-  m_Center: {x: 0, y: 1.910105, z: 0}
---- !u!54 &2464465748440886361
+  m_Center: {x: 0, y: 1.9666169, z: 0}
+--- !u!54 &3461841230897004447
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,42 +141,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 4
+  m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3313599759425267780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1726081620918335318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 902aa07eea385e64b87cda92144d845a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DesertorEnemy
-  speed: 3.5
-  detectionRange: 10
-  raycastDistance: 1.5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 1
---- !u!114 &1240607767527311188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1726081620918335318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 884271063afc9e04cb2366de8f65a2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DesertorAnimation
-  isDead: 0
 --- !u!1001 &7182430660746981751
 PrefabInstance:
   m_ObjectHideFlags: 0
