@@ -43,15 +43,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Change",
-                    "type": "Button",
-                    "id": "a190c4bb-e31f-4808-8676-c135c3f7acc8",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Agarrar",
                     "type": "Button",
                     "id": "e245e16e-2512-47cc-b0b2-fc38e14544bf",
@@ -64,6 +55,15 @@
                     "name": "Datos",
                     "type": "Button",
                     "id": "45b8293c-abd0-4184-87ff-9f79f71bf387",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Puerta",
+                    "type": "Button",
+                    "id": "20add97a-b6ac-414c-9c40-710b7ab7bce6",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -81,50 +81,6 @@
                     "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "2063a8b5-6a45-43de-851b-65f3d46e7b58",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "64e4d037-32e1-4fb9-80e4-fc7330404dfe",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "0fce8b11-5eab-4e4e-a741-b732e7b20873",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "7bdda0d6-57a8-47c8-8238-8aecf3110e47",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "up",
@@ -249,22 +205,11 @@
                 },
                 {
                     "name": "",
-                    "id": "5c352909-52d9-4ff4-9091-a1ea39cbbfb2",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Change",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f58bb4a7-a7f0-4755-9507-32d22d992be7",
                     "path": "<Keyboard>/#(Q)",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardMouse",
                     "action": "Agarrar",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -275,8 +220,19 @@
                     "path": "<Keyboard>/#(E)",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";KeyboardMouse",
                     "action": "Datos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e73da96e-ce42-4208-862d-27e89e040a45",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Puerta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

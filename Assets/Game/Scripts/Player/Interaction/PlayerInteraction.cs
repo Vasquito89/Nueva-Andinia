@@ -8,7 +8,7 @@ using NuevaAndinia.Gameplay;
 public class PlayerInteraction : MonoBehaviour
 {
     [Header("Configuración Raycast")]
-    private float reachDistance = 100.0f;
+    private float reachDistance = 10.0f;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private Transform cameraTransform;
 
@@ -44,7 +44,7 @@ public class PlayerInteraction : MonoBehaviour
     private void Update()
     { 
         businessRaycast();
-        if (_input.AgarrarRequested || _input.DatosRequested)
+        if (_input.AgarrarRequested || _input.DatosRequested || _input.PuertaRequested)
         {
             OnInteractInput();
         }
@@ -79,12 +79,10 @@ public class PlayerInteraction : MonoBehaviour
             Debug.Log("Pulsaste la tecla para interactuar");
             _currentInteractable.Interact(_playerController);
 
-            if (gameObject.CompareTag("Pendrive"))
-                _input.ConsumeAgarrar();
-            else if (gameObject.CompareTag("Computer"))
-                _input.ConsumeDatos();
-            //else if(gameObject.CompareTag("Murtilla"))
-            //_input.ConsumeEat();
+            // Limpia las peticiones de entrada tras interactuar
+            _input.ConsumeAgarrar();
+            _input.ConsumeDatos();
+            _input.ConsumePuerta();
         }
     }
 

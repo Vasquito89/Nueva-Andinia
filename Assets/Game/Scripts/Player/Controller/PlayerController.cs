@@ -31,12 +31,16 @@ namespace NuevaAndinia.Controller
                 RecibirDano(20);
             }
         }
-        
+
         // Métodos de verificación y acción invocados por los scripts interactuables
-        public bool CanUsePendrive() => !hasPendrive;
-        public bool CanTakePendrive() => hasPendrive;
-        
-        
+        public bool CanUsePendrive() => !hasPendrive; // Retorna true si NO tiene pendrive (está libre)
+        public bool CanTakePendrive() => hasPendrive; // Retorna true si SÍ tiene pendrive en el inventario
+
+        // Métodos para CAMBIAR el estado de la variable private
+        public void RecogerPendrive() => hasPendrive = true;
+        public void ConsumirPendrive() => hasPendrive = false;
+
+
         private void RecibirDano(int cantidad)
         {
             vida -= cantidad;

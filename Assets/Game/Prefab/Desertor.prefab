@@ -76,7 +76,7 @@ MonoBehaviour:
   raycastDistance: 10
   groundLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   playerLayer:
     serializedVersion: 2
     m_Bits: 1

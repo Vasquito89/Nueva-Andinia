@@ -9,25 +9,19 @@ public class Pendrive : MonoBehaviour , IInteractable
     [SerializeField] private UIDocument uiDocument;
     private string mensajePrompt = "Presiona [Q] para agarrar";
     private float timePendrive = 2f;
+    private bool agarrado = false;
 
     public string GetInteractPrompt() => mensajePrompt;
 
     public void Interact(PlayerController player)
     {
         // Validamos si el jugador tiene agua lista para usar
-        if (player.CanTakePendrive())
+        if (!agarrado && player.CanUsePendrive())
         {
-            player.CanUsePendrive(); // Agarro el pendrive
-            TakePendrive();           // Aplica el daño al fuego y actualiza la UI
+            agarrado=true;
+            player.RecogerPendrive(); // Agarro el pendrive
+            Debug.Log("Pendrive recogido exitosamente.");
+            Destroy(gameObject);          // Destruccion del pendrive de escena
         }
-    }
-    private void TakePendrive()
-    {
-        StartCoroutine(DestroyPendrive());
-    }
-    IEnumerator DestroyPendrive()
-    {
-        yield return new WaitForSeconds(timePendrive);
-        Destroy(gameObject);
     }
 }

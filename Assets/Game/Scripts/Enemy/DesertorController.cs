@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Video;
 
 public class DesertorController : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class DesertorController : MonoBehaviour
     public float speed = 3.5f;
     public float detectionRange = 10f;
     public float raycastDistance = 1.5f;
+    public int vida = 100;
 
     [Header("Referencias")]
     public LayerMask groundLayer;
@@ -49,7 +51,13 @@ public class DesertorController : MonoBehaviour
             }
         }
     }
-
+    private void OnCollisionStay(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            RecibirDano(20);
+        }
+    }
     void ChasePlayer()
     {
         // Mirar hacia el jugador (solo en el eje Y para evitar inclinaciones)
@@ -73,7 +81,15 @@ public class DesertorController : MonoBehaviour
             desertorAnimation.SetAnimation("Idle");
         }
     }
-    
+    private void RecibirDano(int cantidad)
+    {
+        vida -= cantidad;
+        if (vida <= 0)
+        {
+            desertorAnimation.Morir();
+        }
+
+    }
     private void OnDrawGizmosSelected()
     {
         // Dibujar rango de detección en la escena
