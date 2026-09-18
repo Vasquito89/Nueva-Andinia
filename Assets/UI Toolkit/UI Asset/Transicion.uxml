@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgb(38, 36, 36);">
+        <ui:VisualElement name="TransicionVE" style="flex-grow: 1; width: 1024px; height: 768px; display: none;">
+            <ui:Label text="Label" name="TituloLabel" style="flex-direction: row; font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); color: rgb(149, 146, 146);"/>
+            <ui:Label text="Label" name="ContextoLabel" style="flex-direction: row; font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); color: rgb(149, 146, 146); flex-wrap: wrap;"/>
+            <ui:Label text="Label" name="PersonajeLabel" style="flex-direction: row; font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); color: rgb(149, 146, 146);"/>
+            <ui:Label text="Label" name="MisionLabel" style="flex-direction: row; font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); color: rgb(149, 146, 146);"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="ControlesVE" style="flex-grow: 1; width: 1024px; height: 768px;">
+            <ui:Label text="Label" name="ControlesLabel" style="font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); color: rgb(149, 146, 146);"/>
+            <ui:Label text="Label" name="ContinuarLabel" style="font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); color: rgb(149, 146, 146); bottom: -656px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
