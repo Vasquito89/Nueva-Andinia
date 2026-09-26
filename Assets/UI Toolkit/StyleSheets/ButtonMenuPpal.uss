@@ -1,5 +1,5 @@
 .selection {
-    width: 300px;
+    width: 162px;
     height: 50px;
     font-size: 33px;
     -unity-font-definition: url("project://database/Assets/Fonts/Rajdhani-Bold.ttf?fileID=12800000&guid=41cab5b33fc4adf44ad20557f90cc09e&type=3#Rajdhani-Bold");
@@ -13,7 +13,7 @@
 
 .selection:focus {
     background-color: rgb(139, 209, 207);
-    width: 350px;
+    width: 170px;
     height: 70px;
     font-size: 38px;
 }

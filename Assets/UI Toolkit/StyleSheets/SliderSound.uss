@@ -1,0 +1,13 @@
+:root {
+}
+
+.SelectSlider {
+    -unity-font-definition: url("project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&guid=6855240a754d7bd4e8adafe1bc946d4e&type=3#BebasNeue-Regular");
+    color: rgb(255, 255, 255);
+    font-size: 28px;
+}
+
+.SelectSlider:focus {
+    transition-duration: 0.25s;
+    background-color: rgb(148, 236, 208);
+}

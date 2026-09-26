@@ -24,7 +24,17 @@ namespace NuevaAndinia.Gameplay
             Quaternion playerRotate = Quaternion.Euler(0f, 90f, 0f);
 
             // Instancia el clon directamente con la posici�n y rotaci�n correctas
-            Instantiate(playerPrefab, playerInstate, playerRotate);
+            GameObject playerInstance =  Instantiate(playerPrefab, playerInstate, playerRotate);
+
+            MinimapCamera minimapCam = FindFirstObjectByType<MinimapCamera>();
+            if (minimapCam != null)
+            {
+                minimapCam.SetTarget(playerInstance.transform);
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró el componente MinimapCamera en la escena.");
+            }
         }
         
         public void NatureAudio()

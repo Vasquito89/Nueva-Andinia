@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgb(26, 24, 24);">
+        <ui:VisualElement name="ScreenVE" style="flex-grow: 1;">
+            <ui:Label text="Label" name="DetailLbl" style="position: absolute; color: rgb(59, 91, 185); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 32px; left: 265px; top: 130px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

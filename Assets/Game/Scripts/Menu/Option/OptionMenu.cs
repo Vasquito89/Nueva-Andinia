@@ -101,6 +101,6 @@ public class OptionMenu : MonoBehaviour
 
     private void OnBack(InputAction.CallbackContext context)
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Menu");
     }
 }
