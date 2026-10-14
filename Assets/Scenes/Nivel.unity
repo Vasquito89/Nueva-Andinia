@@ -55273,7 +55273,7 @@ Transform:
   m_GameObject: {fileID: 286991099}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 366, y: 708, z: 223}
+  m_LocalPosition: {x: -5, y: 233, z: 223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55291,7 +55291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da186ec514ba9cc4b8bd6228b36c17cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinimapCamera
-  height: 700
+  height: 180
   followRotation: 1
 --- !u!1 &288331173
 GameObject:
@@ -60342,7 +60342,7 @@ AudioSource:
   m_GameObject: {fileID: 328155019}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3797424123475449798, guid: 8f73f5e88aa26834f871215d5c10067c, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -138713,7 +138713,7 @@ Transform:
   m_GameObject: {fileID: 768219184}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -331, y: 0.52, z: 170}
+  m_LocalPosition: {x: -331, y: 0.01, z: 170}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -141509,7 +141509,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NuevaAndinia.Gameplay.SpawnerDesertores
   desertorPrefab: {fileID: 1726081620918335318, guid: e07fb8d7bac8a1a47a02423f28260157, type: 3}
   cantidadAInstanciar: 3
+  radioSpawn: 4
   posicionSpawnFija: {x: 0, y: 0, z: 0}
+  spawnEnemy: {fileID: 788226663}
   groundMask:
     serializedVersion: 2
     m_Bits: 0
@@ -160731,7 +160733,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NuevaAndinia.Gameplay.SpawnerDesertores
   desertorPrefab: {fileID: 1726081620918335318, guid: e07fb8d7bac8a1a47a02423f28260157, type: 3}
   cantidadAInstanciar: 2
+  radioSpawn: 4
   posicionSpawnFija: {x: 0, y: 0, z: 0}
+  spawnEnemy: {fileID: 926137491}
   groundMask:
     serializedVersion: 2
     m_Bits: 0
@@ -163405,7 +163409,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NuevaAndinia.Gameplay.SpawnerDesertores
   desertorPrefab: {fileID: 1726081620918335318, guid: e07fb8d7bac8a1a47a02423f28260157, type: 3}
   cantidadAInstanciar: 2
+  radioSpawn: 4
   posicionSpawnFija: {x: 0, y: 0, z: 0}
+  spawnEnemy: {fileID: 973013497}
   groundMask:
     serializedVersion: 2
     m_Bits: 0

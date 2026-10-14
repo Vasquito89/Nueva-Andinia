@@ -20,6 +20,9 @@ public class MenuManager : MonoBehaviour
     private Button exitMandoButton;
     private Label creditLabel;
     private Label mandoLabel;
+
+    private bool starCredit = false;
+    private bool starMando = false;
     
 
     private void OnEnable()
@@ -86,21 +89,40 @@ public class MenuManager : MonoBehaviour
     }
     public void CreditVEScreen ()
     {
-        //menuVE.style.display = DisplayStyle.None;
-        creditVE.style.display = DisplayStyle.Flex;
+        if (starMando == false)
+        {
+            starCredit = true;
+            //menuVE.style.display = DisplayStyle.None;
+            creditVE.style.display = DisplayStyle.Flex;
 
-        creditLabel.text = "Programación / Diseño de niveles: Damian Garnica\r\nQA /Testing: Franco Larosa\r\nArte: Joaquín Minolli Rodríguez\r\nProgramación: Mauricio Benevento / Santiago Fortunato";
+            creditLabel.text = "Programación / Diseño de niveles: Damian Garnica\r\nQA /Testing: Franco Larosa\r\nArte: Joaquín Minolli Rodríguez\r\nProgramación: Mauricio Benevento / Santiago Fortunato";
+        }
+        else 
+        {
+            return; 
+        }
     }
     public void MandoVEScreen()
     {
-        //menuVE.style.display= DisplayStyle.None;
-        mandoVE.style.display = DisplayStyle.Flex;
+        if (starCredit == false)
+        {
+            starMando = true;
+            //menuVE.style.display= DisplayStyle.None;
+            mandoVE.style.display = DisplayStyle.Flex;
 
-        mandoLabel.text = "↑ ↓ ← → Moverse\n\n" + "SPACE Saltar\n\n" + "SHIFT Correr\n\n" + "Q Agarrar objeto\n\n" + "E Robar datos / Abrir puerta\n\n" + "P Pausa";
+            mandoLabel.text = "↑ ↓ ← → Moverse\n\n" + "SPACE Saltar\n\n" + "SHIFT Correr\n\n" + "Q Agarrar objeto\n\n" + "E Robar datos / Abrir puerta\n\n" + "P Pausa";
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void OnBackMainMenu()
     {
+        starMando = false;
+        starCredit = false;
+
         menuVE.style.display = DisplayStyle.Flex;
         creditVE.style.display = DisplayStyle.None;
         mandoVE.style.display = DisplayStyle.None;

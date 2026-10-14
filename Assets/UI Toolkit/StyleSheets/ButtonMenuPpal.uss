@@ -17,3 +17,10 @@
     height: 70px;
     font-size: 38px;
 }
+
+.selection:hover {
+    background-color: rgb(139, 209, 207);
+    width: 170px;
+    height: 70px;
+    font-size: 38px;
+}

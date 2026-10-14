@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DesertorEnemy
   speed: 3.5
-  detectionRange: 10
-  raycastDistance: 10
+  detectionRange: 30
+  raycastDistance: 30
   vida: 100
   groundLayer:
     serializedVersion: 2

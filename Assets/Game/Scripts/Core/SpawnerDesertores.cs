@@ -6,9 +6,11 @@ namespace NuevaAndinia.Gameplay
     {
         [SerializeField] private GameObject desertorPrefab;
         [SerializeField] private int cantidadAInstanciar = 5;
+        [SerializeField] private float radioSpawn = 4f;
 
         [Header("Coordenada fija de spawn (placeholder, ajustar despues)")]
         [SerializeField] private Vector3 posicionSpawnFija = new Vector3(0f, 0f, 0f);
+        [SerializeField] private Collider spawnEnemy;
 
         [Header("Ajuste al suelo")]
         [SerializeField] private LayerMask groundMask;
@@ -20,11 +22,11 @@ namespace NuevaAndinia.Gameplay
             if (!other.CompareTag("Player"))
                 return;
 
-            InstantiateDeserters();
+            InstantiateDeserters(spawnEnemy.transform.position);
             Destroy(gameObject); // Evita que vuelva a spawnear
         }
 
-        private void InstantiateDeserters()
+        /*private void InstantiateDeserters()
         {
             Vector3 spawnPos = GetGroundedPoint(posicionSpawnFija.x, posicionSpawnFija.y, posicionSpawnFija.z);
 
@@ -35,6 +37,24 @@ namespace NuevaAndinia.Gameplay
                 // una vez que este todo unido.
                 Instantiate(desertorPrefab, spawnPos, Quaternion.identity);
             }
+        }*/
+        void InstantiateDeserters(Vector3 posicionJugador)
+        {
+            for (int i = 0; i < cantidadAInstanciar; i++)
+            {
+                // Genera una posición aleatoria alrededor del jugador dentro del radio
+                Vector2 randomCircle = Random.insideUnitCircle.normalized * radioSpawn;
+                Vector3 spawnPos = new Vector3(
+                    posicionJugador.x + randomCircle.x,
+                    posicionJugador.y,
+                    posicionJugador.z + randomCircle.y
+                );
+
+                Instantiate(desertorPrefab, spawnPos, Quaternion.identity);
+            }
+
+            // Destruye el trigger para no spawnear infinitamente
+            Destroy(gameObject);
         }
 
         /// <summary>

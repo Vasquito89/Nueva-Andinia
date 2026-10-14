@@ -120,6 +120,7 @@ public class AudioOptionsPanel : MonoBehaviour
     }
     private void OnBack(InputAction.CallbackContext context)
     {
+        AudioManager.Instance.PlayClickAndSave();
         optionVE.style.display = DisplayStyle.Flex;
         audioVE.style.display = DisplayStyle.None;
         //SceneManager.LoadScene("MainMenu");
