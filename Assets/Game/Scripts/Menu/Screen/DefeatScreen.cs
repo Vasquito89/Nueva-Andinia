@@ -28,7 +28,7 @@ namespace NuevaAndinia.Defeat
         private void QuitToMainMenu()
         {
             Time.timeScale = 1f; // Restablecer siempre el tiempo antes de cambiar de escena
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("Menu");
         }
     }
 }

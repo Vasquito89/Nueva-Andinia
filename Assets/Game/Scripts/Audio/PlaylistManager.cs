@@ -133,7 +133,7 @@ public class PlaylistManager : MonoBehaviour
     private void LoadSongsFromResources()
     {
         playlist.Clear();
-        AudioClip[] loadedClips = Resources.LoadAll<AudioClip>("Music");
+        AudioClip[] loadedClips = Resources.LoadAll<AudioClip>("Music/Menu");
 
         foreach (var clip in loadedClips)
         {

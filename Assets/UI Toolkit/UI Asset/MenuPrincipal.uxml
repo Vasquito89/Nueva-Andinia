@@ -1,10 +1,21 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/ButtonMenuPpal.uss?fileID=7433441132597879392&amp;guid=a8a18352365d1df4ab0d906fa2d79b08&amp;type=3"/>
-    <ui:VisualElement style="flex-grow: 1;">
-        <ui:VisualElement style="flex-grow: 1; background-color: rgb(38, 38, 38);">
-            <ui:Button text="JUGAR" name="PlayButton" class="selection" style="position: absolute; top: 380px; left: 353px;"/>
-            <ui:Button text="SALIR" name="ExitButton" class="selection" style="position: absolute; left: 353px; top: 449px;"/>
-            <ui:Label text="nueva andinia" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Brush%20King.otf?fileID=12800000&amp;guid=64f16823e292293419fd4a33eaedfef7&amp;type=3#Brush King&quot;); color: rgb(171, 165, 165); font-size: 36px; position: absolute; top: 46px; left: 327px;"/>
+    <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/ButtonMenuPpal.uss?fileID=7433441132597879392&amp;guid=a8a18352365d1df4ab0d906fa2d79b08&amp;type=3#ButtonMenuPpal"/>
+    <ui:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Game/Sprite/Fondo%20Menu%20Compu.png?fileID=2800000&amp;guid=f19ec54051b26ee4785d01e4880e3f6a&amp;type=3#Fondo Menu Compu&quot;);">
+        <ui:VisualElement name="MenuVE" style="flex-grow: 1;">
+            <ui:Button text="JUGAR" name="PlayButton" class="selection" style="position: absolute; top: 20px; left: 25px;"/>
+            <ui:Button text="MANDOS" name="MandoButton" class="selection" style="position: absolute; top: 20px; left: 570px;"/>
+            <ui:Button text="CREDITOS" name="CreditButton" class="selection" style="position: absolute; top: 20px; left: 390px;"/>
+            <ui:Button text="OPCIONES" name="OptionButton" class="selection" style="top: 20px; left: 207px;"/>
+            <ui:Button text="SALIR" name="ExitButton" class="selection" style="position: absolute; left: 750px; top: 20px;"/>
+            <ui:Label text="nueva andinia" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Brush%20King.otf?fileID=12800000&amp;guid=64f16823e292293419fd4a33eaedfef7&amp;type=3#Brush King&quot;); color: rgb(171, 165, 165); font-size: 36px; position: absolute; top: 630px; left: 327px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="CreditsVE" style="flex-grow: 1; width: 800px; height: 500px; position: absolute; top: 120px; left: 115px;">
+            <ui:Label text="Label" name="CreditLabel" style="color: rgb(185, 179, 179); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 32px; background-color: rgba(0, 0, 0, 0.51);"/>
+            <ui:Button text="VOLVER" name="ExitCreditButton" class="selection" style="position: absolute; top: 440px; left: 324px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="MandosVE" style="flex-grow: 1; width: 800px; height: 500px; position: absolute; top: 120px; left: 115px;">
+            <ui:Button text="VOLVER" name="ExitMandoButton" class="selection" style="position: absolute; top: 440px; left: 324px;"/>
+            <ui:Label text="Label" name="MandoLabel" style="color: rgb(185, 179, 179); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 32px; background-color: rgba(0, 0, 0, 0.51);"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

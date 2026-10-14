@@ -17,10 +17,15 @@ public class ScreenOptionPanel : MonoBehaviour
     private DropdownField _screenModeDropdown;
     private Toggle _vSyncToggle;
     private DropdownField _qualityDropdown;
+    private DropdownField _targetFpsDropdown;
     private Button screenButton;
 
     private Resolution[] _resolutions;
     private List<Resolution> _filteredResolutions;
+
+    private readonly List<int> _fpsValues = new List<int> { -1, 30, 60, 120, 144, 240 };
+    private readonly List<string> _fpsOptions = new List<string> { "Sin Límite", "30 FPS", "60 FPS", "120 FPS", "144 FPS", "240 FPS" };
+
 
     private void Awake()
     {
@@ -43,18 +48,21 @@ public class ScreenOptionPanel : MonoBehaviour
         _screenModeDropdown = displayVE.Q<DropdownField>("ScreenModeDropdown");
         _vSyncToggle = displayVE.Q<Toggle>("VSyncToggle");
         _qualityDropdown = displayVE.Q<DropdownField>("QualityDropdown");
+        _targetFpsDropdown = displayVE.Q<DropdownField>("TargetFpsDropdown");
 
         // 2. Inicializar los menús
         SetupResolutionDropdown();
         SetupScreenModeDropdown();
         SetupVSyncToggle();
         SetupQualityDropdown();
+        SetupTargetFpsDropdown();
 
         // 3. Registrar eventos de cambio
         _resolutionDropdown.RegisterValueChangedCallback(OnResolutionChanged);
         _screenModeDropdown.RegisterValueChangedCallback(OnScreenModeChanged);
         _vSyncToggle.RegisterValueChangedCallback(OnVSyncChanged);
         _qualityDropdown.RegisterValueChangedCallback(OnQualityChanged);
+        _targetFpsDropdown.RegisterValueChangedCallback(OnTargetFpsChanged);
 
         screenButton = displayVE.Q<Button>("ScreenButton");
         if (screenButton != null)  screenButton.clicked += BackMenu;
@@ -111,6 +119,19 @@ public class ScreenOptionPanel : MonoBehaviour
         _qualityDropdown.index = QualitySettings.GetQualityLevel();
     }
 
+    private void SetupTargetFpsDropdown()
+    {
+        if (_targetFpsDropdown == null) return;
+
+        _targetFpsDropdown.choices = _fpsOptions;
+
+        // Detectar el valor actual de Application.targetFrameRate
+        int currentTarget = Application.targetFrameRate;
+        int selectedIndex = _fpsValues.IndexOf(currentTarget);
+
+        // Si el valor actual no está en la lista (o es -1 por defecto), selecciona "Sin Límite" (índice 0)
+        _targetFpsDropdown.index = selectedIndex >= 0 ? selectedIndex : 0;
+    }
     // --- Métodos que aplican los cambios ---
 
     private void OnResolutionChanged(ChangeEvent<string> evt)
@@ -142,6 +163,18 @@ public class ScreenOptionPanel : MonoBehaviour
     {
         // Aplica el Asset de URP correspondiente al índice seleccionado en Quality Settings
         QualitySettings.SetQualityLevel(_qualityDropdown.index, true);
+    }
+    private void OnTargetFpsChanged(ChangeEvent<string> evt)
+    {
+        int index = _targetFpsDropdown.index;
+        if (index >= 0 && index < _fpsValues.Count)
+        {
+            // Solo se aplica si VSync está desactivado (vSyncCount == 0)
+            if (QualitySettings.vSyncCount == 0)
+            {
+                Application.targetFrameRate = _fpsValues[index];
+            }
+        }
     }
 
     private void BackMenu()

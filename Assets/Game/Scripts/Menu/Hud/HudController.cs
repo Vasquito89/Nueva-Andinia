@@ -12,7 +12,7 @@ public class HudController : MonoBehaviour
     private VisualElement Derrota;
     private VisualElement Victoria;
     private Label vidaPlayer;
-    //private Label tiempoFuego;
+    private Label ObjetiveLbl;
     //private Label advertenciaLabel;
     //private Label vidaFuegoLabel;
     //private Label tiempoVidaLabel;
@@ -46,6 +46,7 @@ public class HudController : MonoBehaviour
         Victoria.style.display = DisplayStyle.None;
 
         vidaPlayer = rootVisualElement.Q<Label>("LifeLbl");
+        ObjetiveLbl = rootVisualElement.Q<Label>("ObjetiveLbl");
         /*tiempoFuego = rootVisualElement.Q<Label>("TiempoLabel");
         advertenciaLabel = rootVisualElement.Q<Label>("AdvertenciaLabel");
         vidaFuegoLabel = rootVisualElement.Q<Label>("VidaFuegoLabel");

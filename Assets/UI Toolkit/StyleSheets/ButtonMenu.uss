@@ -1,0 +1,33 @@
+:root {
+}
+
+.Select {
+    -unity-background-image-tint-color: rgba(197, 59, 59, 0);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    -unity-font-definition: url("project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&guid=6855240a754d7bd4e8adafe1bc946d4e&type=3#BebasNeue-Regular");
+    transition-duration: 0.25s;
+    font-size: 24px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+    width: 300px;
+    height: 50px;
+    margin-top: 4px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    margin-left: 4px;
+}
+
+.Select:focus {
+    background-color: rgba(72, 229, 188, 0.81);
+    height: 60px;
+    width: 320px;
+}
+
+.Select:hover {
+    background-color: rgba(72, 229, 188, 0.81);
+    height: 60px;
+    width: 320px;
+}
