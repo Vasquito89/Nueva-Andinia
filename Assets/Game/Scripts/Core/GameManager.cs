@@ -7,8 +7,7 @@ namespace NuevaAndinia.Gameplay
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private GameObject playerPrefab;
-        [SerializeField] private Transform playerTransform;
-
+        [SerializeField] private GameObject playerSpawn;
         [SerializeField] private AudioSource natureAudio;
 
         private void Start()
@@ -20,7 +19,7 @@ namespace NuevaAndinia.Gameplay
 
         void SpawnPlayer()
         {
-            Vector3 playerInstate = new Vector3(playerTransform.position.x, playerTransform.position.y, playerTransform.position.z);
+            Vector3 playerInstate = new Vector3(playerSpawn.transform.position.x, playerSpawn.transform.position.y, playerSpawn.transform.position.z);
             Quaternion playerRotate = Quaternion.Euler(0f, 90f, 0f);
 
             // Instancia el clon directamente con la posici�n y rotaci�n correctas
@@ -35,7 +34,7 @@ namespace NuevaAndinia.Gameplay
             {
                 Debug.LogWarning("No se encontró el componente MinimapCamera en la escena.");
             }
-            Destroy(gameObject);
+            Destroy(playerSpawn);
         }
         
         public void NatureAudio()
