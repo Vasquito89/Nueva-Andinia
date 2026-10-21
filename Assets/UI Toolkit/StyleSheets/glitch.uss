@@ -1,0 +1,20 @@
+.glitch-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    -unity-material: url("project://database/Assets/UI%20Toolkit/Shader%20Graph/M_DroneGlitch.mat?fileID=2100000&guid=05279b197fd695140886890ce89c1971&type=2#M_DroneGlitch");
+}
+
+.drone-crt-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -unity-material: url("project://database/Assets/UI%20Toolkit/Shader%20Graph/M_DroneGlitch.mat?fileID=2100000&guid=05279b197fd695140886890ce89c1971&type=2#M_DroneGlitch");
+    background-color: rgb(0, 0, 0);
+}

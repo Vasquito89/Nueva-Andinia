@@ -18,7 +18,7 @@ public class ScreenOptionPanel : MonoBehaviour
     private Toggle _vSyncToggle;
     private DropdownField _qualityDropdown;
     private DropdownField _targetFpsDropdown;
-    private Button screenButton;
+    private Slider brightnessSlider;
 
     private Resolution[] _resolutions;
     private List<Resolution> _filteredResolutions;
@@ -49,6 +49,7 @@ public class ScreenOptionPanel : MonoBehaviour
         _vSyncToggle = displayVE.Q<Toggle>("VSyncToggle");
         _qualityDropdown = displayVE.Q<DropdownField>("QualityDropdown");
         _targetFpsDropdown = displayVE.Q<DropdownField>("TargetFpsDropdown");
+        brightnessSlider = root.Q<Slider>("BrightnessSlider");
 
         // 2. Inicializar los menús
         SetupResolutionDropdown();
@@ -56,6 +57,7 @@ public class ScreenOptionPanel : MonoBehaviour
         SetupVSyncToggle();
         SetupQualityDropdown();
         SetupTargetFpsDropdown();
+        SetupBrightness();
 
         // 3. Registrar eventos de cambio
         _resolutionDropdown.RegisterValueChangedCallback(OnResolutionChanged);
@@ -63,9 +65,7 @@ public class ScreenOptionPanel : MonoBehaviour
         _vSyncToggle.RegisterValueChangedCallback(OnVSyncChanged);
         _qualityDropdown.RegisterValueChangedCallback(OnQualityChanged);
         _targetFpsDropdown.RegisterValueChangedCallback(OnTargetFpsChanged);
-
-        screenButton = displayVE.Q<Button>("ScreenButton");
-        if (screenButton != null)  screenButton.clicked += BackMenu;
+        brightnessSlider.RegisterValueChangedCallback(OnSliderChanged);
     }
 
     private void SetupResolutionDropdown()
@@ -132,6 +132,23 @@ public class ScreenOptionPanel : MonoBehaviour
         // Si el valor actual no está en la lista (o es -1 por defecto), selecciona "Sin Límite" (índice 0)
         _targetFpsDropdown.index = selectedIndex >= 0 ? selectedIndex : 0;
     }
+    private void SetupBrightness()
+    {
+        if (brightnessSlider == null) return;
+
+        if (brightnessSlider != null)
+        {
+            // Aseguramos que el slider use internamente valores de 0 a 1
+            brightnessSlider.lowValue = 0f;
+            brightnessSlider.highValue = 1f;
+
+            // 3. Le asignamos el valor que esté guardado actualmente en el juego
+            if (GlobalBrightnessManager.Instance != null)
+            {
+                brightnessSlider.value = GlobalBrightnessManager.Instance.GetNormalizedBrightness();
+            }
+        }
+    }
     // --- Métodos que aplican los cambios ---
 
     private void OnResolutionChanged(ChangeEvent<string> evt)
@@ -176,10 +193,12 @@ public class ScreenOptionPanel : MonoBehaviour
             }
         }
     }
-
-    private void BackMenu()
+    private void OnSliderChanged(ChangeEvent<float> evt)
     {
-        if (displayVE != null) displayVE.style.display = DisplayStyle.None;
-        if (optionVE != null) optionVE.style.display = DisplayStyle.Flex;
+        // Le enviamos el valor puro (0 a 1) al manager global
+        if (GlobalBrightnessManager.Instance != null)
+        {
+            GlobalBrightnessManager.Instance.UpdateBrightness(evt.newValue);
+        }
     }
 }

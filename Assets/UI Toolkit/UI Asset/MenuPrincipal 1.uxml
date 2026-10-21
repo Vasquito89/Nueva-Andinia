@@ -1,0 +1,51 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/ButtonMenuPpal.uss?fileID=7433441132597879392&amp;guid=a8a18352365d1df4ab0d906fa2d79b08&amp;type=3#ButtonMenuPpal"/>
+    <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/SliderSound.uss?fileID=7433441132597879392&amp;guid=8739e30b27c50a54fa333e6ce008bdf8&amp;type=3#SliderSound"/>
+    <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/ButtonMenu.uss?fileID=7433441132597879392&amp;guid=aba63672b70c9d643bd802336be2d4bb&amp;type=3#ButtonMenu"/>
+    <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/DropdownPantalla.uss?fileID=7433441132597879392&amp;guid=e88b985e2c60c2946b1c08fdf3a95886&amp;type=3#DropdownPantalla"/>
+    <ui:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Game/Sprite/Fondo%20Menu%20Compu.png?fileID=2800000&amp;guid=f19ec54051b26ee4785d01e4880e3f6a&amp;type=3#Fondo Menu Compu&quot;);">
+        <ui:VisualElement name="MenuVE" enabled="true" style="flex-grow: 1;">
+            <ui:Button text="JUGAR" name="PlayButton" class="selection" style="position: absolute; top: 20px; left: 25px;"/>
+            <ui:Button text="MANDOS" name="MandoButton" class="selection" style="position: absolute; top: 20px; left: 570px;"/>
+            <ui:Button text="CREDITOS" name="CreditButton" class="selection" style="position: absolute; top: 20px; left: 390px;"/>
+            <ui:Button text="OPCIONES" name="OptionButton" class="selection" style="top: 20px; left: 207px;"/>
+            <ui:Button text="SALIR" name="ExitButton" class="selection" style="position: absolute; left: 750px; top: 20px;"/>
+            <ui:Label text="nueva andinia" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/Brush%20King.otf?fileID=12800000&amp;guid=64f16823e292293419fd4a33eaedfef7&amp;type=3#Brush King&quot;); color: rgb(171, 165, 165); font-size: 36px; position: absolute; top: 665px; left: 326px; height: 88px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="CreditsVE" style="flex-grow: 1; width: 800px; height: 566px; position: absolute; top: 94px; left: 115px; display: none;">
+            <ui:Label text="Label" name="CreditLabel" style="color: rgb(185, 179, 179); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 32px; background-color: rgba(0, 0, 0, 0.51);"/>
+            <ui:Label text="[ESC] para salir" style="position: absolute; top: 502px; left: 308px; font-size: 38px; color: rgb(255, 255, 255); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;);"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="MandosVE" style="flex-grow: 1; width: 800px; height: 566px; position: absolute; top: 94px; left: 115px; display: none;">
+            <ui:Label text="Label" name="MandoLabel" style="color: rgb(185, 179, 179); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 32px; background-color: rgba(0, 0, 0, 0.51); display: flex;"/>
+            <ui:Label text="[ESC] para salir" style="position: absolute; top: 502px; left: 308px; font-size: 38px; color: rgb(255, 255, 255); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;);"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="OptionVE" style="display: flex; width: 800px; height: 566px; position: absolute; top: 94px; left: 115px; flex-direction: row;">
+            <ui:Button text="PANTALLA" name="DisplayButton" class="selection" style="left: 230px;"/>
+            <ui:Button text="AUDIO" name="AudioButton" class="selection" style="left: auto; top: auto; right: -240px;"/>
+            <ui:Label text="[ESC] para salir" style="position: absolute; top: 502px; left: 308px; font-size: 38px; color: rgb(255, 255, 255); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;);"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="AudioVE" style="display: flex; position: absolute; top: 94px; left: 115px; height: 566px; width: 800px;">
+            <ui:Label text="Opciones de Audio" name="Label" style="position: absolute; top: 58px; left: 180px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/PermanentMarker-Regular.ttf?fileID=12800000&amp;guid=b72f2d41ab5cfb646b358592981724e0&amp;type=3#PermanentMarker-Regular&quot;); color: rgb(255, 255, 255); width: 431px; font-size: 38px;"/>
+            <ui:ScrollView name="AudioScrollView" style="position: absolute; height: 269px; width: 575px; top: 130px; left: 30px;">
+                <ui:Slider label="Sonido General" value="42" high-value="100" name="SoundGralSlider" low-value="-80" fill="false" class="SelectSlider"/>
+                <ui:Slider label="Menu Principal" value="42" high-value="20" name="MenuPralSlider" low-value="-80" class="SelectSlider"/>
+                <ui:Slider label="Sonido FX" value="42" high-value="20" name="SoundFXSlider" low-value="-80" class="SelectSlider"/>
+                <ui:Toggle label="Silenciar" name="MuteToggle" class="SelectSlider"/>
+            </ui:ScrollView>
+            <ui:Label text="[Esc] para salir" style="position: absolute; top: 502px; left: 308px; color: rgb(245, 245, 245); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 38px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="PantallaVE" style="flex-grow: 1; display: flex; position: absolute; width: 800px; height: 566px; top: 94px; left: 115px;">
+            <ui:Label text="opciones de pantalla" style="position: absolute; top: 58px; left: 180px; font-size: 38px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/PermanentMarker-Regular.ttf?fileID=12800000&amp;guid=b72f2d41ab5cfb646b358592981724e0&amp;type=3#PermanentMarker-Regular&quot;); color: rgb(255, 255, 255);"/>
+            <ui:ScrollView name="PantallaScrollView" style="position: absolute; top: 130px; left: 30px; width: 749px; height: 407px;">
+                <ui:DropdownField label="Resolucion" name="ResolutionDropdown"/>
+                <ui:DropdownField label="Modo de pantalla" name="ScreenModeDropdown"/>
+                <ui:DropdownField label="Calidad Grafica" name="QualityDropdown"/>
+                <ui:DropdownField label="FPS" name="TargetFpsDropdown"/>
+                <ui:Toggle label="Vsync" name="VSyncToggle"/>
+                <ui:Slider label="brillo" value="42" high-value="100" name="BrightnessSlider" class="SelectSlider"/>
+            </ui:ScrollView>
+            <ui:Label text="[Esc] para salir" style="position: absolute; top: 502px; left: 308px; color: rgb(245, 245, 245); -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 38px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

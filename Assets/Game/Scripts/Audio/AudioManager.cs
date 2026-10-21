@@ -232,4 +232,26 @@ public class AudioManager : MonoBehaviour
         SetMixerVolume("VolMenu", PlayerPrefs.GetFloat("VolMenu", 1f));
         SetMixerVolume("VolCharacter", PlayerPrefs.GetFloat("VolCharacter", 1f));
     }
+    public void FadeOutAndDestroy(float duration)
+    {
+        StartCoroutine(FadeRoutine(duration));
+    }
+
+    private IEnumerator FadeRoutine(float duration)
+    {
+        if (fxSource == null) yield break;
+
+        float startVol = fxSource.volume;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            fxSource.volume = Mathf.Lerp(startVol, 0f, time / duration);
+            yield return null;
+        }
+
+        fxSource.volume = 0f;
+        //Destroy(gameObject);
+    }
 }
