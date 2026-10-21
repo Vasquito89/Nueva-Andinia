@@ -11,6 +11,7 @@ public class PauseMenuController : MonoBehaviour
     private VisualElement rootVisualElement;
     private VisualElement pauseVE;
     private VisualElement HUDVE;
+    private VisualElement OptionVE;
     private Button resumeButton;
     private Button quitButton;
     private Button AceptarButton;

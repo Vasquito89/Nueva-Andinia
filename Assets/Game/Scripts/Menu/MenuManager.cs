@@ -1,41 +1,65 @@
 ﻿using System;
-using Unity.Burst.CompilerServices;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using static UnityEngine.Splines.SplineInstantiate;
+using static Navigation;
 
 public class MenuManager : MonoBehaviour
 {
-    //[Header("Buttons")]
+    [Header("Camara")]
+    [SerializeField] CameraSwitcherMainMenu camScript;
+
+    [Header("FadeIn")]
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private GameObject canvasObject;
+    //[SerializeField] private UIDocument glitchUIDoc;
+    private float fadeDuration = 3f;
+
+    //private VisualElement glitchVE;
+
+    //UI Document menu
     private VisualElement creditVE;
     private VisualElement mandoVE;
     private VisualElement menuVE;
+    private VisualElement optionVE;
     private Button matchButton;
     private Button optionButton;
     private Button exitButton;
     private Button creditButton;
-    private Button exitCreditButton;
     private Button mandoButton;
-    private Button exitMandoButton;
     private Label creditLabel;
     private Label mandoLabel;
 
-    private bool starCredit = false;
-    private bool starMando = false;
-    
+    private Navigation navigation;
+    private OptionMenu optionMenu;
 
     private void OnEnable()
     {
+        navigation = GetComponent<Navigation>();
+        optionMenu = GetComponent<OptionMenu>();
+
+        canvasObject.SetActive(false);
+
+        //var rootGlitch = glitchUIDoc.rootVisualElement;
+        //glitchVE = rootGlitch.Q<VisualElement>("GlitchOverlay");
+        //glitchVE.style.display = DisplayStyle.None;
+
+        //glitchUIDoc.enabled = false;
+
         UIDocument uiDocument = GetComponent<UIDocument>();
         VisualElement visualElement = uiDocument.rootVisualElement;
         menuVE = visualElement.Q<VisualElement>("MenuVE");
         creditVE = visualElement.Q<VisualElement>("CreditsVE");
         mandoVE = visualElement.Q<VisualElement>("MandosVE");
+        optionVE = visualElement.Q<VisualElement>("OptionVE");
 
         menuVE.style.display = DisplayStyle.Flex;
         creditVE.style.display = DisplayStyle.None;
-        mandoVE.style.display = DisplayStyle .None;
+        mandoVE.style.display = DisplayStyle.None;
+        optionVE.style.display = DisplayStyle.None;
 
         matchButton = visualElement.Q<Button>("PlayButton");
         optionButton = visualElement.Q<Button>("OptionButton");
@@ -43,23 +67,17 @@ public class MenuManager : MonoBehaviour
         creditButton = visualElement.Q<Button>("CreditButton");
         mandoButton = visualElement.Q<Button>("MandoButton");
 
-        exitCreditButton = creditVE.Q<Button>("ExitCreditButton");
         creditLabel = creditVE.Q<Label>("CreditLabel");
 
-        exitMandoButton = mandoVE.Q<Button>("ExitMandoButton");
         mandoLabel = mandoVE.Q<Label>("MandoLabel");
-
-        matchButton.clicked += StartMatchScene;
+        
         matchButton.Focus();
 
+        matchButton.clicked += StartMatchScene;
         optionButton.clicked += StartOptionScene;
         exitButton.clicked += OnExit;
         creditButton.clicked += CreditVEScreen;
         mandoButton.clicked += MandoVEScreen;
-
-        exitCreditButton.clicked += OnBackMainMenu;
-
-        exitMandoButton.clicked += OnBackMainMenu;
     }
     private void OnDisable()
     {
@@ -69,10 +87,6 @@ public class MenuManager : MonoBehaviour
         exitButton.clicked -= OnExit;
         creditButton.clicked -= CreditVEScreen;
         mandoButton.clicked -= MandoVEScreen;
-
-        exitCreditButton.clicked -= OnBackMainMenu;
-
-        exitMandoButton.clicked -= OnBackMainMenu;
     }
 
     public void OnExit() => Application.Quit();
@@ -80,52 +94,87 @@ public class MenuManager : MonoBehaviour
 
     public void StartMatchScene()
     {
+        canvasObject.SetActive(true);
+        //if (AudioManager.Instance != null)
+        // {
+        //AudioManager.Instance.FadeOutAndDestroy(15f);
+        //}
+        UnityEngine.Cursor.visible = false;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        Debug.Log("Cargando juego...");
+
+        camScript.GoToPlay();
+        // Desactivar interacciones del menú
+        menuVE.SetEnabled(false);
+        //glitchUIDoc.enabled = true;
+        //glitchVE.style.display = DisplayStyle.Flex;
+        StartCoroutine(FadeInCoroutine());
+    }
+    private IEnumerator FadeInCoroutine()
+    {
+        float time = 0f;
+        canvasGroup.alpha = 0.25f;
+        //Color color = glitchVE.style.backgroundColor.value;
+        //color.a = 0f;
+
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(0.25f, 1f, time / fadeDuration);
+            //color.a = Mathf.Lerp(0f, 1f, time / fadeDuration);
+            yield return null;
+        }
+        canvasGroup.alpha = 1f;
+        //color.a = 1f;
+        // Cargar la siguiente escena
         SceneManager.LoadScene("Transicion");
     }
-
     public void StartOptionScene()
     {
-        SceneManager.LoadScene("Option");
-    }
-    public void CreditVEScreen ()
-    {
-        if (starMando == false)
-        {
-            starCredit = true;
-            //menuVE.style.display = DisplayStyle.None;
-            creditVE.style.display = DisplayStyle.Flex;
+        navigation.state = NavigationState.Option;
 
-            creditLabel.text = "Programación / Diseño de niveles: Damian Garnica\r\nQA /Testing: Franco Larosa\r\nArte: Joaquín Minolli Rodríguez\r\nProgramación: Mauricio Benevento / Santiago Fortunato";
-        }
-        else 
-        {
-            return; 
-        }
+        camScript.GoToOptions();
+
+        menuVE.SetEnabled(false);
+
+        optionVE.style.display = DisplayStyle.Flex;
+        //displayButton.Focus();
+        optionMenu.DisplayFocus();
+
+
+    }
+    public void CreditVEScreen()
+    {
+        navigation.state = NavigationState.Option;
+
+        camScript.GoToOptions();
+
+        menuVE.SetEnabled(false);
+        creditVE.style.display = DisplayStyle.Flex;
+
+        creditLabel.text = "Programación / Diseño de niveles: Damian Garnica\r\nQA /Testing: Franco Larosa\r\nArte: Joaquín Minolli Rodríguez\r\nProgramación: Mauricio Benevento / Santiago Fortunato";
+
     }
     public void MandoVEScreen()
     {
-        if (starCredit == false)
-        {
-            starMando = true;
-            //menuVE.style.display= DisplayStyle.None;
-            mandoVE.style.display = DisplayStyle.Flex;
+        navigation.state = NavigationState.Option;
 
-            mandoLabel.text = "↑ ↓ ← → Moverse\n\n" + "SPACE Saltar\n\n" + "SHIFT Correr\n\n" + "Q Agarrar objeto\n\n" + "E Robar datos / Abrir puerta\n\n" + "P Pausa";
-        }
-        else
-        {
-            return;
-        }
+        camScript.GoToOptions();
+
+        menuVE.SetEnabled(false);
+        mandoVE.style.display = DisplayStyle.Flex;
+
+        mandoLabel.text = "↑ ↓ ← → Moverse\n\n" + "SPACE Saltar\n\n" + "SHIFT Correr\n\n" + "Q Agarrar objeto\n\n" + "E Robar datos / Abrir puerta\n\n" + "P Pausa";
+
     }
-
     public void OnBackMainMenu()
     {
-        starMando = false;
-        starCredit = false;
+        camScript.ReturnToMain();
 
-        menuVE.style.display = DisplayStyle.Flex;
+        menuVE.SetEnabled(true);
         creditVE.style.display = DisplayStyle.None;
         mandoVE.style.display = DisplayStyle.None;
+        optionVE.style.display = DisplayStyle.None;
         matchButton.Focus();
     }
 }

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/glitch.uss?fileID=7433441132597879392&amp;guid=2a923f92e90302047b377f8bcfd77b3d&amp;type=3#glitch"/>
+    <ui:VisualElement style="flex-grow: 1; width: 1920px; height: 1080px; display: flex;">
+        <ui:VisualElement name="GlitchOverlay" class="drone-crt-overlay glitch-overlay" style="width: 1920px; height: 1080px; display: flex; -unity-material: url(&quot;project://database/Assets/Shader%20Graph/M-Glitch.mat?fileID=2100000&amp;guid=8b43c25eb5a82384f950ffd4102cb572&amp;type=2#M-Glitch&quot;);"/>
+    </ui:VisualElement>
+</ui:UXML>

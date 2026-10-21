@@ -20,9 +20,6 @@ public class AudioOptionsPanel : MonoBehaviour
     private VisualElement optionVE;
     private VisualElement audioVE;
 
-    [SerializeField] private InputActionAsset inputActions;
-    private InputAction volverAction;
-
     private void Awake()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -35,8 +32,6 @@ public class AudioOptionsPanel : MonoBehaviour
 
         optionVE = rootElement.Q<VisualElement>("OptionVE");
         audioVE = rootElement.Q<VisualElement>("AudioVE");
-
-        
 
         if (AudioManager.Instance == null)
         {
@@ -63,40 +58,6 @@ public class AudioOptionsPanel : MonoBehaviour
                 AudioManager.Instance.RegisterMute(toggle);
             }
         });
-
-        if (inputActions != null)
-        {
-            var uiMap = inputActions.FindActionMap("Menu");
-            volverAction = uiMap?.FindAction("Back"); // O el nombre de tu acción
-            if (volverAction != null)
-            {
-                volverAction.performed += OnBack;
-                volverAction.Enable();
-            }
-        }
-
-        // Botón Aceptar / Guardar
-        Button acceptBtn = rootElement.Q<Button>(acceptButtonName);
-        if (acceptBtn != null)
-        {
-            acceptBtn.clicked += OnAcceptClicked;
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (rootElement == null) return;
-
-        Button acceptBtn = rootElement.Q<Button>(acceptButtonName);
-        if (acceptBtn != null)
-        {
-            acceptBtn.clicked -= OnAcceptClicked;
-        }
-        if (volverAction != null)
-        {
-            volverAction.performed -= OnBack;
-            volverAction.Disable();
-        }
     }
 
     private void RegisterElement<T>(string elementName, System.Action<T> action) where T : VisualElement
@@ -106,24 +67,6 @@ public class AudioOptionsPanel : MonoBehaviour
         {
             action(element);
         }
-    }
-
-    private void OnAcceptClicked()
-    {
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayClickAndSave();
-        }
-        optionVE.style.display = DisplayStyle.Flex;
-        audioVE.style.display = DisplayStyle.None;
-        //SceneManager.LoadScene("MainMenu");
-    }
-    private void OnBack(InputAction.CallbackContext context)
-    {
-        AudioManager.Instance.PlayClickAndSave();
-        optionVE.style.display = DisplayStyle.Flex;
-        audioVE.style.display = DisplayStyle.None;
-        //SceneManager.LoadScene("MainMenu");
     }
 }
 

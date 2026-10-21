@@ -35,6 +35,7 @@ namespace NuevaAndinia.Gameplay
             {
                 Debug.LogWarning("No se encontró el componente MinimapCamera en la escena.");
             }
+            Destroy(gameObject);
         }
         
         public void NatureAudio()
