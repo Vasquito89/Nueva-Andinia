@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,15 +7,33 @@ namespace NuevaAndinia.Gameplay
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private GameObject weatherManager;
+        [SerializeField] private GameObject NivelUiDocument;
+        [SerializeField] private GameObject cinematic01;
+
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private GameObject playerSpawn;
         [SerializeField] private AudioSource natureAudio;
 
         private void Start()
         {
+            weatherManager.SetActive(false);
+            NivelUiDocument.SetActive(false);
+            StartCoroutine(StartGame());
+        }
+        IEnumerator StartGame()
+        {
+            yield return new WaitForSeconds(60f);
+
+            Destroy(cinematic01);
+
+            weatherManager.SetActive(true);
+            NivelUiDocument.SetActive(true);
+
             SpawnPlayer();
 
             natureAudio.volume = 0.4f;
+
         }
 
         void SpawnPlayer()

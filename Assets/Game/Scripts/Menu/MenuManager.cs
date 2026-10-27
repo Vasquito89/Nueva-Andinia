@@ -15,11 +15,9 @@ public class MenuManager : MonoBehaviour
     [Header("FadeIn")]
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private GameObject canvasObject;
-    //[SerializeField] private UIDocument glitchUIDoc;
     private float fadeDuration = 3f;
 
-    //private VisualElement glitchVE;
-
+    
     //UI Document menu
     private VisualElement creditVE;
     private VisualElement mandoVE;
@@ -43,11 +41,6 @@ public class MenuManager : MonoBehaviour
 
         canvasObject.SetActive(false);
 
-        //var rootGlitch = glitchUIDoc.rootVisualElement;
-        //glitchVE = rootGlitch.Q<VisualElement>("GlitchOverlay");
-        //glitchVE.style.display = DisplayStyle.None;
-
-        //glitchUIDoc.enabled = false;
 
         UIDocument uiDocument = GetComponent<UIDocument>();
         VisualElement visualElement = uiDocument.rootVisualElement;
@@ -55,11 +48,6 @@ public class MenuManager : MonoBehaviour
         creditVE = visualElement.Q<VisualElement>("CreditsVE");
         mandoVE = visualElement.Q<VisualElement>("MandosVE");
         optionVE = visualElement.Q<VisualElement>("OptionVE");
-
-        menuVE.style.display = DisplayStyle.Flex;
-        creditVE.style.display = DisplayStyle.None;
-        mandoVE.style.display = DisplayStyle.None;
-        optionVE.style.display = DisplayStyle.None;
 
         matchButton = visualElement.Q<Button>("PlayButton");
         optionButton = visualElement.Q<Button>("OptionButton");
@@ -71,13 +59,15 @@ public class MenuManager : MonoBehaviour
 
         mandoLabel = mandoVE.Q<Label>("MandoLabel");
         
-        matchButton.Focus();
 
         matchButton.clicked += StartMatchScene;
         optionButton.clicked += StartOptionScene;
         exitButton.clicked += OnExit;
         creditButton.clicked += CreditVEScreen;
         mandoButton.clicked += MandoVEScreen;
+
+        StartMenu();
+
     }
     private void OnDisable()
     {
@@ -88,7 +78,18 @@ public class MenuManager : MonoBehaviour
         creditButton.clicked -= CreditVEScreen;
         mandoButton.clicked -= MandoVEScreen;
     }
+    public void StartMenu()
+    {
+        navigation.state = NavigationState.MenuPrincipal;
 
+        menuVE.SetEnabled(true);
+        menuVE.style.display = DisplayStyle.Flex;
+        creditVE.style.display = DisplayStyle.None;
+        mandoVE.style.display = DisplayStyle.None;
+        optionVE.style.display = DisplayStyle.None;
+
+        matchButton.Focus();
+    }
     public void OnExit() => Application.Quit();
 
 
