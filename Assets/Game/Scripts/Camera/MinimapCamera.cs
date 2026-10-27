@@ -27,15 +27,4 @@ public class MinimapCamera : MonoBehaviour
             transform.rotation = Quaternion.Euler(90f, target.eulerAngles.y, 0f);
         }
     }
-    private void OnPreRender()
-    {
-        // Apaga la niebla global justo antes de que la MinimapCamera renderice
-        RenderSettings.fog = false;
-    }
-
-    private void OnPostRender()
-    {
-        // Vuelve a activar la niebla justo después de renderizar el minimapa
-        RenderSettings.fog = true;
-    }
 }

@@ -1,43 +1,41 @@
 using NuevaAndinia.Controller;
 using NuevaAndinia.Core;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class Door : MonoBehaviour, IInteractable
 {
-    [SerializeField] private UIDocument uiDocument;
+    //[SerializeField] private UIDocument uiDocument;
     private Animator animator;
-    private bool isOpen = false;
+    private bool isDoor = false;
 
-    private string mensajePrompt = "Presiona [E] para abrir";
+    private string mensajePrompt = "Presiona [E] para abrir / cerrar";
 
     private void OnEnable()
     {
         animator = GetComponent<Animator>();
     }
 
-    private void Start()
-    {
-        if (animator == null)
-            SetAnimation("Idle");
-    }
-
     public string GetInteractPrompt() => mensajePrompt;
 
     public void Interact(PlayerController player)
     {
-        // Validamos si el jugador tiene agua lista para usar
-        if (!isOpen)
+        if (isDoor == false)
         {
-            isOpen = true;// Agarro el pendrive
-            SetAnimation("Open");           // Aplica el daño al fuego y actualiza la UI
-        }
-    }
-    private void SetAnimation(string state)
-    {
-        if (animator == null) return;
+            animator.Play("DoorOpen");
+            isDoor = true;
 
-        animator.SetBool("isOpen", state =="Open");
-        animator.SetBool("isIdle", state == "Idle");
+        }
+        else
+        {
+            if (isDoor == true)
+            {
+                animator.Play("DoorClose");
+                isDoor = false;
+            }
+
+        }
     }
 }
