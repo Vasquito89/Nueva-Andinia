@@ -2,33 +2,38 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace NuevaAndinia.Gameplay
 {
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private GameObject weatherManager;
-        [SerializeField] private GameObject NivelUiDocument;
+        [SerializeField] private UIDocument NivelUiDocument;
         [SerializeField] private GameObject cinematic01;
 
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private GameObject playerSpawn;
         [SerializeField] private AudioSource natureAudio;
 
+        [SerializeField] private WorldTimeSystem worldTimeSystem;
+
         private void Start()
         {
             weatherManager.SetActive(false);
-            NivelUiDocument.SetActive(false);
+            NivelUiDocument.enabled = false;
+            worldTimeSystem.enabled = false;
             StartCoroutine(StartGame());
         }
         IEnumerator StartGame()
         {
-            yield return new WaitForSeconds(60f);
+            yield return new WaitForSeconds(100f);
 
             Destroy(cinematic01);
 
             weatherManager.SetActive(true);
-            NivelUiDocument.SetActive(true);
+            NivelUiDocument.enabled = true;
+            worldTimeSystem.enabled = true;
 
             SpawnPlayer();
 

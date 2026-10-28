@@ -69,6 +69,8 @@ public class SubtitleFinalScene : MonoBehaviour
         }
 
         activeSequenceCoroutine = StartCoroutine(PlaySequence());
+
+       
     }
 
     public void Stop()
@@ -151,6 +153,7 @@ public class SubtitleFinalScene : MonoBehaviour
 
         Debug.Log("Terminó la secuencia de texto.");
         activeSequenceCoroutine = null;
+        Stop();
     }
 
     private IEnumerator FadeText(float from, float to, float duration)
