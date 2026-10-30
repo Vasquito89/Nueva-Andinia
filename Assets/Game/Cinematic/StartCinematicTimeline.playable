@@ -693,7 +693,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d21dcc2386d650c4597f3633c75a1f98, type: 3}
-  m_Name: Animation Track (2)
+  m_Name: Player (Animator)
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AnimationTrack
   m_Version: 3
   m_AnimClip: {fileID: 0}
@@ -948,25 +948,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -984,7 +966,7 @@ MonoBehaviour:
     m_Start: 78.03333333333333
     m_ClipIn: 0
     m_Asset: {fileID: -7196885902802689082}
-    m_Duration: 2.450000000000003
+    m_Duration: 3.8666666666666742
     m_TimeScale: 1
     m_ParentTrack: {fileID: -4526906019331346085}
     m_EaseInDuration: 0
@@ -1046,14 +1028,14 @@ MonoBehaviour:
     m_Recordable: 0
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 1.4833333333333343
+    m_PostExtrapolationTime: 0.06666666666666288
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_N
   - m_Version: 1
     m_Start: 88.23333333333333
     m_ClipIn: 0
     m_Asset: {fileID: -1570989494766749169}
-    m_Duration: 4.833333333333343
+    m_Duration: 6.316666666666663
     m_TimeScale: 1
     m_ParentTrack: {fileID: -4526906019331346085}
     m_EaseInDuration: 0
@@ -2135,7 +2117,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b22792c3b570444eb18cb78c2af3a74, type: 3}
-  m_Name: Audio Track
+  m_Name: Speak (Audio Source)
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AudioTrack
   m_Version: 3
   m_AnimClip: {fileID: 0}

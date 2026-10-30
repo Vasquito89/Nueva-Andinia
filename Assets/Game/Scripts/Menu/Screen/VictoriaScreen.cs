@@ -11,7 +11,7 @@ public class VictoriaScreen : MonoBehaviour
     //private VideoPlayer victoryVideo;
     private Button AceptarButton;
 
-    private void OnEnable()
+    private void Update()
     {
         uiDocument = FindAnyObjectByType<UIDocument>();    
         rootVisualElement = uiDocument.rootVisualElement;

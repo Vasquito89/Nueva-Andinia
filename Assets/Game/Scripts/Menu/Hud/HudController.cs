@@ -13,18 +13,9 @@ public class HudController : MonoBehaviour
     private VisualElement Victoria;
     private Label vidaPlayer;
     private Label ObjetiveLbl;
-    //private Label advertenciaLabel;
-    //private Label vidaFuegoLabel;
-    //private Label tiempoVidaLabel;
-    //private Label energyLabel;
-    //private Label waterLabel;
 
     [SerializeField] private PlayerController player;
     private PlayerMovement playerMove;
-
-    //public float end = 180f;
-
-    private bool isPlaying = false;
 
     private void Awake()
     {
@@ -33,83 +24,49 @@ public class HudController : MonoBehaviour
 
     private void OnEnable()
     {
+        RefreshUIReferences();
+    }
+
+    public void RefreshUIReferences()
+    {
+        if (uiDocument == null) uiDocument = GetComponent<UIDocument>();
+        if (uiDocument == null || uiDocument.rootVisualElement == null) return;
+
         rootVisualElement = uiDocument.rootVisualElement;
         pauseVE = rootVisualElement.Q<VisualElement>("PauseVE");
         HUDVE = rootVisualElement.Q<VisualElement>("HUDVE");
         Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
         Victoria = rootVisualElement.Q<VisualElement>("VictoriaVE");
 
-        // Ocultar el menú al iniciar
-        pauseVE.style.display = DisplayStyle.None;
-        HUDVE.style.display = DisplayStyle.Flex;
-        Derrota.style.display = DisplayStyle.None;
-        Victoria.style.display = DisplayStyle.None;
+        if (pauseVE != null) pauseVE.style.display = DisplayStyle.None;
+        if (HUDVE != null) HUDVE.style.display = DisplayStyle.Flex;
+        if (Derrota != null) Derrota.style.display = DisplayStyle.None;
+        if (Victoria != null) Victoria.style.display = DisplayStyle.None;
 
         vidaPlayer = rootVisualElement.Q<Label>("LifeLbl");
         ObjetiveLbl = rootVisualElement.Q<Label>("ObjetiveLbl");
-        /*tiempoFuego = rootVisualElement.Q<Label>("TiempoLabel");
-        advertenciaLabel = rootVisualElement.Q<Label>("AdvertenciaLabel");
-        vidaFuegoLabel = rootVisualElement.Q<Label>("VidaFuegoLabel");
-        tiempoVidaLabel = rootVisualElement.Q<Label>("TiempoVidaLabel");
-        energyLabel = rootVisualElement.Q<Label>("EnergyLabel");
-        waterLabel = rootVisualElement.Q<Label>("VidaAguaLabel");
+    }
 
-        tiempoFuego.style.display = DisplayStyle.None;
-        advertenciaLabel.style.display = DisplayStyle.None;
-        vidaFuegoLabel.style.display = DisplayStyle.None;
-        tiempoVidaLabel.style.display = DisplayStyle.Flex;
-        waterLabel.style.display = DisplayStyle.Flex;
-
-        if (tiempoVidaLabel != null)
-        {
-            isPlaying = true;
-        }*/
+    /// <summary>
+    /// Método llamado por GameManager al instanciar el Player
+    /// </summary>
+    public void InitializeHUD(PlayerController targetPlayer)
+    {
+        player = targetPlayer;
+        RefreshUIReferences();
     }
 
     private void Update()
     {
-        player = FindAnyObjectByType<PlayerController>();
-        string vidaRestante = player.vida.ToString();
-        string vida = "Vida restante :";
-        vidaPlayer.text = vida + vidaRestante;
-
-        /*energyLabel.text = "Energia :" + player.energy;
-
-        waterLabel.text = "Cantidad de Agua :" + player.water;
-
-        playerMove = FindAnyObjectByType<PlayerMovement>();
-
-        if (isPlaying)
+        // Si la referencia del player aún no fue vinculada, la buscamos
+        if (player == null)
         {
-            if (end > 0)
-            {
-                end -= Time.deltaTime;
-                ActualizarTexto(end);
-            }
-            else
-            {
-                end = 0f;
-                isPlaying = false;
-                ActualizarTexto(end);
-                LogicaTiempoTerminado();
-                playerMove.Death();
-            }
-        }*/
+            player = FindAnyObjectByType<PlayerController>();
+        }
+
+        if (player != null && vidaPlayer != null)
+        {
+            vidaPlayer.text = "Vida restante :" + player.vida.ToString();
+        }
     }
-    /*void ActualizarTexto(float tiempoEnSegundos)
-    {
-        if (tiempoEnSegundos < 0f) tiempoEnSegundos = 0f;
-
-        // Operaciones matemáticas estándar para la variable flotante
-        int minutos = Mathf.FloorToInt(tiempoEnSegundos / 60f);
-        int segundos = Mathf.FloorToInt(tiempoEnSegundos % 60f);
-
-        // Asignamos el formato de minutos al texto de UI Toolkit
-        tiempoVidaLabel.text = "El juego termina en " + string.Format("{0:00}:{1:00}", minutos, segundos);
-    }
-
-    void LogicaTiempoTerminado()
-    {
-        Debug.Log("¡Tiempo agotado!");
-    }*/
 }
