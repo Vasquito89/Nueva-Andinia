@@ -3059,191 +3059,191 @@ Shader "Polytope Studio/PT_Vegetation_Opaque_Shader"
 			}
 			#endif
 
-			FragmentOutput frag ( VertexOutput IN
-								#ifdef ASE_DEPTH_WRITE_ON
-								,out float outputDepth : ASE_SV_DEPTH
-								#endif
-								 )
-			{
-				UNITY_SETUP_INSTANCE_ID(IN);
-				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(IN);
-
-				#ifdef LOD_FADE_CROSSFADE
-					LODDitheringTransition( IN.positionCS.xyz, unity_LODFade.x );
-				#endif
-
-				#if defined(ENABLE_TERRAIN_PERPIXEL_NORMAL)
-					float2 sampleCoords = (IN.lightmapUVOrVertexSH.zw / _TerrainHeightmapRecipSize.zw + 0.5f) * _TerrainHeightmapRecipSize.xy;
-					float3 WorldNormal = TransformObjectToWorldNormal(normalize(SAMPLE_TEXTURE2D(_TerrainNormalmapTexture, sampler_TerrainNormalmapTexture, sampleCoords).rgb * 2 - 1));
-					float3 WorldTangent = -cross(GetObjectToWorldMatrix()._13_23_33, WorldNormal);
-					float3 WorldBiTangent = cross(WorldNormal, -WorldTangent);
-				#else
-					float3 WorldNormal = normalize( IN.tSpace0.xyz );
-					float3 WorldTangent = IN.tSpace1.xyz;
-					float3 WorldBiTangent = IN.tSpace2.xyz;
-				#endif
-
-				float3 WorldPosition = float3(IN.tSpace0.w,IN.tSpace1.w,IN.tSpace2.w);
-				float3 WorldViewDirection = _WorldSpaceCameraPos.xyz  - WorldPosition;
-				float4 ShadowCoords = float4( 0, 0, 0, 0 );
-
-				float4 ClipPos = IN.clipPosV;
-				float4 ScreenPos = ComputeScreenPos( IN.clipPosV );
-
-				float2 NormalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(IN.positionCS);
-
-				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-					ShadowCoords = IN.shadowCoord;
-				#elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
-					ShadowCoords = TransformWorldToShadowCoord( WorldPosition );
-				#else
-					ShadowCoords = float4(0, 0, 0, 0);
-				#endif
-
-				WorldViewDirection = SafeNormalize( WorldViewDirection );
-
-				float2 uv_BaseTexture2 = IN.ase_texcoord8.xy;
-				float4 tex2DNode2 = tex2D( _BaseTexture, uv_BaseTexture2 );
-				float clampResult621 = clamp( ( (0.5 + (IN.ase_texcoord9.y - 0.0) * (2.0 - 0.5) / (1.0 - 0.0)) * _Gradient ) , 0.0 , 1.0 );
-				float clampResult555 = clamp( pow( clampResult621 , _GradientPower ) , 0.0 , 1.0 );
-				float4 lerpResult557 = lerp( _GroundColor , _TopColor , clampResult555);
-				float4 Gradient558 = lerpResult557;
-				float grayscale180 = dot(tex2DNode2.rgb, float3(0.299,0.587,0.114));
-				float saferPower568 = abs( grayscale180 );
-				float4 temp_cast_1 = (pow( saferPower568 , 0.5 )).xxxx;
-				float4 blendOpSrc18 = Gradient558;
-				float4 blendOpDest18 = CalculateContrast(1.8,temp_cast_1);
-				float2 temp_cast_2 = (0.5).xx;
-				float2 texCoord578 = IN.ase_texcoord8.xy * float2( 1,1 ) + temp_cast_2;
-				float clampResult596 = clamp( step( texCoord578.x , 1.0 ) , 0.0 , 1.0 );
-				float2 temp_cast_3 = (0.0).xx;
-				float2 texCoord577 = IN.ase_texcoord8.xy * float2( 1,1 ) + temp_cast_3;
-				float clampResult585 = clamp( ( ( 1.0 - clampResult596 ) * step( texCoord577.y , 0.5 ) ) , 0.0 , 1.0 );
-				float FRUITSMASK586 = clampResult585;
-				float temp_output_594_0 = ( 1.0 - FRUITSMASK586 );
-				float4 lerpBlendMode18 = lerp(blendOpDest18,( blendOpSrc18 * blendOpDest18 ),temp_output_594_0);
-				float4 lerpResult595 = lerp( tex2DNode2 , ( saturate( lerpBlendMode18 )) , temp_output_594_0);
-				float4 COLOR502 = (( _CUSTOMCOLORSTINTING )?( lerpResult595 ):( tex2DNode2 ));
-				float4 color443 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
-				float fresnelNdotV454 = dot( WorldNormal, WorldViewDirection );
-				float fresnelNode454 = ( 0.11 + 1.0 * pow( 1.0 - fresnelNdotV454, color443.r ) );
-				float3 normalizedWorldNormal = normalize( WorldNormal );
-				float dotResult450 = dot( normalizedWorldNormal , float3(0,1,0) );
-				float smoothstepResult531 = smoothstep( 0.0 , _SnowFade , ( dotResult450 + (-1.0 + (_SnowCoverage - 0.0) * (1.0 - -1.0) / (1.0 - 0.0)) ));
-				float SNOW489 = ( ( (0.0 + (_SnowAmount - 0.0) * (10.0 - 0.0) / (1.0 - 0.0)) * fresnelNode454 ) * smoothstepResult531 );
-				#ifdef _SNOWONOFF_ON
-				float4 staticSwitch372 = ( SNOW489 + COLOR502 );
-				#else
-				float4 staticSwitch372 = COLOR502;
-				#endif
-				
-
-				float3 BaseColor = staticSwitch372.rgb;
-				float3 Normal = float3(0, 0, 1);
-				float3 Emission = 0;
-				float3 Specular = 0.5;
-				float Metallic = 0;
-				float Smoothness = ( _Smoothness * ( 1.0 - FRUITSMASK586 ) );
-				float Occlusion = 1;
-				float Alpha = 1;
-				float AlphaClipThreshold = 0.5;
-				float AlphaClipThresholdShadow = 0.5;
-				float3 BakedGI = 0;
-				float3 RefractionColor = 1;
-				float RefractionIndex = 1;
-				float3 Transmission = 1;
-				float3 Translucency = 1;
-
-				#ifdef ASE_DEPTH_WRITE_ON
-					float DepthValue = IN.positionCS.z;
-				#endif
-
-				#ifdef _ALPHATEST_ON
-					clip(Alpha - AlphaClipThreshold);
-				#endif
-
-				InputData inputData = (InputData)0;
-				inputData.positionWS = WorldPosition;
-				inputData.positionCS = IN.positionCS;
-				inputData.shadowCoord = ShadowCoords;
-
-				#ifdef _NORMALMAP
-					#if _NORMAL_DROPOFF_TS
-						inputData.normalWS = TransformTangentToWorld(Normal, half3x3( WorldTangent, WorldBiTangent, WorldNormal ));
-					#elif _NORMAL_DROPOFF_OS
-						inputData.normalWS = TransformObjectToWorldNormal(Normal);
-					#elif _NORMAL_DROPOFF_WS
-						inputData.normalWS = Normal;
+			GBufferFragOutput frag ( VertexOutput IN
+					#ifdef ASE_DEPTH_WRITE_ON
+					,out float outputDepth : ASE_SV_DEPTH
 					#endif
-				#else
-					inputData.normalWS = WorldNormal;
-				#endif
+					 )
+{
+	UNITY_SETUP_INSTANCE_ID(IN);
+	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(IN);
 
-				inputData.normalWS = NormalizeNormalPerPixel(inputData.normalWS);
-				inputData.viewDirectionWS = SafeNormalize( WorldViewDirection );
+	#ifdef LOD_FADE_CROSSFADE
+		LODDitheringTransition( IN.positionCS.xyz, unity_LODFade.x );
+	#endif
 
-				inputData.vertexLighting = IN.fogFactorAndVertexLight.yzw;
+	#if defined(ENABLE_TERRAIN_PERPIXEL_NORMAL)
+		float2 sampleCoords = (IN.lightmapUVOrVertexSH.zw / _TerrainHeightmapRecipSize.zw + 0.5f) * _TerrainHeightmapRecipSize.xy;
+		float3 WorldNormal = TransformObjectToWorldNormal(normalize(SAMPLE_TEXTURE2D(_TerrainNormalmapTexture, sampler_TerrainNormalmapTexture, sampleCoords).rgb * 2 - 1));
+		float3 WorldTangent = -cross(GetObjectToWorldMatrix()._13_23_33, WorldNormal);
+		float3 WorldBiTangent = cross(WorldNormal, -WorldTangent);
+	#else
+		float3 WorldNormal = normalize( IN.tSpace0.xyz );
+		float3 WorldTangent = IN.tSpace1.xyz;
+		float3 WorldBiTangent = IN.tSpace2.xyz;
+	#endif
 
-				#if defined(ENABLE_TERRAIN_PERPIXEL_NORMAL)
-					float3 SH = SampleSH(inputData.normalWS.xyz);
-				#else
-					float3 SH = IN.lightmapUVOrVertexSH.xyz;
-				#endif
+	float3 WorldPosition = float3(IN.tSpace0.w,IN.tSpace1.w,IN.tSpace2.w);
+	float3 WorldViewDirection = _WorldSpaceCameraPos.xyz  - WorldPosition;
+	float4 ShadowCoords = float4( 0, 0, 0, 0 );
 
-				#ifdef ASE_BAKEDGI
-					inputData.bakedGI = BakedGI;
-				#else
-					#if defined(DYNAMICLIGHTMAP_ON)
-						inputData.bakedGI = SAMPLE_GI( IN.lightmapUVOrVertexSH.xy, IN.dynamicLightmapUV.xy, SH, inputData.normalWS);
-					#else
-						inputData.bakedGI = SAMPLE_GI( IN.lightmapUVOrVertexSH.xy, SH, inputData.normalWS );
-					#endif
-				#endif
+	float4 ClipPos = IN.clipPosV;
+	float4 ScreenPos = ComputeScreenPos( IN.clipPosV );
 
-				inputData.normalizedScreenSpaceUV = NormalizedScreenSpaceUV;
-				inputData.shadowMask = SAMPLE_SHADOWMASK(IN.lightmapUVOrVertexSH.xy);
+	float2 NormalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(IN.positionCS);
 
-				#if defined(DEBUG_DISPLAY)
-					#if defined(DYNAMICLIGHTMAP_ON)
-						inputData.dynamicLightmapUV = IN.dynamicLightmapUV.xy;
-						#endif
-					#if defined(LIGHTMAP_ON)
-						inputData.staticLightmapUV = IN.lightmapUVOrVertexSH.xy;
-					#else
-						inputData.vertexSH = SH;
-					#endif
-				#endif
+	#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
+		ShadowCoords = IN.shadowCoord;
+	#elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
+		ShadowCoords = TransformWorldToShadowCoord( WorldPosition );
+	#else
+		ShadowCoords = float4(0, 0, 0, 0);
+	#endif
 
-				#ifdef _DBUFFER
-					ApplyDecal(IN.positionCS,
-						BaseColor,
-						Specular,
-						inputData.normalWS,
-						Metallic,
-						Occlusion,
-						Smoothness);
-				#endif
+	WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				BRDFData brdfData;
-				InitializeBRDFData
-				(BaseColor, Metallic, Specular, Smoothness, Alpha, brdfData);
+	float2 uv_BaseTexture2 = IN.ase_texcoord8.xy;
+	float4 tex2DNode2 = tex2D( _BaseTexture, uv_BaseTexture2 );
+	float clampResult621 = clamp( ( (0.5 + (IN.ase_texcoord9.y - 0.0) * (2.0 - 0.5) / (1.0 - 0.0)) * _Gradient ) , 0.0 , 1.0 );
+	float clampResult555 = clamp( pow( clampResult621 , _GradientPower ) , 0.0 , 1.0 );
+	float4 lerpResult557 = lerp( _GroundColor , _TopColor , clampResult555);
+	float4 Gradient558 = lerpResult557;
+	float grayscale180 = dot(tex2DNode2.rgb, float3(0.299,0.587,0.114));
+	float saferPower568 = abs( grayscale180 );
+	float4 temp_cast_1 = (pow( saferPower568 , 0.5 )).xxxx;
+	float4 blendOpSrc18 = Gradient558;
+	float4 blendOpDest18 = CalculateContrast(1.8,temp_cast_1);
+	float2 temp_cast_2 = (0.5).xx;
+	float2 texCoord578 = IN.ase_texcoord8.xy * float2( 1,1 ) + temp_cast_2;
+	float clampResult596 = clamp( step( texCoord578.x , 1.0 ) , 0.0 , 1.0 );
+	float2 temp_cast_3 = (0.0).xx;
+	float2 texCoord577 = IN.ase_texcoord8.xy * float2( 1,1 ) + temp_cast_3;
+	float clampResult585 = clamp( ( ( 1.0 - clampResult596 ) * step( texCoord577.y , 0.5 ) ) , 0.0 , 1.0 );
+	float FRUITSMASK586 = clampResult585;
+	float temp_output_594_0 = ( 1.0 - FRUITSMASK586 );
+	float4 lerpBlendMode18 = lerp(blendOpDest18,( blendOpSrc18 * blendOpDest18 ),temp_output_594_0);
+	float4 lerpResult595 = lerp( tex2DNode2 , ( saturate( lerpBlendMode18 )) , temp_output_594_0);
+	float4 COLOR502 = (( _CUSTOMCOLORSTINTING )?( lerpResult595 ):( tex2DNode2 ));
+	float4 color443 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+	float fresnelNdotV454 = dot( WorldNormal, WorldViewDirection );
+	float fresnelNode454 = ( 0.11 + 1.0 * pow( 1.0 - fresnelNdotV454, color443.r ) );
+	float3 normalizedWorldNormal = normalize( WorldNormal );
+	float dotResult450 = dot( normalizedWorldNormal , float3(0,1,0) );
+	float smoothstepResult531 = smoothstep( 0.0 , _SnowFade , ( dotResult450 + (-1.0 + (_SnowCoverage - 0.0) * (1.0 - -1.0) / (1.0 - 0.0)) ));
+	float SNOW489 = ( ( (0.0 + (_SnowAmount - 0.0) * (10.0 - 0.0) / (1.0 - 0.0)) * fresnelNode454 ) * smoothstepResult531 );
+	#ifdef _SNOWONOFF_ON
+	float4 staticSwitch372 = ( SNOW489 + COLOR502 );
+	#else
+	float4 staticSwitch372 = COLOR502;
+	#endif
+	
 
-				Light mainLight = GetMainLight(inputData.shadowCoord, inputData.positionWS, inputData.shadowMask);
-				half4 color;
-				MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI, inputData.shadowMask);
-				color.rgb = GlobalIllumination(brdfData, inputData.bakedGI, Occlusion, inputData.positionWS, inputData.normalWS, inputData.viewDirectionWS);
-				color.a = Alpha;
+	float3 BaseColor = staticSwitch372.rgb;
+	float3 Normal = float3(0, 0, 1);
+	float3 Emission = 0;
+	float3 Specular = 0.5;
+	float Metallic = 0;
+	float Smoothness = ( _Smoothness * ( 1.0 - FRUITSMASK586 ) );
+	float Occlusion = 1;
+	float Alpha = 1;
+	float AlphaClipThreshold = 0.5;
+	float AlphaClipThresholdShadow = 0.5;
+	float3 BakedGI = 0;
+	float3 RefractionColor = 1;
+	float RefractionIndex = 1;
+	float3 Transmission = 1;
+	float3 Translucency = 1;
 
-				#ifdef ASE_FINAL_COLOR_ALPHA_MULTIPLY
-					color.rgb *= color.a;
-				#endif
+	#ifdef ASE_DEPTH_WRITE_ON
+		float DepthValue = IN.positionCS.z;
+	#endif
 
-				#ifdef ASE_DEPTH_WRITE_ON
-					outputDepth = DepthValue;
-				#endif
+	#ifdef _ALPHATEST_ON
+		clip(Alpha - AlphaClipThreshold);
+	#endif
 
-				return BRDFDataToGbuffer(brdfData, inputData, Smoothness, Emission + color.rgb, Occlusion);
-			}
+	InputData inputData = (InputData)0;
+	inputData.positionWS = WorldPosition;
+	inputData.positionCS = IN.positionCS;
+	inputData.shadowCoord = ShadowCoords;
+
+	#ifdef _NORMALMAP
+		#if _NORMAL_DROPOFF_TS
+			inputData.normalWS = TransformTangentToWorld(Normal, half3x3( WorldTangent, WorldBiTangent, WorldNormal ));
+		#elif _NORMAL_DROPOFF_OS
+			inputData.normalWS = TransformObjectToWorldNormal(Normal);
+		#elif _NORMAL_DROPOFF_WS
+			inputData.normalWS = Normal;
+		#endif
+	#else
+		inputData.normalWS = WorldNormal;
+	#endif
+
+	inputData.normalWS = NormalizeNormalPerPixel(inputData.normalWS);
+	inputData.viewDirectionWS = SafeNormalize( WorldViewDirection );
+
+	inputData.vertexLighting = IN.fogFactorAndVertexLight.yzw;
+
+	#if defined(ENABLE_TERRAIN_PERPIXEL_NORMAL)
+		float3 SH = SampleSH(inputData.normalWS.xyz);
+	#else
+		float3 SH = IN.lightmapUVOrVertexSH.xyz;
+	#endif
+
+	#ifdef ASE_BAKEDGI
+		inputData.bakedGI = BakedGI;
+	#else
+		#if defined(DYNAMICLIGHTMAP_ON)
+			inputData.bakedGI = SAMPLE_GI( IN.lightmapUVOrVertexSH.xy, IN.dynamicLightmapUV.xy, SH, inputData.normalWS);
+		#else
+			inputData.bakedGI = SAMPLE_GI( IN.lightmapUVOrVertexSH.xy, SH, inputData.normalWS );
+		#endif
+	#endif
+
+	inputData.normalizedScreenSpaceUV = NormalizedScreenSpaceUV;
+	inputData.shadowMask = SAMPLE_SHADOWMASK(IN.lightmapUVOrVertexSH.xy);
+
+	#if defined(DEBUG_DISPLAY)
+		#if defined(DYNAMICLIGHTMAP_ON)
+			inputData.dynamicLightmapUV = IN.dynamicLightmapUV.xy;
+			#endif
+		#if defined(LIGHTMAP_ON)
+			inputData.staticLightmapUV = IN.lightmapUVOrVertexSH.xy;
+		#else
+			inputData.vertexSH = SH;
+		#endif
+	#endif
+
+	#ifdef _DBUFFER
+		ApplyDecal(IN.positionCS,
+			BaseColor,
+			Specular,
+			inputData.normalWS,
+			Metallic,
+			Occlusion,
+			Smoothness);
+	#endif
+
+	BRDFData brdfData;
+	InitializeBRDFData
+	(BaseColor, Metallic, Specular, Smoothness, Alpha, brdfData);
+
+	Light mainLight = GetMainLight(inputData.shadowCoord, inputData.positionWS, inputData.shadowMask);
+	half4 color;
+	MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI, inputData.shadowMask);
+	color.rgb = GlobalIllumination(brdfData, inputData.bakedGI, Occlusion, inputData.positionWS, inputData.normalWS, inputData.viewDirectionWS);
+	color.a = Alpha;
+
+	#ifdef ASE_FINAL_COLOR_ALPHA_MULTIPLY
+		color.rgb *= color.a;
+	#endif
+
+	#ifdef ASE_DEPTH_WRITE_ON
+		outputDepth = DepthValue;
+	#endif
+
+	return BRDFDataToGbuffer(brdfData, inputData, Smoothness, Emission + color.rgb, Occlusion);
+}
 
 			ENDHLSL
 		}
