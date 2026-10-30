@@ -37,40 +37,47 @@ public class WorldTimeSystem : MonoBehaviour
 
     public int CurrentHour => currentDateTime.Hour;
     public int CurrentMinute => currentDateTime.Minute;
-
-    // Devuelve la hora exacta con decimales (Ej: 13:30 devuelve 13.5)
     public float CurrentHourDecimal => currentDateTime.Hour + (currentDateTime.Minute / 60f);
-
 
     private bool isNight;
 
+    void Awake()
+    {
+        currentDateTime = new DateTime(year, month, day, hour, minute, 0);
+    }
+
+    void OnEnable()
+    {
+        // Forzamos buscar el Label cada vez que el sistema de tiempo o el UIDocument se activen
+        FindDateTimeLabel();
+        UpdateWorld();
+    }
+
     void Start()
     {
-        currentDateTime = new DateTime(
-            year,
-            month,
-            day,
-            hour,
-            minute,
-            0
-        );
-
-        if (uiDocument != null)
-        {
-            dateTimeLabel =
-                uiDocument.rootVisualElement.Q<Label>(labelName);
-        }
-
+        FindDateTimeLabel();
         UpdateWorld();
     }
 
     void Update()
     {
-        currentDateTime = currentDateTime.AddMinutes(
-            gameMinutesPerSecond * Time.deltaTime
-        );
+        currentDateTime = currentDateTime.AddMinutes(gameMinutesPerSecond * Time.deltaTime);
+
+        // Si el label aún no fue capturado (porque la UI estaba desactivada), lo reintentamos
+        if (dateTimeLabel == null)
+        {
+            FindDateTimeLabel();
+        }
 
         UpdateWorld();
+    }
+
+    private void FindDateTimeLabel()
+    {
+        if (uiDocument != null && uiDocument.enabled && uiDocument.rootVisualElement != null)
+        {
+            dateTimeLabel = uiDocument.rootVisualElement.Q<Label>(labelName);
+        }
     }
 
     void UpdateWorld()
@@ -84,24 +91,18 @@ public class WorldTimeSystem : MonoBehaviour
     {
         if (dateTimeLabel != null)
         {
-            dateTimeLabel.text =
-                currentDateTime.ToString("dd/MM/yyyy HH:mm");
+            dateTimeLabel.text = currentDateTime.ToString("dd/MM/yyyy HH:mm");
         }
     }
 
     void UpdateSun()
     {
-        float currentHour =
-            currentDateTime.Hour +
-            currentDateTime.Minute / 60f;
-
-        float sunRotationX =
-            (currentHour / 24f) * 360f - 90f;
+        float currentHour = currentDateTime.Hour + currentDateTime.Minute / 60f;
+        float sunRotationX = (currentHour / 24f) * 360f - 90f;
 
         if (sunPivot != null)
         {
-            sunPivot.localRotation =
-                Quaternion.Euler(sunRotationX, 0, 0);
+            sunPivot.localRotation = Quaternion.Euler(sunRotationX, 0, 0);
         }
 
         bool night = currentHour < 8.5f || currentHour >= 18f;

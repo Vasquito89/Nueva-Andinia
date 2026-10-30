@@ -48,6 +48,12 @@ public class PlayerInteraction : MonoBehaviour
         {
             OnInteractInput();
         }
+        if (uiDocument == null) uiDocument = FindAnyObjectByType<UIDocument>();
+        if (uiDocument != null && uiDocument.rootVisualElement != null)
+        {
+            _promptLabel = uiDocument.rootVisualElement.Q<Label>("PromptLabel");
+            HidePrompt();
+        }
     }
 
     private void businessRaycast()
