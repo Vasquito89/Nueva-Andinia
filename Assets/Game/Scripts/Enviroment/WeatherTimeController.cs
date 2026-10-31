@@ -11,6 +11,11 @@ public class WeatherTimeController : MonoBehaviour
     [Header("Referencias de Partículas de Nieve")]
     [SerializeField] private ParticleSystem snowParticles;
 
+    [Header("Sonidos de las particulas")]
+    [SerializeField] private AudioSource rainDrizzleSound;
+    [SerializeField] private AudioSource rainDownpourSound;
+    [SerializeField] private AudioSource snowSound;
+
     [Header("Referencia al Volumen")]
     [SerializeField] private Volume globalVolume;
 
@@ -76,9 +81,23 @@ public class WeatherTimeController : MonoBehaviour
         if (rainDownpourParticles != null) downpourEmission = rainDownpourParticles.emission;
         if (snowParticles != null) snowEmission = snowParticles.emission;
 
-        if (rainDrizzleParticles != null && !rainDrizzleParticles.isPlaying) rainDrizzleParticles.Play();
-        if (rainDownpourParticles != null && !rainDownpourParticles.isPlaying) rainDownpourParticles.Play();
-        if (snowParticles != null && !snowParticles.isPlaying) snowParticles.Play();
+        if (rainDrizzleParticles != null && !rainDrizzleParticles.isPlaying)
+        {
+            rainDrizzleParticles.Play();
+            rainDrizzleSound.Play();
+        }
+
+        if (rainDownpourParticles != null && !rainDownpourParticles.isPlaying)
+        {
+            rainDownpourParticles.Play();
+            rainDownpourSound.Play();
+        }
+
+        if (snowParticles != null && !snowParticles.isPlaying)
+        {
+            snowParticles.Play();
+            snowSound.Play();
+        }
     }
 
     void Update()
