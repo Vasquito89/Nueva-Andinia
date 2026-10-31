@@ -17,7 +17,7 @@ namespace NuevaAndinia.Gameplay
         [Header("Cinemática y Director")]
         [SerializeField] private GameObject cinematic01;
         [SerializeField] private PlayableDirector cinematicDirector;
-        [SerializeField] private Transform movementPlayerTransform; // Arrastra aquí el GameObject 'MovementPlayer'
+        [SerializeField] private Transform movementPlayerTransform;
 
         [Header("Jugador y Spawning")]
         [SerializeField] private GameObject playerPrefab;
@@ -29,15 +29,12 @@ namespace NuevaAndinia.Gameplay
 
         private void Start()
         {
-            // Apagamos los sistemas y UI mientras dura la cinemática
             weatherManager.SetActive(false);
             NivelUiDocument.enabled = false;
             worldTimeSystem.enabled = false;
 
-            // 1. Instanciamos al Player
             playerInstance = SpawnPlayer();
 
-            // 2. Lo hacemos hijo de MovementPlayer para que aparezca dentro en la jerarquía
             if (movementPlayerTransform != null)
             {
                 playerInstance.transform.SetParent(movementPlayerTransform, false);
@@ -45,10 +42,8 @@ namespace NuevaAndinia.Gameplay
                 playerInstance.transform.localRotation = Quaternion.identity;
             }
 
-            // 3. Reconectamos las pistas (Animator / Audio) del Player al Timeline
             SetupTimelineBindings(playerInstance);
 
-            // 4. Iniciar cinemática
             StartCoroutine(StartGame());
         }
 
@@ -57,7 +52,6 @@ namespace NuevaAndinia.Gameplay
             if (cinematicDirector != null)
             {
                 cinematicDirector.Play();
-                // Espera exactamente la duración real del Timeline
                 yield return new WaitForSeconds((float)cinematicDirector.duration);
             }
             else
@@ -65,30 +59,35 @@ namespace NuevaAndinia.Gameplay
                 yield return new WaitForSeconds(2f);
             }
 
-            // 5. Al terminar la cinemática: Liberar al Player de MovementPlayer
+            // 1. Desvincular de la jerarquía de la cinemática
             if (playerInstance != null)
             {
-                // Salir de la jerarquía de Cinematic para que no sea destruido
-                playerInstance.transform.SetParent(null , true);          
+                playerInstance.transform.SetParent(null);
+
+                // 2. Mover el jugador al punto de inicio del gameplay (playerSpawnStartG)
+                if (playerSpawnStartG != null)
+                {
+                    // Si usas CharacterController o Rigidbody, desactívalos temporalmente antes de cambiar la posición
+                    CharacterController cc = playerInstance.GetComponent<CharacterController>();
+                    if (cc != null) cc.enabled = false;
+
+                    playerInstance.transform.position = playerSpawnStartG.transform.position;
+                    playerInstance.transform.rotation = playerSpawnStartG.transform.rotation;
+
+                    if (cc != null) cc.enabled = true;
+                }
             }
 
-            // Destruir el objeto de la cinemática
-            if (cinematic01 != null)
-            {
-                Destroy(cinematic01);
-            }
+            // 3. Limpiar los objetos de cinemática/spawn
+            if (cinematic01 != null) Destroy(cinematic01);
+            if (playerSpawn != null) Destroy(playerSpawn);
+            if (playerSpawnStartG != null) Destroy(playerSpawnStartG);
 
-            if (playerSpawn != null)
-            {
-                Destroy(playerSpawn);
-            }
-
-            // Activar la UI Toolkit y los sistemas
+            // Activar UI y sistemas
             NivelUiDocument.enabled = true;
             weatherManager.SetActive(true);
             worldTimeSystem.enabled = true;
 
-            //Notificar al HudController sobre el Player instanciado
             HudController hud = NivelUiDocument.GetComponent<HudController>();
             if (hud != null && playerInstance != null)
             {
@@ -107,23 +106,21 @@ namespace NuevaAndinia.Gameplay
 
         GameObject SpawnPlayer()
         {
-            Vector3 spawnPos = playerSpawnStartG != null ? playerSpawnStartG.transform.position : Vector3.zero;
-            Quaternion spawnRot = playerSpawnStartG != null ? playerSpawnStartG.transform.rotation : Quaternion.identity;
+            // Instanciar en la posición temporal de la cinemática o en playerSpawn
+            //Vector3 spawnPos = playerSpawn != null ? playerSpawn.transform.position : Vector3.zero;
+            //Quaternion spawnRot = playerSpawn != null ? playerSpawn.transform.rotation : Quaternion.identity;
+            Vector3 spawnPos = Vector3.zero;
+            Quaternion spawnRot = Quaternion.identity;
 
             GameObject instance = Instantiate(playerPrefab, spawnPos, spawnRot);
 
-            // Asignar el objetivo a la cámara del minimapa
             MinimapCamera minimapCam = FindFirstObjectByType<MinimapCamera>();
             if (minimapCam != null)
             {
                 minimapCam.SetTarget(instance.transform);
             }
 
-            if (playerSpawnStartG != null)
-            {
-                Destroy(playerSpawnStartG);
-            }
-
+            // OJO: No destruimos playerSpawnStartG aquí para poder usar sus transformadas al final de la cinemática
             return instance;
         }
 
@@ -155,7 +152,7 @@ namespace NuevaAndinia.Gameplay
             if (natureAudio == null) return;
             natureAudio.minDistance = 1f;
             natureAudio.maxDistance = 5f;
-            natureAudio.volume = 0.2f;
+            natureAudio.volume = 0.7f;
         }
     }
 }

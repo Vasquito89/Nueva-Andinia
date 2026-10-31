@@ -31,7 +31,7 @@ public class PlayerInteraction : MonoBehaviour
         _gameManager = FindAnyObjectByType<GameManager>();
     }
 
-    private void OnEnable()
+    /*private void OnEnable()
     {
         if (uiDocument == null) uiDocument = FindAnyObjectByType<UIDocument>();
         if (uiDocument != null && uiDocument.rootVisualElement != null)
@@ -39,7 +39,7 @@ public class PlayerInteraction : MonoBehaviour
             _promptLabel = uiDocument.rootVisualElement.Q<Label>("PromptLabel");
             HidePrompt();
         }
-    }
+    }*/
 
     private void Update()
     { 
