@@ -9,13 +9,15 @@ public class Door : MonoBehaviour, IInteractable
 {
     //[SerializeField] private UIDocument uiDocument;
     private Animator animator;
+    private AudioSource audio;
     private bool isDoor = false;
 
     private string mensajePrompt = "Presiona [E] para abrir / cerrar";
 
     private void OnEnable()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
+        audio= GetComponent<AudioSource>();
     }
 
     public string GetInteractPrompt() => mensajePrompt;
@@ -25,6 +27,7 @@ public class Door : MonoBehaviour, IInteractable
         if (isDoor == false)
         {
             animator.Play("DoorOpen");
+            audio.Play();
             isDoor = true;
 
         }
@@ -33,6 +36,7 @@ public class Door : MonoBehaviour, IInteractable
             if (isDoor == true)
             {
                 animator.Play("DoorClose");
+                audio.Play();
                 isDoor = false;
             }
 
