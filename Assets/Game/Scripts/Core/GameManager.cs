@@ -1,5 +1,7 @@
 using NuevaAndinia.Controller;
+using NuevaAndinia.Movement;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -22,8 +24,9 @@ namespace NuevaAndinia.Gameplay
         [Header("Jugador y Spawning")]
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private GameObject playerSpawn;
-        [SerializeField] private GameObject playerSpawnStartG;
         [SerializeField] private AudioSource natureAudio;
+
+        [SerializeField] Transform game;
 
         private GameObject playerInstance;
 
@@ -35,12 +38,9 @@ namespace NuevaAndinia.Gameplay
 
             playerInstance = SpawnPlayer();
 
-            if (movementPlayerTransform != null)
-            {
-                playerInstance.transform.SetParent(movementPlayerTransform, false);
-                playerInstance.transform.localPosition = Vector3.zero;
-                playerInstance.transform.localRotation = Quaternion.identity;
-            }
+            playerInstance.transform.SetParent(movementPlayerTransform, false);
+            playerInstance.transform.position = Vector3.zero;
+            playerInstance.transform.rotation = Quaternion.identity;
 
             SetupTimelineBindings(playerInstance);
 
@@ -60,28 +60,16 @@ namespace NuevaAndinia.Gameplay
             }
 
             // 1. Desvincular de la jerarquía de la cinemática
-            if (playerInstance != null)
-            {
-                playerInstance.transform.SetParent(null);
 
-                // 2. Mover el jugador al punto de inicio del gameplay (playerSpawnStartG)
-                if (playerSpawnStartG != null)
-                {
-                    // Si usas CharacterController o Rigidbody, desactívalos temporalmente antes de cambiar la posición
-                    CharacterController cc = playerInstance.GetComponent<CharacterController>();
-                    if (cc != null) cc.enabled = false;
+            playerInstance.transform.SetParent(game, true);
 
-                    playerInstance.transform.position = playerSpawnStartG.transform.position;
-                    playerInstance.transform.rotation = playerSpawnStartG.transform.rotation;
-
-                    if (cc != null) cc.enabled = true;
-                }
-            }
+            // 2. Teletransportar
+            playerInstance.transform.position = playerSpawn.transform.localPosition;
+            playerInstance.transform.rotation = playerSpawn.transform.localRotation;
 
             // 3. Limpiar los objetos de cinemática/spawn
             if (cinematic01 != null) Destroy(cinematic01);
             if (playerSpawn != null) Destroy(playerSpawn);
-            if (playerSpawnStartG != null) Destroy(playerSpawnStartG);
 
             // Activar UI y sistemas
             NivelUiDocument.enabled = true;
@@ -100,17 +88,15 @@ namespace NuevaAndinia.Gameplay
 
             if (natureAudio != null)
             {
-                natureAudio.volume = 0.4f;
+                natureAudio.Play();
             }
         }
 
         GameObject SpawnPlayer()
         {
-            // Instanciar en la posición temporal de la cinemática o en playerSpawn
-            //Vector3 spawnPos = playerSpawn != null ? playerSpawn.transform.position : Vector3.zero;
-            //Quaternion spawnRot = playerSpawn != null ? playerSpawn.transform.rotation : Quaternion.identity;
-            Vector3 spawnPos = Vector3.zero;
-            Quaternion spawnRot = Quaternion.identity;
+            Vector3 spawnPos = movementPlayerTransform.transform.position;
+            Quaternion spawnRot = movementPlayerTransform.transform.rotation;
+            Debug.Log("el player esta en " + spawnPos +"con rotacion en " + spawnRot);
 
             GameObject instance = Instantiate(playerPrefab, spawnPos, spawnRot);
 
@@ -120,7 +106,6 @@ namespace NuevaAndinia.Gameplay
                 minimapCam.SetTarget(instance.transform);
             }
 
-            // OJO: No destruimos playerSpawnStartG aquí para poder usar sus transformadas al final de la cinemática
             return instance;
         }
 
@@ -128,7 +113,7 @@ namespace NuevaAndinia.Gameplay
         {
             if (cinematicDirector == null || cinematicDirector.playableAsset == null) return;
 
-            Animator playerAnimator = player.GetComponentInChildren<Animator>();
+            Animator playerAnimator = player.GetComponent<Animator>();
             AudioSource playerAudioSource = player.GetComponentInChildren<AudioSource>();
 
             foreach (var binding in cinematicDirector.playableAsset.outputs)
@@ -140,6 +125,7 @@ namespace NuevaAndinia.Gameplay
                 {
                     cinematicDirector.SetGenericBinding(trackAsset, playerAnimator);
                 }
+                
                 else if (binding.streamName == "Speak (Audio Source)" && playerAudioSource != null)
                 {
                     cinematicDirector.SetGenericBinding(trackAsset, playerAudioSource);
