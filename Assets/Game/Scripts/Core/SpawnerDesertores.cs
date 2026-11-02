@@ -26,18 +26,6 @@ namespace NuevaAndinia.Gameplay
             Destroy(gameObject); // Evita que vuelva a spawnear
         }
 
-        /*private void InstantiateDeserters()
-        {
-            Vector3 spawnPos = GetGroundedPoint(posicionSpawnFija.x, posicionSpawnFija.y, posicionSpawnFija.z);
-
-            for (int i = 0; i < cantidadAInstanciar; i++)
-            {
-                // TODO: por ahora todos spawnean en la misma coordenada fija (ya ajustada al suelo).
-                // Reemplazar por la logica final (radio random alrededor del jugador, etc.)
-                // una vez que este todo unido.
-                Instantiate(desertorPrefab, spawnPos, Quaternion.identity);
-            }
-        }*/
         void InstantiateDeserters(Vector3 posicionJugador)
         {
             for (int i = 0; i < cantidadAInstanciar; i++)

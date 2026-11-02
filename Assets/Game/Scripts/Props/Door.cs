@@ -1,45 +1,61 @@
 using NuevaAndinia.Controller;
 using NuevaAndinia.Core;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class Door : MonoBehaviour, IInteractable
 {
-    //[SerializeField] private UIDocument uiDocument;
     private Animator animator;
-    private AudioSource audio;
-    private bool isDoor = false;
+    private AudioSource audioSource;
 
-    private string mensajePrompt = "Presiona [E] para abrir / cerrar";
+    [Header("Estado Inicial")]
+    [Tooltip("Marcar si la puerta inicia abierta en la escena/prefab.")]
+    [SerializeField] private bool isOpen = false;
 
-    private void OnEnable()
+    [Header("Nombres de Animación")]
+    [SerializeField] private string openAnimationName = "DoorOpen";
+    [SerializeField] private string closeAnimationName = "DoorClose";
+
+    private const string animBoolName = "IsOpen";
+
+    private void Awake()
     {
         animator = GetComponent<Animator>();
-        audio= GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
     }
 
-    public string GetInteractPrompt() => mensajePrompt;
+    private void Start()
+    {
+        if (animator != null)
+        {
+            // Sincronizar el estado inicial configurado en el Inspector con el Animator Controller
+            animator.SetBool(animBoolName, isOpen);
+        }
+    }
 
+    /// <summary>
+    /// Retorna el texto exacto según el estado actual de la puerta.
+    /// </summary>
+    public string GetInteractPrompt()
+    {
+        
+        return isOpen ? "Presiona [E] para Cerrar" : "Presiona [E] para Abrir";
+    }
+
+    /// <summary>
+    /// Ejecuta la apertura o cierre al interactuar.
+    /// </summary>
     public void Interact(PlayerController player)
     {
-        if (isDoor == false)
-        {
-            animator.Play("DoorOpen");
-            audio.Play();
-            isDoor = true;
+        if (animator == null) return;
 
-        }
-        else
-        {
-            if (isDoor == true)
-            {
-                animator.Play("DoorClose");
-                audio.Play();
-                isDoor = false;
-            }
+        // Invertir el estado (si estaba cerrada pasa a abierta y viceversa)
+        isOpen = !isOpen;
 
+        animator.SetBool(animBoolName, isOpen);
+
+        if (audioSource != null)
+        {
+            audioSource.Play();
         }
     }
 }

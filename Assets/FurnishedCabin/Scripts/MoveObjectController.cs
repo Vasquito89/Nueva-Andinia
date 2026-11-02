@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 
 public class MoveObjectController : MonoBehaviour 
@@ -180,4 +180,66 @@ public class MoveObjectController : MonoBehaviour
 	}		
 	//End of GUI Config --------------
 	#endregion
+}*/
+using UnityEngine;
+using NuevaAndinia.Core;
+using NuevaAndinia.Controller;
+
+public class MoveObjectController : MonoBehaviour, IInteractable
+{
+    private Animator anim;
+    private MoveableObject moveableObject;
+
+    private const string animBoolName = "isOpen_Obj_";
+
+    private void Awake()
+    {
+        anim = GetComponent<Animator>();
+        if (anim != null)
+        {
+            anim.enabled = false; // Desactivar animaciones por defecto
+        }
+
+        // Obtener la referencia al componente MoveableObject adjunto a este objeto o sus padres
+        moveableObject = GetComponentInParent<MoveableObject>();
+        if (moveableObject == null)
+        {
+            Debug.LogWarning($"MoveableObject no encontrado en el objeto {gameObject.name} o sus padres.");
+        }
+    }
+
+    #region Implementación de IInteractable
+
+    /// <summary>
+    /// Retorna el texto para la interfaz UI dependiente de si el objeto está abierto o cerrado.
+    /// </summary>
+    public string GetInteractPrompt()
+    {
+        if (anim == null || moveableObject == null) 
+            return string.Empty;
+
+        string animBoolNameNum = animBoolName + moveableObject.objectNumber.ToString();
+        bool isOpen = anim.GetBool(animBoolNameNum);
+
+        return isOpen ? "Presiona [E] para Cerrar" : "Presiona [E] para Abrir";
+    }
+
+    /// <summary>
+    /// Se invoca cuando PlayerInteraction detecta la entrada del jugador.
+    /// </summary>
+    public void Interact(PlayerController player)
+    {
+        if (anim == null || moveableObject == null) 
+            return;
+
+        anim.enabled = true;
+
+        string animBoolNameNum = animBoolName + moveableObject.objectNumber.ToString();
+        bool isOpen = anim.GetBool(animBoolNameNum);
+
+        // Cambiar el estado de la animación
+        anim.SetBool(animBoolNameNum, !isOpen);
+    }
+
+    #endregion
 }

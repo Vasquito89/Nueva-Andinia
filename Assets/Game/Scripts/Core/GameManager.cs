@@ -27,8 +27,12 @@ namespace NuevaAndinia.Gameplay
 
         [Header("Jugador y Spawning")]
         [SerializeField] private GameObject playerPrefab;
-        [SerializeField] private GameObject playerSpawn;
+        [SerializeField] private Transform playerSpawn;
         [SerializeField] private AudioSource natureAudio;
+
+        [Header("Controles")]
+        [SerializeField] private InputActionAsset inputActions;
+        private InputAction volverAction;
 
         [SerializeField] Transform game;
 
@@ -36,11 +40,20 @@ namespace NuevaAndinia.Gameplay
         private Vector3 positionPlayer;
         private Quaternion rotationPlayer;
 
+        private Vector3 positionPlayerM;
+        private Quaternion rotationPlayerM;
+
         IDisposable inputEventListener;
         private bool canContinue = false;
-        private void Awake()
+        private Coroutine startGameCoroutine;
+        private void OnEnable()
         {
-            StartCoroutine(ActivarInputSeguro());
+            if (inputActions != null)
+            {
+                var uiMap = inputActions.FindActionMap("Menu");
+                volverAction = uiMap?.FindAction("Back"); // O el nombre de tu acción
+                
+            }
         }
         private void Start()
         {
@@ -48,17 +61,27 @@ namespace NuevaAndinia.Gameplay
             NivelUiDocument.enabled = false;
             worldTimeSystem.enabled = false;
 
+            positionPlayer = playerSpawn.position;
+            rotationPlayer = playerSpawn.rotation;
+
+            positionPlayerM = movementPlayerTransform.position;
+            rotationPlayerM = movementPlayerTransform.rotation;
+
             playerInstance = SpawnPlayer();
 
-            playerInstance.transform.SetParent(movementPlayerTransform, true);
-
-            positionPlayer = playerSpawn.transform.position;
-            rotationPlayer = playerSpawn.transform.rotation;
+            //playerInstance.transform.SetParent(movementPlayerTransform, true);
             Debug.Log("rotacion " + rotationPlayer + " y la posicion " + positionPlayer);
+
+
+            CharacterController controller = playerInstance.GetComponent<CharacterController>();
+            if (controller != null) { controller.enabled = false; }
+
 
             SetupTimelineBindings(playerInstance);
 
-            StartCoroutine(StartGame());
+            startGameCoroutine = StartCoroutine(StartGame());
+
+            StartCoroutine(ActivarInputSeguro());
         }
 
         IEnumerator StartGame()
@@ -72,20 +95,24 @@ namespace NuevaAndinia.Gameplay
             {
                 yield return new WaitForSeconds(2f);
             }
+            LogPlayerPosition();
 
             ActivateGame();
         }
 
         GameObject SpawnPlayer()
         {
-            Vector3 spawnPos = movementPlayerTransform.transform.position;
+            /*Vector3 spawnPos = movementPlayerTransform.transform.position;
             Quaternion spawnRot = movementPlayerTransform.transform.rotation;
-            Debug.Log("el player esta en " + spawnPos +"con rotacion en " + spawnRot);
+            Debug.Log("el player esta en " + spawnPos +"con rotacion en " + spawnRot);*/
+
+            GameObject instance = Instantiate(playerPrefab, positionPlayer, rotationPlayer);
 
             PlayerInteraction playerInteraction = FindFirstObjectByType<PlayerInteraction>();
-            if (playerInteraction != null) {playerInteraction.enabled = false;}
+            if (playerInteraction != null) { playerInteraction.enabled = false; }
 
-            GameObject instance = Instantiate(playerPrefab, spawnPos, spawnRot);
+            PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
+            if (playerMovement != null) { playerMovement.enabled = false; }
 
             MinimapCamera minimapCam = FindFirstObjectByType<MinimapCamera>();
             if (minimapCam != null)
@@ -97,15 +124,23 @@ namespace NuevaAndinia.Gameplay
         }
         private void ActivateGame()
         {
-            playerInstance.transform.SetParent(null, true);
+            if (cinematicDirector != null)
+            {
+                cinematicDirector.Stop();
+            }
+
+
+            //playerInstance.transform.SetParent(null, true);
             // 3. Limpiar los objetos de cinemática/spawn
             if (cinematic01 != null) Destroy(cinematic01);
-            if (playerSpawn != null) Destroy(playerSpawn);
+            if (playerSpawn != null) Destroy(playerSpawn.gameObject);
 
             // Activar UI y sistemas
             NivelUiDocument.enabled = true;
             weatherManager.SetActive(true);
             worldTimeSystem.enabled = true;
+
+            playerInstance.transform.SetPositionAndRotation(positionPlayerM, rotationPlayerM);
 
             HudController hud = NivelUiDocument.GetComponent<HudController>();
             if (hud != null && playerInstance != null)
@@ -117,6 +152,10 @@ namespace NuevaAndinia.Gameplay
                 }
                 PlayerInteraction playerInteraction = FindFirstObjectByType<PlayerInteraction>();
                 if (playerInteraction != null) { playerInteraction.enabled = true; }
+                PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
+                if (playerMovement != null) { playerMovement.enabled = true; }
+                CharacterController controller = playerInstance.GetComponent<CharacterController>();
+                if (controller != null) { controller.enabled = true; }
             }
             if (natureAudio != null)
             {
@@ -140,7 +179,10 @@ namespace NuevaAndinia.Gameplay
                 {
                     cinematicDirector.SetGenericBinding(trackAsset, playerAnimator);
                 }
-                
+                if(binding.streamName == "Player Movement" && playerAnimator != null)
+                {
+                    cinematicDirector.SetGenericBinding(trackAsset, playerAnimator);
+                }
                 else if (binding.streamName == "Speak (Audio Source)" && playerAudioSource != null)
                 {
                     cinematicDirector.SetGenericBinding(trackAsset, playerAudioSource);
@@ -164,20 +206,46 @@ namespace NuevaAndinia.Gameplay
             canContinue = true;
 
             // Escuchar CUALQUIER entrada del Input System (Teclado, Mouse, Gamepad)
-            inputEventListener = InputSystem.onAnyButtonPress.Call(_ => OnAnyKeyPressed());
+            //inputEventListener = InputSystem.onAnyButtonPress.Call(_ => OnAnyKeyPressed());
+            if (volverAction != null)
+            {
+                volverAction.performed += OnAnyKeyPressed;
+                volverAction.Enable();
+            }
         }
-        private void OnAnyKeyPressed()
+        private void OnAnyKeyPressed(InputAction.CallbackContext context)
         {
             if (!canContinue) return;
 
             canContinue = false;
 
-            // Destruir listener inmediatamente para evitar doble ejecución
-            inputEventListener?.Dispose();
+            if (volverAction != null)
+            {
+                volverAction.Disable();
+            }
 
-            playerInstance.transform.SetPositionAndRotation(positionPlayer, rotationPlayer);
+            if (startGameCoroutine != null)
+            {
+                StopCoroutine(startGameCoroutine);
+            }
+
 
             ActivateGame();
+        }
+        private void LogPlayerPosition()
+        {
+            Debug.Log("=== POSICIÓN DEL JUGADOR ===");
+
+            Debug.Log("Position: " + playerInstance.transform.position);
+            Debug.Log("LocalPosition: " + playerInstance.transform.localPosition);
+            Debug.Log("Parent: " + playerInstance.transform.parent);
+
+            Animator animator = playerInstance.GetComponent<Animator>();
+
+            if (animator != null)
+            {
+                Debug.Log("Root Motion: " + animator.applyRootMotion);
+            }
         }
     }
 }

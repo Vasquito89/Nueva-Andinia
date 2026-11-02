@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -54,7 +55,7 @@ public class EnemySpawner : MonoBehaviour
     // Método de prueba para spawnear con una tecla (ejemplo: Espacio)
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Keyboard.current.spaceKey.isPressed)
         {
             GetEnemy(enemyPrefab);
         }

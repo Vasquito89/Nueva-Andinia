@@ -173,9 +173,26 @@ namespace NuevaAndinia.Movement
                 new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime);*/
             Vector3 movementDelta = targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime;
 
-            if (movementDelta.sqrMagnitude > 0.00001f)
+            /*if (movementDelta.sqrMagnitude > 0.00001f)
             {
                 _controller.Move(movementDelta);
+            }*/
+            if (movementDelta.sqrMagnitude > 0.00001f)
+            {
+                Vector3 beforeMove = transform.position;
+
+                _controller.Move(movementDelta);
+
+                Vector3 afterMove = transform.position;
+
+                if (Vector3.Distance(beforeMove, afterMove) > 1f)
+                {
+                    Debug.LogWarning("¡DESPLAZAMIENTO INESPERADO!");
+                    Debug.Log("Antes: " + beforeMove);
+                    Debug.Log("Después: " + afterMove);
+                    Debug.Log("Velocidad: " + _controller.velocity);
+                    Debug.Log("Colisiones: " + _controller.collisionFlags);
+                }
             }
 
             _anim?.UpdateMovement(_animationBlend, inputMagnitude);

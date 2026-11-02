@@ -44,7 +44,7 @@ public class HudController : MonoBehaviour
         if (Victoria != null) Victoria.style.display = DisplayStyle.None;
 
         vidaPlayer = rootVisualElement.Q<Label>("LifeLbl");
-        ObjetiveLbl = rootVisualElement.Q<Label>("ObjetiveLbl");
+        ObjetiveLbl = rootVisualElement.Q<Label>("ObjectiveLabel");
     }
 
     /// <summary>
@@ -67,6 +67,10 @@ public class HudController : MonoBehaviour
         if (player != null && vidaPlayer != null)
         {
             vidaPlayer.text = "Vida restante :" + player.vida.ToString();
+        }
+        if(ObjetiveLbl != null)
+        {
+            ObjetiveLbl.text = "Busca a Martin Belgrano";
         }
     }
 }
