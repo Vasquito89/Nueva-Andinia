@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2178309115149545231}
   - component: {fileID: 7015753722451646715}
   - component: {fileID: 1576593992446461275}
-  - component: {fileID: 2797105396427018310}
   m_Layer: 0
   m_Name: Interior_Door
   m_TagString: Untagged
@@ -113,25 +112,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8959997, y: 2.0370002, z: 0.066000335}
   m_Center: {x: 0.4459999, y: 1.0195, z: 0.031999942}
---- !u!95 &2797105396427018310
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6496748334773340241}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8d819954a0b44764794898f2d17a9c03, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0

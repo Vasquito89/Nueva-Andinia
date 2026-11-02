@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4960866549766176820}
   - component: {fileID: 8916360036433283440}
   - component: {fileID: 1325037908267730929}
-  m_Layer: 0
+  - component: {fileID: 3522733548113009354}
+  m_Layer: 6
   m_Name: Door_2A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,6 +150,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073c70fc73bd0004092c82e72499bf0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
+--- !u!95 &3522733548113009354
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3784975644127368396}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aecca176e540adb428191b18627f1512, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &5843363150499777
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -160,6 +183,10 @@ PrefabInstance:
     - target: {fileID: 6093378202129190585, guid: 5f5fd3c2188df8f43a4b5a648002990f, type: 3}
       propertyPath: m_Name
       value: Interior_Door_BaseboardB
+      objectReference: {fileID: 0}
+    - target: {fileID: 6093378202129190585, guid: 5f5fd3c2188df8f43a4b5a648002990f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9099550944236827174, guid: 5f5fd3c2188df8f43a4b5a648002990f, type: 3}
       propertyPath: m_RootOrder
@@ -271,6 +298,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interior_Door_HingesB
       objectReference: {fileID: 0}
+    - target: {fileID: 3782923492805815927, guid: c249fc6e3f813f14dbe21617804ed17f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -292,6 +323,10 @@ PrefabInstance:
     - target: {fileID: 3653895078253476013, guid: 56ee302379118a64982ab1105fedfdc0, type: 3}
       propertyPath: m_Name
       value: Interior_Door_WallB
+      objectReference: {fileID: 0}
+    - target: {fileID: 3653895078253476013, guid: 56ee302379118a64982ab1105fedfdc0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4926356134537457098, guid: 56ee302379118a64982ab1105fedfdc0, type: 3}
       propertyPath: m_RootOrder
@@ -403,6 +438,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interior_Door_HingesA
       objectReference: {fileID: 0}
+    - target: {fileID: 4300908032425828453, guid: bb536d71135f8414f8f7cefd7734a23b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -469,6 +508,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interior_Door
       objectReference: {fileID: 0}
+    - target: {fileID: 6496748334773340241, guid: c7049498fdae1fa4992800082e31571c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -499,6 +542,10 @@ PrefabInstance:
     - target: {fileID: 1383750416692036285, guid: 08f110985fcd3b148b2f4fea2a9672d0, type: 3}
       propertyPath: m_Name
       value: Interior_Door_Lock
+      objectReference: {fileID: 0}
+    - target: {fileID: 1383750416692036285, guid: 08f110985fcd3b148b2f4fea2a9672d0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7005037906052675919, guid: 08f110985fcd3b148b2f4fea2a9672d0, type: 3}
       propertyPath: m_RootOrder
@@ -565,6 +612,10 @@ PrefabInstance:
     - target: {fileID: 6093378202129190585, guid: 5f5fd3c2188df8f43a4b5a648002990f, type: 3}
       propertyPath: m_Name
       value: Interior_Door_BaseboardA
+      objectReference: {fileID: 0}
+    - target: {fileID: 6093378202129190585, guid: 5f5fd3c2188df8f43a4b5a648002990f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9099550944236827174, guid: 5f5fd3c2188df8f43a4b5a648002990f, type: 3}
       propertyPath: m_RootOrder
@@ -676,6 +727,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interior_Door_Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 6528623062914581328, guid: fd8b729894a4dcd4d99f0341ca83926b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -697,6 +752,10 @@ PrefabInstance:
     - target: {fileID: 1444540159997871375, guid: 0d2eb644e66ba054c94ace55f6a4fa8e, type: 3}
       propertyPath: m_Name
       value: Interior_Door_Pommel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444540159997871375, guid: 0d2eb644e66ba054c94ace55f6a4fa8e, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6326279174329956964, guid: 0d2eb644e66ba054c94ace55f6a4fa8e, type: 3}
       propertyPath: m_RootOrder
@@ -807,6 +866,10 @@ PrefabInstance:
     - target: {fileID: 8190687850893291645, guid: fac9889ae8b01ec46af185dfdc0115b0, type: 3}
       propertyPath: m_Name
       value: Interior_Door_Frame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8190687850893291645, guid: fac9889ae8b01ec46af185dfdc0115b0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
