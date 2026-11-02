@@ -16,7 +16,7 @@ public class Door : MonoBehaviour, IInteractable
 
     private void OnEnable()
     {
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
         audio= GetComponent<AudioSource>();
     }
 

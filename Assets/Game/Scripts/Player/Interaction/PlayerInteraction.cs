@@ -31,15 +31,15 @@ public class PlayerInteraction : MonoBehaviour
         _gameManager = FindAnyObjectByType<GameManager>();
     }
 
-    /*private void OnEnable()
+    private void OnEnable()
     {
-        if (uiDocument == null) uiDocument = FindAnyObjectByType<UIDocument>();
+        if (uiDocument == null) uiDocument = FindFirstObjectByType<UIDocument>();
         if (uiDocument != null && uiDocument.rootVisualElement != null)
         {
             _promptLabel = uiDocument.rootVisualElement.Q<Label>("PromptLabel");
             HidePrompt();
         }
-    }*/
+    }
 
     private void Update()
     { 
@@ -47,12 +47,6 @@ public class PlayerInteraction : MonoBehaviour
         if (_input.AgarrarRequested || _input.DatosRequested || _input.PuertaRequested)
         {
             OnInteractInput();
-        }
-        if (uiDocument == null) uiDocument = FindAnyObjectByType<UIDocument>();
-        if (uiDocument != null && uiDocument.rootVisualElement != null)
-        {
-            _promptLabel = uiDocument.rootVisualElement.Q<Label>("PromptLabel");
-            HidePrompt();
         }
     }
 
