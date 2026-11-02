@@ -9,17 +9,20 @@ public class VictoriaScreen : MonoBehaviour
     private VisualElement rootVisualElement;
     private VisualElement Victoria;
     //private VideoPlayer victoryVideo;
-    private Button AceptarButton;
-
-    private void Update()
+    private Button aceptarButton;
+    private void Awake()
     {
-        uiDocument = FindAnyObjectByType<UIDocument>();    
+        //uiDocument = FindAnyObjectByType<UIDocument>();
+        uiDocument = GetComponent<UIDocument>();
+    }
+    private void OnEnable()
+    {    
         rootVisualElement = uiDocument.rootVisualElement;
         Victoria = rootVisualElement.Q<VisualElement>("VictoriaVE");
 
-        AceptarButton = rootVisualElement.Q<Button>("AceptarButton");
+        aceptarButton = rootVisualElement.Q<Button>("AceptarButton");
 
-        AceptarButton.clicked += QuitToMainMenu;
+        aceptarButton.clicked += QuitToMainMenu;
 
         //victoryVideo = FindAnyObjectByType<VideoPlayer>();
     }

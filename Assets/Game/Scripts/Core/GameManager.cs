@@ -1,9 +1,13 @@
 using NuevaAndinia.Controller;
 using NuevaAndinia.Movement;
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
 
@@ -29,7 +33,15 @@ namespace NuevaAndinia.Gameplay
         [SerializeField] Transform game;
 
         private GameObject playerInstance;
+        private Vector3 positionPlayer;
+        private Quaternion rotationPlayer;
 
+        IDisposable inputEventListener;
+        private bool canContinue = false;
+        private void Awake()
+        {
+            StartCoroutine(ActivarInputSeguro());
+        }
         private void Start()
         {
             weatherManager.SetActive(false);
@@ -38,9 +50,11 @@ namespace NuevaAndinia.Gameplay
 
             playerInstance = SpawnPlayer();
 
-            playerInstance.transform.SetParent(movementPlayerTransform, false);
-            playerInstance.transform.position = Vector3.zero;
-            playerInstance.transform.rotation = Quaternion.identity;
+            playerInstance.transform.SetParent(movementPlayerTransform, true);
+
+            positionPlayer = playerSpawn.transform.position;
+            rotationPlayer = playerSpawn.transform.rotation;
+            Debug.Log("rotacion " + rotationPlayer + " y la posicion " + positionPlayer);
 
             SetupTimelineBindings(playerInstance);
 
@@ -59,14 +73,31 @@ namespace NuevaAndinia.Gameplay
                 yield return new WaitForSeconds(2f);
             }
 
-            // 1. Desvincular de la jerarquía de la cinemática
+            ActivateGame();
+        }
 
-            playerInstance.transform.SetParent(game, true);
+        GameObject SpawnPlayer()
+        {
+            Vector3 spawnPos = movementPlayerTransform.transform.position;
+            Quaternion spawnRot = movementPlayerTransform.transform.rotation;
+            Debug.Log("el player esta en " + spawnPos +"con rotacion en " + spawnRot);
 
-            // 2. Teletransportar
-            playerInstance.transform.position = playerSpawn.transform.localPosition;
-            playerInstance.transform.rotation = playerSpawn.transform.localRotation;
+            PlayerInteraction playerInteraction = FindFirstObjectByType<PlayerInteraction>();
+            if (playerInteraction != null) {playerInteraction.enabled = false;}
 
+            GameObject instance = Instantiate(playerPrefab, spawnPos, spawnRot);
+
+            MinimapCamera minimapCam = FindFirstObjectByType<MinimapCamera>();
+            if (minimapCam != null)
+            {
+                minimapCam.SetTarget(instance.transform);
+            }
+
+            return instance;
+        }
+        private void ActivateGame()
+        {
+            playerInstance.transform.SetParent(null, true);
             // 3. Limpiar los objetos de cinemática/spawn
             if (cinematic01 != null) Destroy(cinematic01);
             if (playerSpawn != null) Destroy(playerSpawn);
@@ -84,29 +115,13 @@ namespace NuevaAndinia.Gameplay
                 {
                     hud.InitializeHUD(pController);
                 }
+                PlayerInteraction playerInteraction = FindFirstObjectByType<PlayerInteraction>();
+                if (playerInteraction != null) { playerInteraction.enabled = true; }
             }
-
             if (natureAudio != null)
             {
                 natureAudio.Play();
             }
-        }
-
-        GameObject SpawnPlayer()
-        {
-            Vector3 spawnPos = movementPlayerTransform.transform.position;
-            Quaternion spawnRot = movementPlayerTransform.transform.rotation;
-            Debug.Log("el player esta en " + spawnPos +"con rotacion en " + spawnRot);
-
-            GameObject instance = Instantiate(playerPrefab, spawnPos, spawnRot);
-
-            MinimapCamera minimapCam = FindFirstObjectByType<MinimapCamera>();
-            if (minimapCam != null)
-            {
-                minimapCam.SetTarget(instance.transform);
-            }
-
-            return instance;
         }
 
         private void SetupTimelineBindings(GameObject player)
@@ -139,6 +154,30 @@ namespace NuevaAndinia.Gameplay
             natureAudio.minDistance = 1f;
             natureAudio.maxDistance = 5f;
             natureAudio.volume = 0.7f;
+        }
+        private IEnumerator ActivarInputSeguro()
+        {
+            // Esperamos 0.2 segundos. Esto evita que si venían moviendo el mouse o haciendo clic 
+            // durante el video, se saltee la pantalla de "Presione una tecla" instantáneamente.
+            yield return new WaitForSeconds(0.2f);
+
+            canContinue = true;
+
+            // Escuchar CUALQUIER entrada del Input System (Teclado, Mouse, Gamepad)
+            inputEventListener = InputSystem.onAnyButtonPress.Call(_ => OnAnyKeyPressed());
+        }
+        private void OnAnyKeyPressed()
+        {
+            if (!canContinue) return;
+
+            canContinue = false;
+
+            // Destruir listener inmediatamente para evitar doble ejecución
+            inputEventListener?.Dispose();
+
+            playerInstance.transform.SetPositionAndRotation(positionPlayer, rotationPlayer);
+
+            ActivateGame();
         }
     }
 }
