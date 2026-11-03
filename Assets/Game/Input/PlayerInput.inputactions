@@ -68,6 +68,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Numero0",
+                    "type": "Button",
+                    "id": "ae968aa9-a9e3-43ec-99d3-f79a8e908191",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Numero1",
+                    "type": "Button",
+                    "id": "6fa51de5-563e-4ba6-b9cf-18c3ac0a8d57",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Numero2",
+                    "type": "Button",
+                    "id": "1be0576b-109a-4771-894a-b0b3eec59ef3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -233,6 +260,39 @@
                     "processors": "",
                     "groups": ";KeyboardMouse",
                     "action": "Puerta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad2e6274-80aa-498c-8803-17f817b7157f",
+                    "path": "<Keyboard>/#(1)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Numero1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d8a9d5b9-ff77-4c25-80fc-c557d15a6336",
+                    "path": "<Keyboard>/#(2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Numero2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b4fe9f1a-9cc8-4c2f-bf28-24495ebaaad6",
+                    "path": "<Keyboard>/#(0)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Numero0",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
