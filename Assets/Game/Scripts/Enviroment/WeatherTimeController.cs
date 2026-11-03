@@ -19,7 +19,7 @@ public class WeatherTimeController : MonoBehaviour
     [Header("Referencia al Volumen")]
     [SerializeField] private Volume globalVolume;
 
-    [Header("Configuración de Niebla (Madrugada / Niebla Densa 00:00 - 09:00)")]
+    /*[Header("Configuración de Niebla (Madrugada / Niebla Densa 00:00 - 09:00)")]
     [SerializeField] private Color morningFogColor = new Color(0.45f, 0.48f, 0.52f);
     [SerializeField] private float morningFogDensity = 0.035f; // Niebla densa de amanecer
     [SerializeField] private float morningSaturation = -35f;
@@ -37,7 +37,7 @@ public class WeatherTimeController : MonoBehaviour
     [Header("Configuración de Niebla (Noche Helada / Nieve 21:00 - 00:00)")]
     [SerializeField] private Color nightSnowFogColor = new Color(0.75f, 0.78f, 0.82f);
     [SerializeField] private float nightSnowFogDensity = 0.04f; // Tormenta/Nieve cerrada
-    [SerializeField] private float nightSnowSaturation = -45f;
+    [SerializeField] private float nightSnowSaturation = -45f;*/
 
     [Header("Velocidad de Transición")]
     [SerializeField] private float transitionSpeed = 1f;
@@ -57,8 +57,8 @@ public class WeatherTimeController : MonoBehaviour
     void Start()
     {
         // Forzamos que la niebla nativa esté activa
-        RenderSettings.fog = true;
-        RenderSettings.fogMode = FogMode.ExponentialSquared;
+        /*RenderSettings.fog = true;
+        RenderSettings.fogMode = FogMode.ExponentialSquared;*/
 
         timeSystem = Object.FindFirstObjectByType<WorldTimeSystem>();
 
@@ -111,9 +111,9 @@ public class WeatherTimeController : MonoBehaviour
             downpourEmission.enabled = false;
             snowEmission.enabled = false;
 
-            targetFogColor = morningFogColor;
+            /*targetFogColor = morningFogColor;
             targetFogDensity = morningFogDensity;
-            targetSaturation = morningSaturation;
+            targetSaturation = morningSaturation;*/
         }
         // 2. Mañana y Pico Térmico (09:00 a 15:00): Despejado / Sol bajo / Pistas de esquí
         else if (currentTime >= 9f && currentTime < 15f)
@@ -122,9 +122,9 @@ public class WeatherTimeController : MonoBehaviour
             downpourEmission.enabled = false;
             snowEmission.enabled = false;
 
-            targetFogColor = clearFogColor;
+            /*targetFogColor = clearFogColor;
             targetFogDensity = clearFogDensity;
-            targetSaturation = clearSaturation;
+            targetSaturation = clearSaturation;*/
         }
         // 3. Atardecer y Bajada Térmica (15:00 a 21:00): Aguanieve / Lluvia fría intensa
         else if (currentTime >= 15f && currentTime < 21f)
@@ -133,9 +133,9 @@ public class WeatherTimeController : MonoBehaviour
             downpourEmission.enabled = true;  // PFX_Rain_Downpour activo
             snowEmission.enabled = false;
 
-            targetFogColor = eveningFogColor;
+            /*targetFogColor = eveningFogColor;
             targetFogDensity = eveningFogDensity;
-            targetSaturation = eveningSaturation;
+            targetSaturation = eveningSaturation;*/
         }
         // 4. Cierre del Día / Noche Helada (21:00 a 00:00): Nieve nocturna
         else
@@ -144,18 +144,18 @@ public class WeatherTimeController : MonoBehaviour
             downpourEmission.enabled = false;
             snowEmission.enabled = true;      // Nieve activa
 
-            targetFogColor = nightSnowFogColor;
+            /*targetFogColor = nightSnowFogColor;
             targetFogDensity = nightSnowFogDensity;
-            targetSaturation = nightSnowSaturation;
+            targetSaturation = nightSnowSaturation;*/
         }
 
         // Aplicamos cambios visuales fluidos
-        RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, targetFogColor, Time.deltaTime * transitionSpeed);
+        /*RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, targetFogColor, Time.deltaTime * transitionSpeed);
         RenderSettings.fogDensity = Mathf.Lerp(RenderSettings.fogDensity, targetFogDensity, Time.deltaTime * transitionSpeed);
 
         if (colorAdjustments != null)
         {
             colorAdjustments.saturation.value = Mathf.Lerp(colorAdjustments.saturation.value, targetSaturation, Time.deltaTime * transitionSpeed);
-        }
+        }*/
     }
 }
