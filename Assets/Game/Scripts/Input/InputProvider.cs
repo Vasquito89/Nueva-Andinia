@@ -16,6 +16,9 @@ namespace NuevaAndinia.Inputs
         public bool AgarrarRequested { get; private set; }
         public bool DatosRequested { get; private set; }
         public bool PuertaRequested { get; private set; }
+        public bool NumeroUnoRequested { get; private set; }
+        public bool NumeroDosRequested { get; private set; }
+        public bool NumeroCeroRequested { get; private set; }
 
         private float sprintHoldTime = 0f;
         private const float sprintThreshold = 0.25f; // tiempo para activar sprint
@@ -65,6 +68,18 @@ namespace NuevaAndinia.Inputs
         {
             PuertaRequested = value.Get<float>() > 0.5f;
         }
+        public void OnNumeroUno(InputValue value)
+        {
+            NumeroUnoRequested = value.Get<float>() > 0.5f;
+        }
+        public void OnNumeroDos(InputValue value)
+        {
+            NumeroDosRequested = value.Get<float>() > 0.5f;
+        }
+        public void OnNumeroCero(InputValue value)
+        {
+            NumeroCeroRequested = value.Get<float>() > 0.5f;
+        }
 
         private void Update()
         {
@@ -87,5 +102,8 @@ namespace NuevaAndinia.Inputs
         public void ConsumeAgarrar() { AgarrarRequested = false; }
         public void ConsumeDatos() { DatosRequested = false; }
         public void ConsumePuerta() { PuertaRequested = false; }
+        public void ConsumeNumeroUno() { NumeroUnoRequested = false; }
+        public void ConsumeNumeroDos() { NumeroDosRequested = false; }
+        public void ConsumeNumeroCero() { NumeroCeroRequested = false; }
     }
 }

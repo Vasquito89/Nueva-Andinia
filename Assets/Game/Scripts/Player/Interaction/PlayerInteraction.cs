@@ -50,7 +50,7 @@ public class PlayerInteraction : MonoBehaviour
             HidePrompt();
         }
         businessRaycast();
-        if (_input.AgarrarRequested || _input.DatosRequested || _input.PuertaRequested)
+        if (_input.AgarrarRequested || _input.DatosRequested || _input.PuertaRequested || _input.NumeroUnoRequested || _input.NumeroDosRequested || _input.NumeroCeroRequested)
         {
             OnInteractInput();
         }
@@ -89,6 +89,9 @@ public class PlayerInteraction : MonoBehaviour
             _input.ConsumeAgarrar();
             _input.ConsumeDatos();
             _input.ConsumePuerta();
+            _input.ConsumeNumeroUno();
+            _input.ConsumeNumeroDos();
+            _input.ConsumeNumeroCero();
         }
     }
 
