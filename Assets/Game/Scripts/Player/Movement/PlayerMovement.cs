@@ -6,10 +6,12 @@ namespace NuevaAndinia.Movement
     using NuevaAndinia.Audio;
     using NuevaAndinia.Controller;
     using NuevaAndinia.Core;
-    using NuevaAndinia.Inputs;
     using NuevaAndinia.Defeat;
-    using UnityEngine.UIElements;
+    using NuevaAndinia.Gameplay;
+    using NuevaAndinia.Inputs;
     using System.Collections;
+    using Unity.Cinemachine;
+    using UnityEngine.UIElements;
 
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement : MonoBehaviour
@@ -20,8 +22,9 @@ namespace NuevaAndinia.Movement
         private float sprintSpeed = 5.335f;  // sprint
         private float runHoldThreshold = 0.25f; // tiempo para pasar de caminar a correr
         private float moveHoldTime = 0f;
+        private Vector3 _currentMoveVelocity;
 
-        [Range(0.0f, 0.3f)] private float rotationSmoothTime = 0.12f;
+        [Range(0.0f, 1.0f)][SerializeField] private float rotationSmoothTime = 0.35f;
         private float speedChangeRate = 10.0f;
 
         [Header("Jump & Gravity")]
@@ -40,7 +43,7 @@ namespace NuevaAndinia.Movement
         private PersonAnimationController _anim;
         private PlayerController _playerController;
         private CharacterController _controller;
-        private Camera _mainCamera;
+        private CinemachineCamera _mainCamera;
 
         private UIDocument uiDocument;
         private VisualElement rootVisualElement;
@@ -56,6 +59,7 @@ namespace NuevaAndinia.Movement
         private float _fallTimeoutDelta;
 
         private float _targetRotation;
+        private AscensorController _ascensorActivo;
 
         public bool IsGrounded { get; private set; }
 
@@ -66,11 +70,12 @@ namespace NuevaAndinia.Movement
             _anim = GetComponent<PersonAnimationController>();
             _playerController = GetComponent<PlayerController>();
 
-            _mainCamera = Camera.main;
+            _mainCamera = GetComponentInChildren<CinemachineCamera>();
         }
         private void OnEnable()
         {
-            uiDocument = FindAnyObjectByType<UIDocument>();
+            GameObject uiGameObject = GameObject.Find("NivelUIDocument");
+            uiDocument = uiGameObject.GetComponent<UIDocument>();
             rootVisualElement = uiDocument.rootVisualElement;
             if (rootVisualElement != null)
             {
@@ -105,24 +110,21 @@ namespace NuevaAndinia.Movement
                 QueryTriggerInteraction.Ignore);
 
             _anim?.SetGrounded(IsGrounded);
-            Debug.Log("Grounded = " + IsGrounded);
+            //Debug.Log("Grounded = " + IsGrounded);
         }
-
         private void HandleMovement()
         {
             Vector2 moveInput = _input.MoveInput;
-            bool sprint = _input.SprintRequested;
-
 
             float targetSpeed = GetTargetSpeed();
             if (moveInput == Vector2.zero) targetSpeed = 0f;
 
-            float currentHorizontalSpeed =
-                new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
-
+            // 1. Calculamos la velocidad actual horizontal
+            float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0f, _controller.velocity.z).magnitude;
             float speedOffset = 0.1f;
             float inputMagnitude = moveInput.magnitude;
 
+            // Suavizado de aceleración/desaceleración
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
                 currentHorizontalSpeed > targetSpeed + speedOffset)
             {
@@ -145,59 +147,51 @@ namespace NuevaAndinia.Movement
 
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
+            // Normalizar dirección del input
             Vector3 inputDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
+            // 2. Si hay input, rotamos al personaje relativo a la orientación de la cámara
             if (moveInput != Vector2.zero)
             {
-                float targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
 
                 if (_mainCamera != null)
-                    targetRotation += _mainCamera.transform.eulerAngles.y;
+                {
+                    _targetRotation += _mainCamera.transform.eulerAngles.y;
+                }
 
                 float rotation = Mathf.SmoothDampAngle(
                     transform.eulerAngles.y,
-                    targetRotation,
+                    _targetRotation,
                     ref _rotationVelocity,
                     rotationSmoothTime);
 
+                // Rotar al personaje hacia la dirección donde apunta la cámara + input
                 transform.rotation = Quaternion.Euler(0f, rotation, 0f);
-
-                _targetRotation = targetRotation;
             }
 
-            Vector3 targetDirection =
-                Quaternion.Euler(0f, _targetRotation, 0f) * Vector3.forward;
+            // 3. Obtener la dirección final del movimiento según la rotación calculada (igual que en ThirdPersonController)
+            Vector3 targetDirection = Quaternion.Euler(0f, _targetRotation, 0f) * Vector3.forward;
 
-            /*_controller.Move(
-                targetDirection.normalized * (_speed * Time.deltaTime) +
-                new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime);*/
-            Vector3 movementDelta = targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime;
+            float windModifier = 1f;
 
-            /*if (movementDelta.sqrMagnitude > 0.00001f)
+            if (WindTimeController.Instance != null)
             {
-                _controller.Move(movementDelta);
-            }*/
-            if (movementDelta.sqrMagnitude > 0.00001f)
-            {
-                Vector3 beforeMove = transform.position;
-
-                _controller.Move(movementDelta);
-
-                Vector3 afterMove = transform.position;
-
-                if (Vector3.Distance(beforeMove, afterMove) > 1f)
-                {
-                    Debug.LogWarning("¡DESPLAZAMIENTO INESPERADO!");
-                    Debug.Log("Antes: " + beforeMove);
-                    Debug.Log("Después: " + afterMove);
-                    Debug.Log("Velocidad: " + _controller.velocity);
-                    Debug.Log("Colisiones: " + _controller.collisionFlags);
-                }
+                windModifier = WindTimeController.Instance.GetMovementModifier(targetDirection);
             }
+
+            // 4. Aplicar el movimiento final
+            Vector3 movementDelta = targetDirection.normalized * (_speed * windModifier * Time.deltaTime) + 
+                new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime;
+
+            if (_ascensorActivo != null)
+            {
+                movementDelta += _ascensorActivo.MovimientoFrame;
+            }
+
+            _controller.Move(movementDelta);
 
             _anim?.UpdateMovement(_animationBlend, inputMagnitude);
-
-
         }
         private float GetTargetSpeed()
         {
@@ -283,6 +277,10 @@ namespace NuevaAndinia.Movement
             Derrota.style.display = DisplayStyle.Flex;
             Time.timeScale = 0f;
 
+        }
+        public void SetAscensorActivo(AscensorController ascensor)
+        {
+            _ascensorActivo = ascensor;
         }
     }
 }

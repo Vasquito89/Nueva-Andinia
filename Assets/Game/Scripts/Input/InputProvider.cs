@@ -6,8 +6,11 @@ namespace NuevaAndinia.Inputs
 {
     public class InputProvider : MonoBehaviour, IInputProvider
     {
+        [Header("Mouse Cursor Settings")]
         [SerializeField] private bool cursorLocked = true;
+        [SerializeField] private bool cursorInputForLook = true;
 
+        [Header("Character Input Values")]
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
         public bool JumpRequested { get; private set; }
@@ -24,6 +27,7 @@ namespace NuevaAndinia.Inputs
         private const float sprintThreshold = 0.25f; // tiempo para activar sprint
 
         private bool sprintButtonDown = false;
+
 
         private void Start()
         {
@@ -105,5 +109,15 @@ namespace NuevaAndinia.Inputs
         public void ConsumeNumeroUno() { NumeroUnoRequested = false; }
         public void ConsumeNumeroDos() { NumeroDosRequested = false; }
         public void ConsumeNumeroCero() { NumeroCeroRequested = false; }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            SetCursorState(cursorLocked);
+        }
+
+        private void SetCursorState(bool newState)
+        {
+            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+        }
     }
 }

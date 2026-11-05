@@ -1,3 +1,4 @@
+using NuevaAndinia.Gameplay;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,10 +13,12 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Persecución")]
     public float chaseSpeed = 4f;
+    public float patrolSpeed = 2f;
 
     private Transform player;
     private NavMeshAgent agent;
     private bool playerDetected = false;
+    private Transform patrolTarget;
 
     private void Awake()
     {
@@ -28,7 +31,7 @@ public class EnemyAI : MonoBehaviour
         playerDetected = false;
         if (agent != null)
         {
-            agent.speed = chaseSpeed;
+            agent.speed = patrolSpeed;
             if (agent.isOnNavMesh)
             {
                 agent.ResetPath();
@@ -46,41 +49,53 @@ public class EnemyAI : MonoBehaviour
 
         if (agent != null)
         {
-            agent.speed = chaseSpeed;
+            agent.speed = patrolSpeed;
+        }
+    }
+
+    public void SetInitialTarget(Transform target)
+    {
+        patrolTarget = target;
+        if (agent != null && agent.isOnNavMesh && patrolTarget != null)
+        {
+            agent.speed = patrolSpeed;
+            agent.SetDestination(patrolTarget.position);
         }
     }
 
     private void Update()
     {
-        if (player == null)
-            return;
-
         DetectPlayer();
 
         if (playerDetected)
         {
             ChasePlayer();
         }
-        else if (agent.hasPath)
+        else if (patrolTarget != null && agent.isOnNavMesh)
         {
-            agent.ResetPath();
+            // Si pierde o no ha detectado al player, camina hacia su waypoint asignado
+            agent.speed = ApplyWind(patrolSpeed);
+            if (!agent.hasPath || agent.destination != patrolTarget.position)
+            {
+                agent.SetDestination(patrolTarget.position);
+            }
         }
     }
 
     private void DetectPlayer()
     {
+        if (player == null) return;
+
         Vector3 origin = transform.position + Vector3.up * eyeHeight;
         Vector3 direction = (player.position - origin).normalized;
         float distance = Vector3.Distance(origin, player.position);
 
-        // Comprobar distancia
         if (distance > detectionRange)
         {
             playerDetected = false;
             return;
         }
 
-        // Comprobar campo de visión
         float angle = Vector3.Angle(transform.forward, direction);
         if (angle > fieldOfView / 2f)
         {
@@ -88,7 +103,6 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        // Raycast para comprobar obstáculos utilizando la mascara de capa
         if (Physics.Raycast(origin, direction, out RaycastHit hit, detectionRange, ~obstacleMask))
         {
             playerDetected = hit.transform.CompareTag("Player");
@@ -101,12 +115,19 @@ public class EnemyAI : MonoBehaviour
 
     private void ChasePlayer()
     {
-        if (agent.isOnNavMesh)
+        if (agent.isOnNavMesh && player != null)
         {
+            agent.speed = ApplyWind(chaseSpeed);
             agent.SetDestination(player.position);
         }
     }
+    private float ApplyWind(float baseSpeed)
+    {
+        if (agent.velocity.sqrMagnitude < 0.1f)
+            return baseSpeed;
 
+        return baseSpeed * WindTimeController.Instance.GetSpeedModifier(agent.velocity.normalized);
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3982438634990055822}
-  m_Layer: 0
+  - component: {fileID: 103095175624204077}
+  m_Layer: 8
   m_Name: Wall_2E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,6 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7579648308366020646}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,18 +33,38 @@ Transform:
   - {fileID: 6609264334459879130}
   - {fileID: 5927934137232061794}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &103095175624204077
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7579648308366020646}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &924110917912569843
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3982438634990055822}
     m_Modifications:
     - target: {fileID: 4827230489301449236, guid: 0d99dd474cd56804a8d655c95eaebdae, type: 3}
       propertyPath: m_Name
       value: Interior_Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 4827230489301449236, guid: 0d99dd474cd56804a8d655c95eaebdae, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6299351836757236009, guid: 0d99dd474cd56804a8d655c95eaebdae, type: 3}
       propertyPath: m_RootOrder
@@ -89,10 +111,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8945919959679386546, guid: 0d99dd474cd56804a8d655c95eaebdae, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 9d9fecfc9d43da2418f88eca6c235fcf, type: 2}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d99dd474cd56804a8d655c95eaebdae, type: 3}
 --- !u!4 &6609264334459879130 stripped
 Transform:
@@ -104,6 +129,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3982438634990055822}
     m_Modifications:
     - target: {fileID: 809163920079412734, guid: 9c0a9e1a998861d408ca54a9f808af2c, type: 3}
@@ -154,19 +180,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interior_WallB
       objectReference: {fileID: 0}
+    - target: {fileID: 2613488314068108794, guid: 9c0a9e1a998861d408ca54a9f808af2c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3018658766029394178, guid: 9c0a9e1a998861d408ca54a9f808af2c, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7187934029414764737, guid: 9c0a9e1a998861d408ca54a9f808af2c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 9d9fecfc9d43da2418f88eca6c235fcf, type: 2}
     - target: {fileID: 8563258977088701554, guid: 9c0a9e1a998861d408ca54a9f808af2c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 9d9fecfc9d43da2418f88eca6c235fcf, type: 2}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c0a9e1a998861d408ca54a9f808af2c, type: 3}
 --- !u!4 &5927934137232061794 stripped
 Transform:

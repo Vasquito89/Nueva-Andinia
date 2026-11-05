@@ -25,6 +25,8 @@ public class AscensorController : MonoBehaviour
     private Vector3 posicionObjetivo;
     private bool estaMoviendose = false;
 
+    public Vector3 MovimientoFrame { get; private set; }
+
     void Start()
     {
         // Empezamos en la Planta Baja por defecto
@@ -34,7 +36,7 @@ public class AscensorController : MonoBehaviour
         if(audioSource != null ) {audioSource.Play();}
     }
 
-    void Update()
+    void LateUpdate()
     {
         Vector3 posicionPrevia = transform.position;
         // Actualizamos la posición objetivo según el enum actual
@@ -42,6 +44,9 @@ public class AscensorController : MonoBehaviour
 
         // Movemos el ascensor hacia el objetivo
         transform.position = Vector3.MoveTowards(transform.position, posicionObjetivo, velocidad * Time.deltaTime);
+
+        // Calculamos el desplazamiento neto de este frame
+        MovimientoFrame = transform.position - posicionPrevia;
 
         ControlarAudioYMovimiento(posicionPrevia);
     }
