@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1989189642404539259}
   - component: {fileID: 3881125197309085919}
   - component: {fileID: 693031417564788060}
-  - component: {fileID: 5310127397667387112}
   m_Layer: 3
   m_Name: Stairs1_Floor
   m_TagString: Untagged
@@ -91,20 +90,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5310127397667387112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7004187056762629887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifierVolume
-  m_SerializedVersion: 0
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff

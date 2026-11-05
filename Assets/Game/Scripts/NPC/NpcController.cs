@@ -1,3 +1,4 @@
+using NuevaAndinia.Gameplay;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -38,7 +39,14 @@ public class NpcController : MonoBehaviour
         }
 
         AI.destination = objective.position;
-        AI.speed = velocity;
+        float speed = velocity;
+
+        if (AI.velocity.sqrMagnitude > 0.1f)
+        {
+            speed *= WindTimeController.Instance.GetSpeedModifier(AI.velocity.normalized);
+        }
+
+        AI.speed = speed;
 
         // 2. Control automático de la animación basado en si el NavMesh Agent se está moviendo
         // Si la velocidad actual del agente es mayor a 0.1, le dice al Animator que camine

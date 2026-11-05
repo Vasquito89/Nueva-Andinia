@@ -1,79 +1,98 @@
+using NuevaAndinia.Gameplay;
 using UnityEngine;
-using UnityEngine.Video;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class DesertorController : MonoBehaviour
 {
     [Header("Parámetros de Movimiento")]
     public float speed = 3.5f;
     public float detectionRange = 10f;
-    public float raycastDistance = 1.5f;
     public int vida = 100;
 
-    [Header("Referencias")]
-    public LayerMask groundLayer;
-    public LayerMask playerLayer;
+    [Header("Configuración de Patrulla")]
+    [Tooltip("Asigna aquí los objetos/puntos por donde debe patrullar")]
+    public Transform[] waypoints;
+    public float waypointStoppingDistance = 0.5f;
 
+    [Header("Configuración de Persecución")]
+    public float chaseStoppingDistance = 1.2f;
+
+    private int currentWaypointIndex = 0;
     private Transform player;
     private DesertorAnimation desertorAnimation;
+    private NavMeshAgent agent;
 
     private void Awake()
     {
         desertorAnimation = GetComponent<DesertorAnimation>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     void Start()
     {
+        agent.speed = speed;
+
         // Buscar al jugador por Tag
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
             player = playerObj.transform;
         }
+
+        // Si hay waypoints, ir al primero de inmediato
+        if (waypoints != null && waypoints.Length > 0)
+        {
+            SetNextWaypointDestination();
+        }
     }
 
     void Update()
     {
-        if (desertorAnimation.isDead) return;
+        if (desertorAnimation != null && desertorAnimation.isDead)
+        {
+            if (agent.enabled) agent.isStopped = true;
+            return;
+        }
+
+        bool playerEnRango = false;
 
         if (player != null)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-            // Persecución si el jugador está en rango
             if (distanceToPlayer <= detectionRange)
             {
-                ChasePlayer();
-            }
-            else
-            {
-                // Estado Idle
-                desertorAnimation.SetAnimation("Idle");
+                playerEnRango = true;
             }
         }
-    }
-    private void OnCollisionStay(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Player"))
+
+        // LÓGICA DE ESTADOS:
+        if (playerEnRango)
         {
-            RecibirDano(20);
+            // PERSECUCIÓN: Ignora los puntos de patrulla e va directo al jugador
+            ChasePlayer();
+        }
+        else if (waypoints != null && waypoints.Length > 0)
+        {
+            // PATRULLA: Recorre los puntos ordenadamente
+            Patrol();
+        }
+        else
+        {
+            // IDLE: Si no ve al jugador ni tiene puntos asignados
+            StopMoving();
         }
     }
+
     void ChasePlayer()
     {
-        // Mirar hacia el jugador (solo en el eje Y para evitar inclinaciones)
-        Vector3 targetPosition = new Vector3(player.position.x, transform.position.y, player.position.z);
-        transform.LookAt(targetPosition);
+        agent.isStopped = false;
+        agent.speed = GetWindSpeed();
+        agent.stoppingDistance = chaseStoppingDistance;
+        agent.SetDestination(player.position);
 
-        // Raycast para evitar obstáculos en el frente antes de avanzar
-        RaycastHit hit;
-        bool hayObstaculo = Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out hit, raycastDistance, ~playerLayer);
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * raycastDistance, Color.black);
-
-        if (!hayObstaculo)
+        if (agent.velocity.sqrMagnitude > 0.1f)
         {
-
-            // Avanzar hacia el jugador
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
             desertorAnimation.SetAnimation("Walk");
         }
         else
@@ -81,23 +100,91 @@ public class DesertorController : MonoBehaviour
             desertorAnimation.SetAnimation("Idle");
         }
     }
-    private void RecibirDano(int cantidad)
+
+    void Patrol()
+    {
+        if (waypoints == null || waypoints.Length == 0) return;
+
+        agent.isStopped = false;
+        agent.speed = GetWindSpeed();
+        agent.stoppingDistance = waypointStoppingDistance;
+
+        // Si no tiene destino asignado aún (al instanciarse)
+        if (!agent.hasPath)
+        {
+            SetNextWaypointDestination();
+        }
+
+        // Verificar si ya llegó al punto actual
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
+            SetNextWaypointDestination();
+        }
+
+        desertorAnimation.SetAnimation("Walk");
+    }
+
+    void SetNextWaypointDestination()
+    {
+        if (waypoints.Length == 0) return;
+        agent.SetDestination(waypoints[currentWaypointIndex].position);
+    }
+
+    void StopMoving()
+    {
+        agent.isStopped = true;
+        desertorAnimation.SetAnimation("Idle");
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            RecibirDano(20);
+        }
+    }
+
+    public void RecibirDano(int cantidad)
     {
         vida -= cantidad;
         if (vida <= 0)
         {
+            if (agent.enabled)
+            {
+                agent.isStopped = true;
+                agent.enabled = false;
+            }
             desertorAnimation.Morir();
         }
+    }
+    private float GetWindSpeed()
+    {
+        if (agent.velocity.sqrMagnitude < 0.1f)
+            return speed;
 
+        return speed * WindTimeController.Instance.GetSpeedModifier(agent.velocity.normalized);
     }
     private void OnDrawGizmosSelected()
     {
-        // Dibujar rango de detección en la escena
+        // Rango de detección del jugador
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
-        // Dibujar raycast frontal
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * raycastDistance);
+        // Visualizar las líneas de patrulla entre waypoints en el editor
+        if (waypoints != null && waypoints.Length > 1)
+        {
+            Gizmos.color = Color.cyan;
+            for (int i = 0; i < waypoints.Length; i++)
+            {
+                if (waypoints[i] != null)
+                {
+                    Vector3 current = waypoints[i].position;
+                    Vector3 next = waypoints[(i + 1) % waypoints.Length].position;
+                    Gizmos.DrawLine(current, next);
+                    Gizmos.DrawSphere(current, 0.3f);
+                }
+            }
+        }
     }
 }
