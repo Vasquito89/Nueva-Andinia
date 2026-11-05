@@ -26,6 +26,19 @@ public class HudController : MonoBehaviour
     {
         RefreshUIReferences();
     }
+    private void Update()
+    {
+        // Si la referencia del player aún no fue vinculada, la buscamos
+        if (player == null)
+        {
+            player = FindAnyObjectByType<PlayerController>();
+        }
+
+        if (player != null && vidaPlayer != null)
+        {
+            vidaPlayer.text = "Vida restante :" + player.vida.ToString();
+        }
+    }
 
     public void RefreshUIReferences()
     {
@@ -45,6 +58,9 @@ public class HudController : MonoBehaviour
 
         vidaPlayer = rootVisualElement.Q<Label>("LifeLbl");
         ObjetiveLbl = rootVisualElement.Q<Label>("ObjectiveLabel");
+
+        // Configuración inicial por defecto al refrescar la UI
+        SetObjective("Busca a Martin Belgrano");
     }
 
     /// <summary>
@@ -55,22 +71,19 @@ public class HudController : MonoBehaviour
         player = targetPlayer;
         RefreshUIReferences();
     }
-
-    private void Update()
+    /// <summary>
+    /// Cambia el texto del objetivo en la interfaz.
+    /// </summary>
+    public void SetObjective(string newObjective)
     {
-        // Si la referencia del player aún no fue vinculada, la buscamos
-        if (player == null)
+        if (ObjetiveLbl == null)
         {
-            player = FindAnyObjectByType<PlayerController>();
+            RefreshUIReferences();
         }
 
-        if (player != null && vidaPlayer != null)
+        if (ObjetiveLbl != null)
         {
-            vidaPlayer.text = "Vida restante :" + player.vida.ToString();
-        }
-        if(ObjetiveLbl != null)
-        {
-            ObjetiveLbl.text = "Busca a Martin Belgrano";
+            ObjetiveLbl.text = newObjective;
         }
     }
 }

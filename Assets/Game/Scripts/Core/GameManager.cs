@@ -34,7 +34,6 @@ namespace NuevaAndinia.Gameplay
         [SerializeField] private InputActionAsset inputActions;
         private InputAction volverAction;
 
-        [SerializeField] Transform game;
 
         private GameObject playerInstance;
         private Vector3 positionPlayer;

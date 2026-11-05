@@ -5,6 +5,8 @@ namespace NuevaAndinia.Gameplay
     [RequireComponent(typeof(WindZone))]
     public class WindTimeController : MonoBehaviour
     {
+        public static WindTimeController Instance;
+
         [Header("Referencias")]
         [SerializeField] private WindZone windZone;
 
@@ -31,6 +33,10 @@ namespace NuevaAndinia.Gameplay
         private float targetWindMain;
         private float targetWindTurbulence;
 
+        public float CurrentWindStrength => windZone != null ? windZone.windMain : 0f;
+
+        public Vector3 CurrentWindDirection => transform.forward;
+
         private void Start()
         {
             if (windZone == null)
@@ -46,7 +52,10 @@ namespace NuevaAndinia.Gameplay
                 enabled = false;
             }
         }
-
+        private void Awake()
+        {
+            Instance = this;
+        }
         private void Update()
         {
             if (timeSystem == null || windZone == null) return;
@@ -81,6 +90,35 @@ namespace NuevaAndinia.Gameplay
             // Aplicar transición suave al WindZone
             windZone.windMain = Mathf.Lerp(windZone.windMain, targetWindMain, Time.deltaTime * transitionSpeed);
             windZone.windTurbulence = Mathf.Lerp(windZone.windTurbulence, targetWindTurbulence, Time.deltaTime * transitionSpeed);
+        }
+        public float GetMovementModifier(Vector3 moveDirection)
+        {
+            float alignment = Vector3.Dot(moveDirection.normalized, CurrentWindDirection.normalized);
+
+            const float penalty = 0.15f;
+            const float bonus = 0.05f;
+
+            if (alignment < 0)
+            {
+                return Mathf.Lerp(1f, 1f - penalty, Mathf.Abs(alignment));
+            }
+
+            return Mathf.Lerp(1f, 1f + bonus, alignment);
+        }
+        public float GetSpeedModifier(Vector3 moveDirection)
+        {
+            float alignment = Vector3.Dot(moveDirection.normalized, CurrentWindDirection.normalized);
+
+            float penalty = CurrentWindStrength * 0.1f;
+
+            penalty = Mathf.Clamp( penalty, 0f,0.15f);
+
+            if (alignment < 0)
+            {
+                return 1f - Mathf.Abs(alignment) * penalty;
+            }
+
+            return 0.2f;
         }
     }
 }
