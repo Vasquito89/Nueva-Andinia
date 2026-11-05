@@ -153,7 +153,7 @@ public class MenuManager : MonoBehaviour
         menuVE.SetEnabled(false);
         creditVE.style.display = DisplayStyle.Flex;
 
-        creditLabel.text = "Programación / Diseño de niveles: Damian Garnica\r\nQA /Testing: Franco Larosa\r\nArte: Joaquín Minolli Rodríguez\r\nProgramación: Mauricio Benevento / Santiago Fortunato";
+        creditLabel.text = "Programación / Diseño de niveles: Damian Garnica\r\nQA /Testing: Franco Larosa\r\nArte: Joaquín Minolli Rodríguez\r\nProgramación: Mauricio Benevento / Santiago Formento";
 
     }
     public void MandoVEScreen()
