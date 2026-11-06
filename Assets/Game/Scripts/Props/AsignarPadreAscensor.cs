@@ -14,11 +14,11 @@ public class AsignarPadreAscensor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        /*if (other.CompareTag("Player"))
         {
 
             other.transform.SetParent(ascensor.transform, false);
-            /*other.transform.SetParent(transform);
+            other.transform.SetParent(transform);
 
             // Si el player tiene un script de movimiento, le avisamos en qué ascensor está
             // Reemplaza "ScriptMovimientoPlayer" por el nombre REAL de tu script de movimiento
@@ -26,13 +26,13 @@ public class AsignarPadreAscensor : MonoBehaviour
             if (controladorPlayer != null)
             {
                 controladorPlayer.SetAscensorActivo(ascensor);
-            }*/
-        }
+            }
+        }*/
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        /*if (other.CompareTag("Player"))
         {
             other.transform.SetParent(null);
 
@@ -41,6 +41,6 @@ public class AsignarPadreAscensor : MonoBehaviour
             {
                 controladorPlayer.SetAscensorActivo(null);
             }
-        }
+        }*/
     }
 }

@@ -31496,8 +31496,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.021
-  far clip plane: 5000
+  near clip plane: 0.19
+  far clip plane: 500
   field of view: 40
   orthographic: 0
   orthographic size: 10
@@ -31525,7 +31525,7 @@ Transform:
   m_GameObject: {fileID: 374909292}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -166.45264, y: 289.29016, z: -669.87384}
+  m_LocalPosition: {x: 276.1391, y: -1.88356, z: -354.35922}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -115292,8 +115292,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
   NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
   PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 0.4
-  FrequencyGain: 0.65
+  AmplitudeGain: 0.5
+  FrequencyGain: 0.3
   m_NoiseOffsets: {x: 358.64563, y: 441.96863, z: -355.28577}
 --- !u!114 &1071822681
 MonoBehaviour:
@@ -115308,8 +115308,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
-    Enabled: 0
-    m_Value: 0
+    Enabled: 1
+    m_Value: 10
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
@@ -115321,10 +115321,10 @@ MonoBehaviour:
   Lens:
     FieldOfView: 40
     OrthographicSize: 10
-    NearClipPlane: 0.021
-    FarClipPlane: 5000
+    NearClipPlane: 0.19
+    FarClipPlane: 500
     Dutch: 0
-    ModeOverride: 2
+    ModeOverride: 0
     PhysicalProperties:
       GateFit: 2
       SensorSize: {x: 21.946, y: 16.002}
@@ -115347,7 +115347,7 @@ Transform:
   m_GameObject: {fileID: 1071822675}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -442.59174, y: 291.1737, z: -315.51462}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

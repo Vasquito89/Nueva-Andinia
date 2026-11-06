@@ -60,8 +60,7 @@ namespace NuevaAndinia.Gameplay
         }
         private void Start()
         {
-            InputProvider _input = FindFirstObjectByType<InputProvider>();
-            _input.SetCursorState(false);
+            
             weatherManager.SetActive(false);
             NivelUiDocument.enabled = false;
             worldTimeSystem.enabled = false;
@@ -80,6 +79,8 @@ namespace NuevaAndinia.Gameplay
 
             CharacterController controller = playerInstance.GetComponent<CharacterController>();
             if (controller != null) { controller.enabled = false; }
+            InputProvider _input = playerInstance.GetComponent<InputProvider>();
+            _input.SetCursorState(false);
 
 
             SetupTimelineBindings(playerInstance);

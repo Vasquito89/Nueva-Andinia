@@ -1344,7 +1344,7 @@ GameObject:
   - component: {fileID: 1084325849307456996}
   m_Layer: 0
   m_Name: Player 1
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1428,7 +1428,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29a1d23f41d07146be7776a323de3cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarterAssets.Movement.ThirdPersonController
+  CinemachineCameraTarget: {fileID: 0}
+  TopClamp: 70
+  BottomClamp: -30
+  CameraAngleOverride: 0
+  LockCameraPosition: 0
   rotationSmoothTime: 0.35
+  speedChangeRate: 10
+  groundedOffset: 0.25
+  groundedRadius: 0.28
   groundLayers:
     serializedVersion: 2
     m_Bits: 8
@@ -1500,6 +1508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StarterAssets.Inputs.InputProvider
   cursorLocked: 1
   cursorInputForLook: 1
+  playerInput: {fileID: 0}
 --- !u!114 &102689001056029221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1547,6 +1556,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   cameraTransform: {fileID: 7865552496043553189}
+  uiGameObject: {fileID: 0}
   uiDocument: {fileID: 0}
 --- !u!114 &1084325849307456996
 MonoBehaviour:
