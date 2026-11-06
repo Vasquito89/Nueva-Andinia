@@ -3,29 +3,42 @@
 namespace NuevaAndinia.Movement
 {
     using NuevaAndinia.Animation;
-    using NuevaAndinia.Audio;
     using NuevaAndinia.Controller;
-    using NuevaAndinia.Core;
-    using NuevaAndinia.Defeat;
     using NuevaAndinia.Gameplay;
     using NuevaAndinia.Inputs;
     using System.Collections;
-    using Unity.Cinemachine;
     using UnityEngine.UIElements;
 
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement : MonoBehaviour
     {
+        [Header("Cinemachine")]
+        [Tooltip("El objetivo de seguimiento configurado en la Cinemachine Virtual Camera al cual seguirá la cámara")]
+        public GameObject CinemachineCameraTarget;
+
+        [Tooltip("¿Cuántos grados se puede mover la cámara hacia arriba?")]
+        public float TopClamp = 70.0f;
+
+        [Tooltip("¿Cuántos grados se puede inclinar la cámara hacia abajo?")]
+        public float BottomClamp = -30.0f;
+
+        [Tooltip("Grados adicionales para ajustar la posición de la cámara. Útil para realizar ajustes precisos en la posición de la cámara cuando esta se encuentra bloqueada.")]
+        public float CameraAngleOverride = 0.0f;
+
+        [Tooltip("Para bloquear la posición de la cámara en todos los ejes.")]
+        public bool LockCameraPosition = false;
+
+        private float _cinemachineTargetYaw;
+        private float _cinemachineTargetPitch;
+        private const float _threshold = 0.01f;
+
         [Header("Movement Configuration")]
         private float moveSpeed = 2.0f;  // caminar
-        //private float runSpeed = 3.5f;         // correr
         private float sprintSpeed = 5.335f;  // sprint
-        private float runHoldThreshold = 0.25f; // tiempo para pasar de caminar a correr
         private float moveHoldTime = 0f;
-        private Vector3 _currentMoveVelocity;
 
         [Range(0.0f, 1.0f)][SerializeField] private float rotationSmoothTime = 0.35f;
-        private float speedChangeRate = 10.0f;
+        [SerializeField] private float speedChangeRate = 10.0f;
 
         [Header("Jump & Gravity")]
         private float jumpHeight = 1.2f;
@@ -35,15 +48,15 @@ namespace NuevaAndinia.Movement
 
 
         [Header("Ground Check")]
-        private float groundedOffset = 0.25f;
-        private float groundedRadius = 0.28f;
+        [SerializeField] private float groundedOffset = 0.25f;
+        [SerializeField] private float groundedRadius = 0.28f;
         [SerializeField] private LayerMask groundLayers;
 
         private InputProvider _input;
         private PersonAnimationController _anim;
         private PlayerController _playerController;
         private CharacterController _controller;
-        private CinemachineCamera _mainCamera;
+        private Camera _mainCamera;
 
         private UIDocument uiDocument;
         private VisualElement rootVisualElement;
@@ -65,28 +78,37 @@ namespace NuevaAndinia.Movement
 
         private void Awake()
         {
+            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<InputProvider>();
             _anim = GetComponent<PersonAnimationController>();
             _playerController = GetComponent<PlayerController>();
 
-            _mainCamera = GetComponentInChildren<CinemachineCamera>();
+            _mainCamera = Camera.main;
         }
         private void OnEnable()
         {
             GameObject uiGameObject = GameObject.Find("NivelUIDocument");
-            uiDocument = uiGameObject.GetComponent<UIDocument>();
-            rootVisualElement = uiDocument.rootVisualElement;
-            if (rootVisualElement != null)
+            if (uiGameObject != null)
             {
-                Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
+                uiDocument = uiGameObject.GetComponent<UIDocument>();
+                if (uiDocument != null)
+                {
+                    rootVisualElement = uiDocument.rootVisualElement;
+                    if (rootVisualElement != null)
+                    {
+                        Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
+                    }
+                }
             }
-
         }
         private void Start()
         {
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
+
+            _input.SetCursorState(false);
         }
 
         private void Update()
@@ -95,23 +117,49 @@ namespace NuevaAndinia.Movement
             HandleJumpAndGravity();
             HandleMovement();
         }
+        private void LateUpdate()
+        {
+            CameraRotation();
+        }
+        private void CameraRotation()
+        {
+            if (CinemachineCameraTarget == null) return;
 
+            // si hay input de look y la posición de la cámara no está bloqueada
+            if (_input.LookInput.sqrMagnitude >= _threshold && !LockCameraPosition)
+            {
+                // No multiplicar mouse input por Time.deltaTime
+                float deltaTimeMultiplier = _input.IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+
+                _cinemachineTargetYaw += _input.LookInput.x * deltaTimeMultiplier;
+                _cinemachineTargetPitch += _input.LookInput.y * deltaTimeMultiplier;
+            }
+
+            // Clampear rotaciones en 360 grados
+            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+
+            // Asignar rotación al target que sigue Cinemachine
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
+                _cinemachineTargetYaw, 0.0f);
+        }
+
+        private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+        {
+            if (lfAngle < -360f) lfAngle += 360f;
+            if (lfAngle > 360f) lfAngle -= 360f;
+            return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
         private void GroundedCheck()
         {
-            Vector3 spherePos = new Vector3(
-                transform.position.x,
-                transform.position.y - groundedOffset,
-                transform.position.z);
+            Vector3 spherePos = new Vector3( transform.position.x, transform.position.y - groundedOffset, transform.position.z);
 
-            IsGrounded = Physics.CheckSphere(
-                spherePos,
-                groundedRadius,
-                groundLayers,
-                QueryTriggerInteraction.Ignore);
+            IsGrounded = Physics.CheckSphere( spherePos, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
             _anim?.SetGrounded(IsGrounded);
             //Debug.Log("Grounded = " + IsGrounded);
         }
+
         private void HandleMovement()
         {
             Vector2 moveInput = _input.MoveInput;
@@ -125,13 +173,9 @@ namespace NuevaAndinia.Movement
             float inputMagnitude = moveInput.magnitude;
 
             // Suavizado de aceleración/desaceleración
-            if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-                currentHorizontalSpeed > targetSpeed + speedOffset)
+            if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
             {
-                _speed = Mathf.Lerp(
-                    currentHorizontalSpeed,
-                    targetSpeed * inputMagnitude,
-                    Time.deltaTime * speedChangeRate);
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * speedChangeRate);
 
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
@@ -140,10 +184,7 @@ namespace NuevaAndinia.Movement
                 _speed = targetSpeed;
             }
 
-            _animationBlend = Mathf.Lerp(
-                _animationBlend,
-                targetSpeed,
-                Time.deltaTime * speedChangeRate);
+            _animationBlend = Mathf.Lerp( _animationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
 
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
@@ -160,11 +201,7 @@ namespace NuevaAndinia.Movement
                     _targetRotation += _mainCamera.transform.eulerAngles.y;
                 }
 
-                float rotation = Mathf.SmoothDampAngle(
-                    transform.eulerAngles.y,
-                    _targetRotation,
-                    ref _rotationVelocity,
-                    rotationSmoothTime);
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, rotationSmoothTime);
 
                 // Rotar al personaje hacia la dirección donde apunta la cámara + input
                 transform.rotation = Quaternion.Euler(0f, rotation, 0f);
@@ -181,8 +218,7 @@ namespace NuevaAndinia.Movement
             }
 
             // 4. Aplicar el movimiento final
-            Vector3 movementDelta = targetDirection.normalized * (_speed * windModifier * Time.deltaTime) + 
-                new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime;
+            Vector3 movementDelta = targetDirection.normalized * (_speed * windModifier * Time.deltaTime) + new Vector3(0f, _verticalVelocity, 0f) * Time.deltaTime;
 
             if (_ascensorActivo != null)
             {
@@ -196,7 +232,6 @@ namespace NuevaAndinia.Movement
         private float GetTargetSpeed()
         {
             Vector2 moveInput = _input.MoveInput;
-            float targetSpeed;
 
             // si no hay input → no se mueve
             if (moveInput == Vector2.zero)
@@ -209,13 +244,9 @@ namespace NuevaAndinia.Movement
             moveHoldTime += Time.deltaTime;
 
             // 1) caminar
-             targetSpeed = moveSpeed;
+            float targetSpeed = moveSpeed;
              Debug.Log("Caminando");
             
-
-            // 2) correr (si mantiene apretado)
-            //if (moveHoldTime >= runHoldThreshold)
-            //targetSpeed = runSpeed;
 
             // 3) sprint (si presiona la tecla)
 
@@ -263,8 +294,10 @@ namespace NuevaAndinia.Movement
         }
         public void Death()
         {
-            _playerController.vida = 0;
-            //_playerController.energy = 0;
+            if (_playerController != null) _playerController.vida = 0;
+
+            _input.SetCursorState(true);
+
             _anim?.SetDeath(true);
             Debug.Log("se ejecuto la animacion");
             StartCoroutine(DeathSeg());

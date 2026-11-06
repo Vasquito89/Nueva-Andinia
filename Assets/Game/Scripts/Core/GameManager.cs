@@ -34,6 +34,9 @@ namespace NuevaAndinia.Gameplay
         [SerializeField] private InputActionAsset inputActions;
         private InputAction volverAction;
 
+        [Header("Camara")]
+        [SerializeField] private CinemachineCameraPlayer cinemachineCamera;
+
 
         private GameObject playerInstance;
         private Vector3 positionPlayer;
@@ -118,8 +121,13 @@ namespace NuevaAndinia.Gameplay
             {
                 minimapCam.SetTarget(instance.transform);
             }
-
-            return instance;
+            Transform targetObj = instance.transform.Find("PlayerInteractable");
+            //CinemachineCamera cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
+            if (cinemachineCamera != null)
+            {
+                cinemachineCamera.SetTarget(targetObj.transform);
+            }
+                return instance;          
         }
         private void ActivateGame()
         {
