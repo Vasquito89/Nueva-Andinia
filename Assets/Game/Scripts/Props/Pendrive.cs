@@ -4,16 +4,23 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Pendrive : MonoBehaviour , IInteractable
+public class Pendrive : MonoBehaviour
 {
-    [SerializeField] private UIDocument uiDocument;
-    private string mensajePrompt = "Presiona [Q] para agarrar";
-    private float timePendrive = 2f;
     private bool agarrado = false;
+    private void Start()
+    {
+        PlayerController player = FindFirstObjectByType<PlayerController>();
+        if (!agarrado && player.CanUsePendrive())
+        {
+            agarrado = true;
+            player.RecogerPendrive(); // Agarro el pendrive
+            Debug.Log("Pendrive recogido exitosamente.");
+            //Destroy(gameObject);          // Destruccion del pendrive de escena
+        }
+    }
 
-    public string GetInteractPrompt() => mensajePrompt;
 
-    public void Interact(PlayerController player)
+    /*public void Interact(PlayerController player)
     {
         // Validamos si el jugador tiene agua lista para usar
         if (!agarrado && player.CanUsePendrive())
@@ -23,5 +30,5 @@ public class Pendrive : MonoBehaviour , IInteractable
             Debug.Log("Pendrive recogido exitosamente.");
             Destroy(gameObject);          // Destruccion del pendrive de escena
         }
-    }
+    }*/
 }
