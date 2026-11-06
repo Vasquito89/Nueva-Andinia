@@ -176626,6 +176626,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9141498245154989028, guid: f71087e924b3d7f4989e0d3d5969dc4e, type: 3}
   m_PrefabInstance: {fileID: 1724975027}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1727564839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1727564841}
+  - component: {fileID: 1727564840}
+  m_Layer: 0
+  m_Name: CommanderSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1727564840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727564839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412170e80dffde54b8b5a4105852a2c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommanderSpawner
+  commanderPrefab: {fileID: 8077866472920805402, guid: 65a499791b8c87d40a8fe4ceac02cd43, type: 3}
+  spawnPoint: {fileID: 1727564841}
+  player: {fileID: 0}
+--- !u!4 &1727564841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727564839}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -46.41288, y: -0.00002, z: 179.12851}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1728790672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -235130,3 +235177,4 @@ SceneRoots:
   - {fileID: 153151269}
   - {fileID: 1670945032}
   - {fileID: 139171522}
+  - {fileID: 1727564841}

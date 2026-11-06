@@ -43,4 +43,8 @@ public class CommanderAI : MonoBehaviour
             animator.SetBool(animationParameter, isMoving);
         }
     }
+    public void SetTarget(Transform target)
+    {
+        player = target;
+    }
 }
