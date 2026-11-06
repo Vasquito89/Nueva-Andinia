@@ -108,7 +108,7 @@ namespace NuevaAndinia.Movement
             _jumpTimeoutDelta = jumpTimeout;
             _fallTimeoutDelta = fallTimeout;
 
-            _input.SetCursorState(false);
+            
         }
 
         private void Update()
@@ -194,13 +194,8 @@ namespace NuevaAndinia.Movement
             // 2. Si hay input, rotamos al personaje relativo a la orientación de la cámara
             if (moveInput != Vector2.zero)
             {
-                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
-
-                if (_mainCamera != null)
-                {
-                    _targetRotation += _mainCamera.transform.eulerAngles.y;
-                }
-
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
+                
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, rotationSmoothTime);
 
                 // Rotar al personaje hacia la dirección donde apunta la cámara + input
