@@ -1,4 +1,5 @@
 using NuevaAndinia.Controller;
+using NuevaAndinia.Inputs;
 using NuevaAndinia.Movement;
 using System;
 using System.Collections;
@@ -59,6 +60,8 @@ namespace NuevaAndinia.Gameplay
         }
         private void Start()
         {
+            InputProvider _input = FindFirstObjectByType<InputProvider>();
+            _input.SetCursorState(false);
             weatherManager.SetActive(false);
             NivelUiDocument.enabled = false;
             worldTimeSystem.enabled = false;
@@ -135,6 +138,10 @@ namespace NuevaAndinia.Gameplay
             {
                 cinematicDirector.Stop();
             }
+
+            // --- OCULTAR Y BLOQUEAR EL CURSOR ---
+            UnityEngine.Cursor.visible = false;
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
 
 
             //playerInstance.transform.SetParent(null, true);
