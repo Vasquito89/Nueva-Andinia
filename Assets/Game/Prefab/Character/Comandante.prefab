@@ -102,9 +102,10 @@ GameObject:
   - component: {fileID: 8002988720872297871}
   - component: {fileID: 6989249034495760214}
   - component: {fileID: 3909116854466982708}
+  - component: {fileID: -8926073394305670652}
   m_Layer: 0
   m_Name: Comandante
-  m_TagString: Untagged
+  m_TagString: EnemyFinal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,6 +194,23 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &-8926073394305670652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077866472920805402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9d972d144e056c4c91287c3543a04a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CommanderAI
+  player: {fileID: 0}
+  agent: {fileID: 0}
+  animator: {fileID: 0}
+  stoppingDistance: 2
+  animationParameter: isRunning
 --- !u!1001 &819450274302084193
 PrefabInstance:
   m_ObjectHideFlags: 0
