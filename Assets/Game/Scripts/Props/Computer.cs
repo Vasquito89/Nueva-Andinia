@@ -12,6 +12,10 @@ public class Computer : MonoBehaviour, IInteractable
 
     [Header("Sonido de Alarma")]
     [SerializeField] private AudioSource alarmaSound;
+
+    [Header("Enemigo Final")]
+    [SerializeField] private CommanderSpawner commanderSpawner;
+
     private UIDocument computerUiDocument;
     private VisualElement root;
     private Label detailLbl;
@@ -74,6 +78,10 @@ public class Computer : MonoBehaviour, IInteractable
         if (alarmaSound != null)
         {
             alarmaSound.Play();
+        }
+        if(commanderSpawner != null)
+        {
+            commanderSpawner.SpawnCommander();
         }
         yield return new WaitForSeconds(time);
         Debug.Log("¡Proceso finalizado!");
