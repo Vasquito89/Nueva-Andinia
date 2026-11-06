@@ -94,6 +94,7 @@ public class SpawnCinematic02 : MonoBehaviour
 
             if (usbPlayer != null)
             {
+                Instantiate(usbPlayer, playerPosition, playerRotation);
                 usbPlayer.transform.SetParent(player.transform);
                 usbPlayer.SetActive(false);
             }

@@ -52,7 +52,8 @@ public class NpcController : MonoBehaviour
         // Si la velocidad actual del agente es mayor a 0.1, le dice al Animator que camine
         if (animator != null)
         {
-            bool isMoving = AI.velocity.magnitude > 0.1f;
+            //bool isMoving = AI.velocity.magnitude > 0.1f;
+            bool isMoving = true;
             animator.SetBool(animationParameter, isMoving);
         }
     }
