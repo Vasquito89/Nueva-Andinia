@@ -23,11 +23,22 @@ namespace NuevaAndinia.Inputs
         public bool NumeroDosRequested { get; private set; }
         public bool NumeroCeroRequested { get; private set; }
 
+        public bool IsCurrentDeviceMouse { get; private set; }
+
+        [SerializeField] private PlayerInput playerInput;
+
         private float sprintHoldTime = 0f;
-        private const float sprintThreshold = 0.25f; // tiempo para activar sprint
+        private const float sprintThreshold = 0.25f;
 
         private bool sprintButtonDown = false;
 
+        private void Awake()
+        {
+            if (playerInput == null)
+            {
+                playerInput = GetComponent<PlayerInput>();
+            }
+        }
 
         private void Start()
         {
@@ -42,7 +53,10 @@ namespace NuevaAndinia.Inputs
 
         public void OnLook(InputValue value)
         {
-            LookInput = value.Get<Vector2>();
+            if (cursorInputForLook)
+            {
+                LookInput = value.Get<Vector2>();
+            }
         }
 
         public void OnJump(InputValue value)
@@ -60,26 +74,32 @@ namespace NuevaAndinia.Inputs
                 SprintRequested = false;
             }
         }
+
         public void OnAgarrar(InputValue value)
         {
             AgarrarRequested = value.Get<float>() > 0.5f;
         }
+
         public void OnDatos(InputValue value)
         {
             DatosRequested = value.Get<float>() > 0.5f;
         }
+
         public void OnPuerta(InputValue value)
         {
             PuertaRequested = value.Get<float>() > 0.5f;
         }
+
         public void OnNumeroUno(InputValue value)
         {
             NumeroUnoRequested = value.Get<float>() > 0.5f;
         }
+
         public void OnNumeroDos(InputValue value)
         {
             NumeroDosRequested = value.Get<float>() > 0.5f;
         }
+
         public void OnNumeroCero(InputValue value)
         {
             NumeroCeroRequested = value.Get<float>() > 0.5f;
@@ -87,6 +107,11 @@ namespace NuevaAndinia.Inputs
 
         private void Update()
         {
+            if (playerInput != null)
+            {
+                IsCurrentDeviceMouse = playerInput.currentControlScheme == "Keyboard&Mouse";
+            }
+
             if (sprintButtonDown)
             {
                 sprintHoldTime += Time.deltaTime;
@@ -96,13 +121,8 @@ namespace NuevaAndinia.Inputs
             }
         }
 
-        public void ConsumeJump()
-        {
-            JumpRequested = false;
-        }
-        public void ConsumeSprint()
-        { SprintRequested = false; }
-
+        public void ConsumeJump() { JumpRequested = false; }
+        public void ConsumeSprint() { SprintRequested = false; }
         public void ConsumeAgarrar() { AgarrarRequested = false; }
         public void ConsumeDatos() { DatosRequested = false; }
         public void ConsumePuerta() { PuertaRequested = false; }
@@ -110,14 +130,10 @@ namespace NuevaAndinia.Inputs
         public void ConsumeNumeroDos() { NumeroDosRequested = false; }
         public void ConsumeNumeroCero() { NumeroCeroRequested = false; }
 
-        private void OnApplicationFocus(bool hasFocus)
+        public void SetCursorState(bool newState)
         {
-            SetCursorState(cursorLocked);
-        }
-
-        private void SetCursorState(bool newState)
-        {
-            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.lockState = newState ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = !newState;
         }
     }
 }

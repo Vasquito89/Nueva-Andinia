@@ -16,8 +16,9 @@ public class PlayerInteraction : MonoBehaviour
     private IInteractable _currentInteractable;
 
     // UI Toolkit
+    [SerializeField] private GameObject uiGameObject;
     [SerializeField] private UIDocument uiDocument;
-    private Label _promptLabel;
+    [SerializeField] private Label _promptLabel;
 
     private InputProvider _input;
 
@@ -31,33 +32,26 @@ public class PlayerInteraction : MonoBehaviour
         _gameManager = FindAnyObjectByType<GameManager>();
     }
 
-    /*private void OnEnable()
-    {
-        if (uiDocument == null) uiDocument = FindFirstObjectByType<UIDocument>();
-        if (uiDocument != null && uiDocument.rootVisualElement != null)
-        {
-            _promptLabel = uiDocument.rootVisualElement.Q<Label>("PromptLabel");
-            HidePrompt();
-        }
-    }*/
-
     private void Update()
     {
-        if (uiDocument == null) uiDocument = FindFirstObjectByType<UIDocument>();
+        uiGameObject = GameObject.Find("NivelUIDocument");
+        if (uiGameObject != null) uiDocument = uiGameObject.GetComponent<UIDocument>();
         if (uiDocument != null && uiDocument.rootVisualElement != null)
         {
             _promptLabel = uiDocument.rootVisualElement.Q<Label>("PromptLabel");
             HidePrompt();
         }
-        businessRaycast();
+        BusinessRaycast();
         if (_input.AgarrarRequested || _input.DatosRequested || _input.PuertaRequested || _input.NumeroUnoRequested || _input.NumeroDosRequested || _input.NumeroCeroRequested)
         {
             OnInteractInput();
         }
     }
 
-    private void businessRaycast()
+    private void BusinessRaycast()
     {
+        if (cameraTransform == null) return;
+
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
         Debug.DrawRay(cameraTransform.position, cameraTransform.forward * reachDistance, Color.green);
 
