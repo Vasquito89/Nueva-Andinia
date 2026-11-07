@@ -22,5 +22,11 @@
             <ui:Label text="Has ganado!" style="font-size: 31px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); width: 200px; height: 50px; position: absolute; top: 118px; left: 360px;"/>
             <ui:Button text="Aceptar" name="AceptarButton" style="position: absolute; width: 200px; height: 50px; font-size: 32px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); top: 453px; left: 647px;"/>
         </ui:VisualElement>
+        <ui:VisualElement name="AscensorPanel" style="flex-grow: 1; display: none;">
+            <ui:Label text="SELECCIONAR PISO" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); font-size: 50px; position: absolute; top: 49px; left: 807px;"/>
+            <ui:Button text="0 - Planta Baja" name="Piso0Button" style="font-size: 42px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); position: absolute; top: 150px; left: 851px;"/>
+            <ui:Button text="1 - Primer Piso" name="Piso1Button" style="font-size: 42px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); position: absolute; top: 238px; left: 851px;"/>
+            <ui:Button text="2 - Segundo Piso" name="Piso2Button" style="font-size: 42px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/BebasNeue-Regular.ttf?fileID=12800000&amp;guid=e92794c5e8db32e469836442938636dc&amp;type=3#BebasNeue-Regular&quot;); position: absolute; top: 323px; left: 851px;"/>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

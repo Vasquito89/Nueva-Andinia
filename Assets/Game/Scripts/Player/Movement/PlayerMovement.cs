@@ -27,8 +27,8 @@ namespace NuevaAndinia.Movement
 
         [Tooltip("Para bloquear la posición de la cámara en todos los ejes.")]
         public bool LockCameraPosition = false;
+        public bool InvertY = false;
 
-        private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
         private const float _threshold = 0.01f;
 
@@ -78,8 +78,6 @@ namespace NuevaAndinia.Movement
 
         private void Awake()
         {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<InputProvider>();
             _anim = GetComponent<PersonAnimationController>();
@@ -125,30 +123,20 @@ namespace NuevaAndinia.Movement
         {
             if (CinemachineCameraTarget == null) return;
 
-            // si hay input de look y la posición de la cámara no está bloqueada
-            if (_input.LookInput.sqrMagnitude >= _threshold && !LockCameraPosition)
+            // Solo input vertical (se ignora LookInput.x)
+            if (Mathf.Abs(_input.LookInput.y) >= _threshold && !LockCameraPosition)
             {
-                // No multiplicar mouse input por Time.deltaTime
                 float deltaTimeMultiplier = _input.IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float yInput = InvertY ? -_input.LookInput.y : _input.LookInput.y;
 
-                _cinemachineTargetYaw += _input.LookInput.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.LookInput.y * deltaTimeMultiplier;
+                _cinemachineTargetPitch += yInput * deltaTimeMultiplier;
             }
 
-            // Clampear rotaciones en 360 grados
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            _cinemachineTargetPitch = Mathf.Clamp(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-            // Asignar rotación al target que sigue Cinemachine
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
-        }
-
-        private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
-        {
-            if (lfAngle < -360f) lfAngle += 360f;
-            if (lfAngle > 360f) lfAngle -= 360f;
-            return Mathf.Clamp(lfAngle, lfMin, lfMax);
+            // Rotación LOCAL: solo pitch. El yaw lo hereda del Player (padre).
+            CinemachineCameraTarget.transform.localRotation =
+                Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, 0.0f, 0.0f);
         }
         private void GroundedCheck()
         {

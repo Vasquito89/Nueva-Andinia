@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2219233255714284620}
   - component: {fileID: -579609961569764867}
   - component: {fileID: 9082018358809483613}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: pc_monitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,6 +129,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Computer
   connectedToServer: 0
+  alarmaSound: {fileID: 0}
+  commanderSpawner: {fileID: 0}
+  acercamiento: 5.5
+  velocidadCamara: 3
 --- !u!1 &4873613642238922217
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8135238839443125798}
   - component: {fileID: 4581349085708129195}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

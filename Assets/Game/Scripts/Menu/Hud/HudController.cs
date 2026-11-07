@@ -22,10 +22,10 @@ public class HudController : MonoBehaviour
         uiDocument = GetComponent<UIDocument>();
     }
 
-    private void OnEnable()
+    /*private void OnEnable()
     {
         RefreshUIReferences();
-    }
+    }*/
     private void Update()
     {
         // Si la referencia del player aún no fue vinculada, la buscamos

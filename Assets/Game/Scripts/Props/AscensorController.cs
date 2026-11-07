@@ -1,4 +1,6 @@
+using NuevaAndinia.Movement;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AscensorController : MonoBehaviour
 {
@@ -91,6 +93,35 @@ public class AscensorController : MonoBehaviour
             // El ascensor se detiene exactamente en el piso de destino
             estaMoviendose = false;
             audioSource.Stop();
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        //PlayerMovement player = other.GetComponent<PlayerMovement>();
+
+        /*if (player != null)
+        {
+            player.SetAscensorActivo(this);
+        }*/
+        if (other.CompareTag("Player"))
+        {
+
+            other.transform.SetParent(gameObject.transform, false);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        /*PlayerMovement player = other.GetComponent<PlayerMovement>();
+
+        if (player != null)
+        {
+            player.SetAscensorActivo(null);
+        }*/
+        if (other.CompareTag("Player"))
+        {
+
+            other.transform.SetParent(null);
         }
     }
 }
