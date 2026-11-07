@@ -1,3 +1,4 @@
+using NuevaAndinia.Controller;
 using NuevaAndinia.Gameplay;
 using UnityEngine;
 using UnityEngine.AI;
@@ -17,13 +18,27 @@ public class EnemyAI : MonoBehaviour
     [Header("Persecución")]
     public float chaseSpeed = 4f;
     public float patrolSpeed = 2f;
+    [Tooltip("Segundos que sigue buscando al player en su última posición conocida después de perderlo de vista")]
+    public float loseSightDuration = 3f;
+
+    [Header("Ataque")]
+    [Tooltip("Distancia al player a la que el guardia le hace daño (el prefab no tiene collider, así que se mide por distancia)")]
+    public float attackRange = 1.2f;
+    public int attackDamage = 20;
 
     private Transform player;
+    private PlayerController playerController;
     private NavMeshAgent agent;
     private bool playerDetected = false;
     private Transform patrolTarget;
     private Vector3 lastPatrolDestination;
     private float nextPlayerSearchTime;
+
+    // Memoria: dónde y cuándo vio al player por última vez
+    private Vector3 lastKnownPlayerPosition;
+    private float lastSeenTime = float.NegativeInfinity;
+    private bool searchPathPending;
+    private bool patrolResumeNeeded;
 
     private const float PlayerSearchInterval = 1f;
     private const float PatrolRepathThreshold = 0.5f;
@@ -37,6 +52,9 @@ public class EnemyAI : MonoBehaviour
     {
         // Reiniciar estado al reactivarse desde el pool
         playerDetected = false;
+        lastSeenTime = float.NegativeInfinity;
+        searchPathPending = false;
+        patrolResumeNeeded = false;
         if (agent != null)
         {
             agent.speed = patrolSpeed;
@@ -67,6 +85,9 @@ public class EnemyAI : MonoBehaviour
         if (playerObject != null)
         {
             player = playerObject.transform;
+            playerController = playerObject.GetComponentInParent<PlayerController>();
+            if (playerController == null)
+                playerController = playerObject.GetComponentInChildren<PlayerController>();
         }
     }
 
@@ -94,10 +115,20 @@ public class EnemyAI : MonoBehaviour
         }
 
         DetectPlayer();
+        TryAttackPlayer();
 
         if (playerDetected)
         {
+            lastKnownPlayerPosition = player.position;
+            lastSeenTime = Time.time;
+            searchPathPending = true;
+            patrolResumeNeeded = true;
             ChasePlayer();
+        }
+        else if (Time.time - lastSeenTime < loseSightDuration)
+        {
+            // Lo perdió de vista hace poco: va a la última posición donde lo vio
+            SearchLastKnownPosition();
         }
         else if (patrolTarget != null && agent.isOnNavMesh)
         {
@@ -112,8 +143,11 @@ public class EnemyAI : MonoBehaviour
             float arriveDistance = agent.stoppingDistance + PatrolRepathThreshold;
             bool needsPath = !agent.hasPath && !agent.pathPending
                              && (transform.position - patrolTarget.position).sqrMagnitude > arriveDistance * arriveDistance;
-            if (needsPath || waypointMoved)
+            // Al terminar una persecución/búsqueda el agente todavía tiene el camino
+            // hacia el player, así que hay que mandarlo de vuelta al waypoint explícitamente.
+            if (needsPath || waypointMoved || patrolResumeNeeded)
             {
+                patrolResumeNeeded = false;
                 SetPatrolDestination();
             }
         }
@@ -165,6 +199,33 @@ public class EnemyAI : MonoBehaviour
             agent.SetDestination(player.position);
         }
     }
+    // Daño por cercanía. La cadencia la controla la invulnerabilidad del PlayerController
+    // (un golpe por intervalo), así que se puede llamar en cada frame.
+    private void TryAttackPlayer()
+    {
+        if (playerController == null) return;
+
+        if ((player.position - transform.position).sqrMagnitude <= attackRange * attackRange)
+        {
+            playerController.RecibirDano(attackDamage);
+        }
+    }
+
+    private void SearchLastKnownPosition()
+    {
+        if (!agent.isOnNavMesh) return;
+
+        agent.speed = ApplyWind(chaseSpeed);
+
+        // El destino se fija una sola vez al perderlo; si llega antes de que
+        // termine el tiempo, espera ahí (y puede volver a verlo).
+        if (searchPathPending)
+        {
+            searchPathPending = false;
+            agent.SetDestination(lastKnownPlayerPosition);
+        }
+    }
+
     private float ApplyWind(float baseSpeed)
     {
         if (WindTimeController.Instance == null || agent.velocity.sqrMagnitude < 0.1f)
@@ -177,8 +238,19 @@ public class EnemyAI : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
+        Gizmos.color = new Color(1f, 0.5f, 0f);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+
         Vector3 origin = transform.position + Vector3.up * eyeHeight;
         Gizmos.color = Color.red;
         Gizmos.DrawRay(origin, transform.forward * detectionRange);
+
+        // Última posición conocida del player mientras lo está buscando
+        if (Application.isPlaying && Time.time - lastSeenTime < loseSightDuration)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(lastKnownPlayerPosition, 0.5f);
+            Gizmos.DrawLine(transform.position, lastKnownPlayerPosition);
+        }
     }
 }

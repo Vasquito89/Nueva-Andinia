@@ -142,13 +142,6 @@ public class DesertorController : MonoBehaviour
         desertorAnimation.SetAnimation("Idle");
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            RecibirDano(20);
-        }
-    }
 
     public void RecibirDano(int cantidad)
     {
