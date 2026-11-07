@@ -77,10 +77,12 @@ public class SpawnCinematic02 : MonoBehaviour
         CharacterController controller = player.GetComponent<CharacterController>();
         PlayerInteraction playerInteraction = player.GetComponent<PlayerInteraction>();
         PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+        CinemachineCamera playerCamera = player.GetComponentInChildren<CinemachineCamera>();
 
         if (controller != null) { controller.enabled = isActive; }
         if (playerInteraction != null) { playerInteraction.enabled = isActive; }
         if (playerMovement != null) { playerMovement.enabled = isActive; }
+        if (playerCamera != null) { playerCamera.enabled = isActive; }
     }
 
     IEnumerator StartGame()

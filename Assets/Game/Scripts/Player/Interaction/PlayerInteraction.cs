@@ -31,8 +31,7 @@ public class PlayerInteraction : MonoBehaviour
         _input = GetComponent<InputProvider>();
         _gameManager = FindAnyObjectByType<GameManager>();
     }
-
-    private void Update()
+    private void OnEnable()
     {
         uiGameObject = GameObject.Find("NivelUIDocument");
         if (uiGameObject != null) uiDocument = uiGameObject.GetComponent<UIDocument>();
@@ -41,6 +40,11 @@ public class PlayerInteraction : MonoBehaviour
             _promptLabel = uiDocument.rootVisualElement.Q<Label>("PromptLabel");
             HidePrompt();
         }
+    }
+
+    private void Update()
+    {
+        
         BusinessRaycast();
         if (_input.AgarrarRequested || _input.DatosRequested || _input.PuertaRequested || _input.NumeroUnoRequested || _input.NumeroDosRequested || _input.NumeroCeroRequested)
         {
