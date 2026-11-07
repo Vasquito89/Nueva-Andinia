@@ -14,6 +14,12 @@ public class EnemySpawner : MonoBehaviour
     [Tooltip("Puntos a donde irán los guardias instanciados")]
     public Transform[] waypoints;
 
+    [Header("Ajuste al suelo")]
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float raycastAltura = 20f;
+    [SerializeField] private float raycastDistanciaMax = 100f;
+    [SerializeField] private float sampleRadius = 3.0f;
+
     private List<GameObject> enemyPool = new List<GameObject>();
     private bool hasSpawned = false; // Evita que spawnee múltiples veces seguidas si no se desea
 
@@ -51,6 +57,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < waypoints.Length; i++)
         {
+            Vector3 spawnPos = CalculateValidSpawnPoint(waypoints[i].position);
+
             GameObject guardia = GetGuardiaFromPool(waypoints[i].position);
 
             // Le asignamos el destino particular a cada guardia
@@ -68,18 +76,20 @@ public class EnemySpawner : MonoBehaviour
         {
             if (!enemy.activeInHierarchy)
             {
+                // PRIMERO: Posicionar el Transform
+                enemy.transform.position = spawnPosition;
+                enemy.transform.rotation = Quaternion.identity;
+
+                // SEGUNDO: Activar el GameObject
+                enemy.SetActive(true);
+
+                // TERCERO: Mover el NavMeshAgent mediante Warp (con el objeto activo)
                 NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
                 if (agent != null)
                 {
                     agent.Warp(spawnPosition);
                 }
-                else
-                {
-                    enemy.transform.position = spawnPosition;
-                }
 
-                enemy.transform.rotation = Quaternion.identity;
-                enemy.SetActive(true);
                 return enemy;
             }
         }
@@ -88,5 +98,27 @@ public class EnemySpawner : MonoBehaviour
         GameObject newEnemy = Instantiate(guardiaPrefab, spawnPosition, Quaternion.identity);
         enemyPool.Add(newEnemy);
         return newEnemy;
+    }
+    private Vector3 CalculateValidSpawnPoint(Vector3 originPos)
+    {
+        // Proyectar Raycast hacia abajo
+        Vector3 groundedPos = GetGroundedPoint(originPos.x, originPos.y, originPos.z);
+
+        // Ajustar exactamente a la superficie del NavMesh más cercana
+        if (NavMesh.SamplePosition(groundedPos, out NavMeshHit hit, sampleRadius, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+
+        return groundedPos;
+    }
+    private Vector3 GetGroundedPoint(float x, float alturaReferencia, float z)
+    {
+        Vector3 origen = new Vector3(x, alturaReferencia + raycastAltura, z);
+
+        if (Physics.Raycast(origen, Vector3.down, out RaycastHit hit, raycastDistanciaMax, groundMask))
+            return hit.point;
+
+        return new Vector3(x, alturaReferencia, z);
     }
 }
