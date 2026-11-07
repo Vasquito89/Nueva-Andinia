@@ -118,7 +118,8 @@ namespace NuevaAndinia.Gameplay
                 return 1f - Mathf.Abs(alignment) * penalty;
             }
 
-            return 0.2f;
+            // A favor del viento no hay penalizacion (antes devolvia 0.2 = 20% de velocidad)
+            return 1f;
         }
     }
 }

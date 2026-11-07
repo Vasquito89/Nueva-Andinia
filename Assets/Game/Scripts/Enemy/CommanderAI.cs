@@ -25,7 +25,10 @@ public class CommanderAI : MonoBehaviour
         if (player == null)
         {
             GameObject playerInstance = GameObject.FindGameObjectWithTag("Player");
-            player = playerInstance.transform;
+            if (playerInstance != null)
+                player = playerInstance.transform;
+            else
+                Debug.LogWarning("CommanderAI: no se encontró ningún objeto con tag Player; se puede asignar con SetTarget.", this);
         }
     }
 
@@ -38,8 +41,7 @@ public class CommanderAI : MonoBehaviour
         agent.SetDestination(player.position);
         if (animator != null)
         {
-            //bool isMoving = AI.velocity.magnitude > 0.1f;
-            bool isMoving = true;
+            bool isMoving = agent.velocity.sqrMagnitude > 0.01f;
             animator.SetBool(animationParameter, isMoving);
         }
     }

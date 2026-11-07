@@ -59,7 +59,7 @@ public class EnemySpawner : MonoBehaviour
         {
             Vector3 spawnPos = CalculateValidSpawnPoint(waypoints[i].position);
 
-            GameObject guardia = GetGuardiaFromPool(waypoints[i].position);
+            GameObject guardia = GetGuardiaFromPool(spawnPos);
 
             // Le asignamos el destino particular a cada guardia
             EnemyAI enemyAI = guardia.GetComponent<EnemyAI>();
