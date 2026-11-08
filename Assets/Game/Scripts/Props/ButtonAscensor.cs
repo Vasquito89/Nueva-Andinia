@@ -56,7 +56,7 @@ public class ButtonAscensor : MonoBehaviour, IInteractable
             playerMovement.enabled = false;
 
         // Liberamos el cursor.
-        inputProvider?.SetCursorState(true);
+        inputProvider.SetCursorState(true);
 
         // Mostramos el menú.
         hud.style.display = DisplayStyle.None;
@@ -77,7 +77,7 @@ public class ButtonAscensor : MonoBehaviour, IInteractable
             playerMovement.enabled = true;
 
         // Bloqueamos nuevamente el cursor.
-        inputProvider?.SetCursorState(false);
+        inputProvider.SetCursorState(false);
 
         Debug.Log($"Destino seleccionado: {piso}");
     }

@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 129.50587, y: 3.0716403, z: -44.306213}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2954893502336867244}
@@ -44,8 +44,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 969498002264986816}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 4350b309aa35d8241b5a918441629bdc, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7d93bbad76fd39145ab6a9143712dd69, type: 2}
+  m_Avatar: {fileID: 9000000, guid: 07cfd655bf23cbc409ab05c4e0d2d549, type: 3}
+  m_Controller: {fileID: 9100000, guid: c3d84c7063e166d41b79a45ba509ccd8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9aa403afcce28747b55330f08f0ce79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NpcController
-  AI: {fileID: 0}
+  AI: {fileID: 4803962807099843633}
   velocity: 2
   objectives:
   - {fileID: 0}

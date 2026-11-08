@@ -1,3 +1,4 @@
+using NuevaAndinia.Inputs;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.HID;
@@ -24,16 +25,12 @@ public class VictoriaScreen : MonoBehaviour
     private VisualElement Hud;
     //private VideoPlayer victoryVideo;
     private Button aceptarButton;
-    
+
+    private InputProvider inputProvider;
+
     private void OnEnable()
-    {    
-        rootVisualElement = uiDocument.rootVisualElement;
-        Victoria = rootVisualElement.Q<VisualElement>("VictoriaVE");
-        Hud = rootVisualElement.Q<VisualElement>("HUDVE");
-
-        aceptarButton = rootVisualElement.Q<Button>("AceptarButton");
-
-        aceptarButton.clicked += QuitToMainMenu;
+    {
+        OnVIctoria();
     }
     private void Update()
     {
@@ -74,6 +71,8 @@ public class VictoriaScreen : MonoBehaviour
     }
     private void Win()
     {
+        OnVIctoria();
+
         victoryAchieved = true;
 
         Debug.Log("¡VICTORIA!");
@@ -85,7 +84,7 @@ public class VictoriaScreen : MonoBehaviour
         {
             agent.isStopped = true;
         }
-
+        inputProvider.SetCursorState(true);
         // Mostrar pantalla de victoria
         if (uiDocument != null)
         {
@@ -93,5 +92,15 @@ public class VictoriaScreen : MonoBehaviour
         }
         // Congelar el juego
         Time.timeScale = 0f;
+    }
+    private void OnVIctoria()
+    {
+        rootVisualElement = uiDocument.rootVisualElement;
+        Victoria = rootVisualElement.Q<VisualElement>("VictoriaVE");
+        Hud = rootVisualElement.Q<VisualElement>("HUDVE");
+
+        aceptarButton = rootVisualElement.Q<Button>("AceptarButton");
+
+        aceptarButton.clicked += QuitToMainMenu;
     }
 }

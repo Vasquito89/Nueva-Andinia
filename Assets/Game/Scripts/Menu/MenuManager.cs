@@ -128,7 +128,7 @@ public class MenuManager : MonoBehaviour
         canvasGroup.alpha = 1f;
         //color.a = 1f;
         // Cargar la siguiente escena
-        SceneManager.LoadScene("Transicion");
+        SceneManager.LoadScene("Nivel");
     }
     public void StartOptionScene()
     {

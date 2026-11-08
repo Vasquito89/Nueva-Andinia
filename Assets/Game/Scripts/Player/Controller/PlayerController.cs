@@ -34,12 +34,13 @@ namespace NuevaAndinia.Controller
         }
         private void OnCollisionStay(Collision collision)
         {
-            if(!collision.gameObject.CompareTag("Enemy")) return;
+            if(!collision.gameObject.CompareTag("Enemy") || !collision.gameObject.CompareTag("EnemyFinal")) return;
             if (Time.time < nextDanoTime) return;
 
             nextDanoTime = Time.time + cooldownDano;
             RecibirDano(danoPorContacto);
         }
+
 
         // Métodos de verificación y acción invocados por los scripts interactuables
         public bool CanUsePendrive() => !hasPendrive; // Retorna true si NO tiene pendrive (está libre)

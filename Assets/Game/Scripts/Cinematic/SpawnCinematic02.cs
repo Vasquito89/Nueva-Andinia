@@ -96,9 +96,14 @@ public class SpawnCinematic02 : MonoBehaviour
 
             if (usbPlayer != null)
             {
-                Instantiate(usbPlayer, playerPosition, playerRotation);
-                usbPlayer.transform.SetParent(player.transform);
-                usbPlayer.SetActive(false);
+                // 1. Guardar la referencia del objeto recién creado
+                GameObject spawnedPlayer = Instantiate(usbPlayer, playerPosition, playerRotation);
+
+                // 2. Asignar el padre
+                spawnedPlayer.transform.SetParent(player.transform);
+
+                // 3. Modificar la escala a 0.1 en los tres ejes (x, y, z)
+                spawnedPlayer.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             }
         }
         else
