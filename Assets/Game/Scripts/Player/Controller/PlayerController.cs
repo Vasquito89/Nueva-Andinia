@@ -14,6 +14,11 @@ namespace NuevaAndinia.Controller
         [Tooltip("Segundos de invulnerabilidad despues de recibir un golpe")]
         [SerializeField] private float invulnerabilityTime = 1f;
 
+        [Header("Daño por contacto")]
+        public int danoPorContacto = 20;
+        public float cooldownDano = 0.5f;
+        private float nextDanoTime;
+
         private bool hasPendrive = false;
         private float nextDamageTime;
 
@@ -29,10 +34,11 @@ namespace NuevaAndinia.Controller
         }
         private void OnCollisionStay(Collision collision)
         {
-            if(collision.gameObject.CompareTag("Enemy"))
-            {
-                RecibirDano(20);
-            }
+            if(!collision.gameObject.CompareTag("Enemy")) return;
+            if (Time.time < nextDanoTime) return;
+
+            nextDanoTime = Time.time + cooldownDano;
+            RecibirDano(danoPorContacto);
         }
 
         // Métodos de verificación y acción invocados por los scripts interactuables

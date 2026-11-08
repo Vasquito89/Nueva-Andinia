@@ -14,33 +14,19 @@ public class AsignarPadreAscensor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        /*if (other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
 
-            other.transform.SetParent(ascensor.transform, false);
-            other.transform.SetParent(transform);
-
-            // Si el player tiene un script de movimiento, le avisamos en qué ascensor está
-            // Reemplaza "ScriptMovimientoPlayer" por el nombre REAL de tu script de movimiento
-            var controladorPlayer = other.GetComponent<PlayerMovement>();
-            if (controladorPlayer != null)
-            {
-                controladorPlayer.SetAscensorActivo(ascensor);
-            }
-        }*/
+            other.transform.SetParent(gameObject.transform, false);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        /*if (other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            other.transform.SetParent(null);
 
-            var controladorPlayer = other.GetComponent<PlayerMovement>();
-            if (controladorPlayer != null)
-            {
-                controladorPlayer.SetAscensorActivo(null);
-            }
-        }*/
+            other.transform.SetParent(null);
+        }
     }
 }
