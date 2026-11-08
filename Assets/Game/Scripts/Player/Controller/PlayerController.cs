@@ -11,8 +11,16 @@ namespace NuevaAndinia.Controller
     {
         [Header("Player Stats & Water")]
         public int vida = 100;
+        [Tooltip("Segundos de invulnerabilidad despues de recibir un golpe")]
+        [SerializeField] private float invulnerabilityTime = 1f;
+
+        [Header("Daño por contacto")]
+        public int danoPorContacto = 20;
+        public float cooldownDano = 0.5f;
+        private float nextDanoTime;
 
         private bool hasPendrive = false;
+        private float nextDamageTime;
 
         private InputProvider _input;
         private PlayerMovement _playerMovement;
@@ -26,10 +34,11 @@ namespace NuevaAndinia.Controller
         }
         private void OnCollisionStay(Collision collision)
         {
-            if(collision.gameObject.CompareTag("Enemy"))
-            {
-                RecibirDano(20);
-            }
+            if(!collision.gameObject.CompareTag("Enemy")) return;
+            if (Time.time < nextDanoTime) return;
+
+            nextDanoTime = Time.time + cooldownDano;
+            RecibirDano(danoPorContacto);
         }
 
         // Métodos de verificación y acción invocados por los scripts interactuables
@@ -41,11 +50,20 @@ namespace NuevaAndinia.Controller
         public void ConsumirPendrive() => hasPendrive = false;
 
 
-        private void RecibirDano(int cantidad)
+        public void RecibirDano(int cantidad)
         {
+            // Ya muerto (por golpes o por otra causa): no seguir llamando a Death()
+            if (vida <= 0) return;
+
+            // OnCollisionStay se ejecuta en cada paso de fisica: sin esta ventana
+            // de invulnerabilidad el player perdia 20 de vida cada ~0.02 s.
+            if (Time.time < nextDamageTime) return;
+            nextDamageTime = Time.time + invulnerabilityTime;
+
             vida -= cantidad;
             if (vida <= 0)
             {
+                vida = 0;
                 _playerMovement.Death();
             }
             

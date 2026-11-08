@@ -11,31 +11,67 @@ public class NpcController : MonoBehaviour
     private Transform objective;
 
     [Header("Animaciones (Sistema Moderno)")]
-    // Cambiamos 'Animation' por el componente moderno 'Animator'
     [SerializeField] private Animator animator;
 
-    // Usamos el nombre del parámetro que crees en tu Animator Controller (ej: "isWalking" o "Speed")
+    // Nombre del parametro en tu Animator Controller (ej: "isWalking" o "Speed")
     [SerializeField] private string animationParameter = "isWalking";
+
+    private void Awake()
+    {
+        if (AI == null) AI = GetComponent<NavMeshAgent>();
+    }
 
     private void Start()
     {
-        // Validación para evitar NullReferenceException si te olvidás de arrastrar el Animator
         if (animator == null)
         {
             animator = GetComponent<Animator>();
         }
 
-        objective = objectives[Random.Range(0, objectives.Length)];
+        // Si el spawner ya llamo a Initialize(), no se pisa el objetivo.
+        if (objective == null)
+        {
+            PickNewObjective();
+        }
+    }
+
+    /// <summary>
+    /// Lo llama el NpcSpawner justo despues de instanciar al NPC.
+    /// </summary>
+    public void Initialize(Transform[] newObjectives)
+    {
+        objectives = newObjectives;
+        PickNewObjective();
+    }
+
+    private void PickNewObjective()
+    {
+        if (objectives == null || objectives.Length == 0) return;
+
+        // Evita repetir el mismo objetivo si hay mas de uno.
+        Transform next = objectives[Random.Range(0, objectives.Length)];
+        if (objectives.Length > 1)
+        {
+            int safety = 10;
+            while (next == objective && safety-- > 0)
+            {
+                next = objectives[Random.Range(0, objectives.Length)];
+            }
+        }
+
+        objective = next;
     }
 
     private void Update()
     {
+        if (objective == null || AI == null || !AI.isOnNavMesh) return;
+
         // 1. Control del movimiento y objetivos
         distance = Vector3.Distance(transform.position, objective.position);
 
         if (distance < 2)
         {
-            objective = objectives[Random.Range(0, objectives.Length)];
+            PickNewObjective();
         }
 
         AI.destination = objective.position;
@@ -48,12 +84,10 @@ public class NpcController : MonoBehaviour
 
         AI.speed = speed;
 
-        // 2. Control automático de la animación basado en si el NavMesh Agent se está moviendo
-        // Si la velocidad actual del agente es mayor a 0.1, le dice al Animator que camine
+        // 2. Animacion
         if (animator != null)
         {
-            //bool isMoving = AI.velocity.magnitude > 0.1f;
-            bool isMoving = true;
+            bool isMoving = AI.velocity.sqrMagnitude > 0.01f;
             animator.SetBool(animationParameter, isMoving);
         }
     }

@@ -10,6 +10,12 @@ public class EnemySpawner : MonoBehaviour
     public GameObject guardiaPrefab;
     public int initialPoolSize = 5;
 
+    [Header("Punto de Aparición")]
+    [Tooltip("Dónde aparecen los guardias antes de caminar a sus waypoints. Si queda vacío, se usa la posición de este spawner.")]
+    public Transform spawnPoint;
+    [Tooltip("Radio en el que se reparten los guardias alrededor del punto de aparición para que no aparezcan superpuestos")]
+    public float spawnSpread = 1.5f;
+
     [Header("Puntos de Destino de los Guardias")]
     [Tooltip("Puntos a donde irán los guardias instanciados")]
     public Transform[] waypoints;
@@ -55,11 +61,19 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
+        Vector3 spawnCenter = spawnPoint != null ? spawnPoint.position : transform.position;
+
         for (int i = 0; i < waypoints.Length; i++)
         {
-            Vector3 spawnPos = CalculateValidSpawnPoint(waypoints[i].position);
+            // Repartir a los guardias en círculo alrededor del punto de aparición
+            float angle = i * Mathf.PI * 2f / waypoints.Length;
+            Vector3 offset = waypoints.Length > 1
+                ? new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * spawnSpread
+                : Vector3.zero;
 
-            GameObject guardia = GetGuardiaFromPool(waypoints[i].position);
+            Vector3 spawnPos = CalculateValidSpawnPoint(spawnCenter + offset);
+
+            GameObject guardia = GetGuardiaFromPool(spawnPos);
 
             // Le asignamos el destino particular a cada guardia
             EnemyAI enemyAI = guardia.GetComponent<EnemyAI>();

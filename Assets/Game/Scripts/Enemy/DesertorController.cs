@@ -91,14 +91,7 @@ public class DesertorController : MonoBehaviour
         agent.stoppingDistance = chaseStoppingDistance;
         agent.SetDestination(player.position);
 
-        if (agent.velocity.sqrMagnitude > 0.1f)
-        {
-            desertorAnimation.SetAnimation("Walk");
-        }
-        else
-        {
-            desertorAnimation.SetAnimation("Idle");
-        }
+        UpdateMoveAnimation();
     }
 
     void Patrol()
@@ -122,7 +115,19 @@ public class DesertorController : MonoBehaviour
             SetNextWaypointDestination();
         }
 
-        desertorAnimation.SetAnimation("Walk");
+        UpdateMoveAnimation();
+    }
+
+    void UpdateMoveAnimation()
+    {
+        if (agent.velocity.sqrMagnitude > 0.1f)
+        {
+            desertorAnimation.SetAnimation("Walk");
+        }
+        else
+        {
+            desertorAnimation.SetAnimation("Idle");
+        }
     }
 
     void SetNextWaypointDestination()
@@ -137,13 +142,6 @@ public class DesertorController : MonoBehaviour
         desertorAnimation.SetAnimation("Idle");
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            RecibirDano(20);
-        }
-    }
 
     public void RecibirDano(int cantidad)
     {
@@ -160,7 +158,7 @@ public class DesertorController : MonoBehaviour
     }
     private float GetWindSpeed()
     {
-        if (agent.velocity.sqrMagnitude < 0.1f)
+        if (WindTimeController.Instance == null || agent.velocity.sqrMagnitude < 0.1f)
             return speed;
 
         return speed * WindTimeController.Instance.GetSpeedModifier(agent.velocity.normalized);
