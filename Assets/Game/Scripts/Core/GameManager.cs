@@ -1,4 +1,5 @@
 using NuevaAndinia.Controller;
+using NuevaAndinia.Defeat;
 using NuevaAndinia.Inputs;
 using NuevaAndinia.Movement;
 using System;
@@ -20,6 +21,7 @@ namespace NuevaAndinia.Gameplay
         [SerializeField] private GameObject weatherManager;
         [SerializeField] private UIDocument NivelUiDocument;
         [SerializeField] private WorldTimeSystem worldTimeSystem;
+        [SerializeField] private VictoriaScreen victory;
 
         [Header("Cinemática y Director")]
         [SerializeField] private GameObject cinematic01;
@@ -158,12 +160,15 @@ namespace NuevaAndinia.Gameplay
             playerInstance.transform.SetPositionAndRotation(positionPlayerM, rotationPlayerM);
 
             HudController hud = NivelUiDocument.GetComponent<HudController>();
+            DefeatScreen def = NivelUiDocument.GetComponent<DefeatScreen>();
             if (hud != null && playerInstance != null)
             {
                 PlayerController pController = playerInstance.GetComponent<PlayerController>();
                 if (pController != null)
                 {
                     hud.InitializeHUD(pController);
+                    def.DefeatMenu();
+                    victory.VictoriaMenu();
                 }
                 PlayerInteraction playerInteraction = FindFirstObjectByType<PlayerInteraction>();
                 if (playerInteraction != null) { playerInteraction.enabled = true; }

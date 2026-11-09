@@ -1,10 +1,8 @@
 using NuevaAndinia.Inputs;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem.HID;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using UnityEngine.Video;
 
 public class VictoriaScreen : MonoBehaviour
 {
@@ -14,93 +12,148 @@ public class VictoriaScreen : MonoBehaviour
     [Header("Enemigo")]
     [SerializeField] private Transform commander;
 
-    [Header("Configuracion")]
-    [SerializeField] private float victoryDistance = 10f;
-
-    private bool playerInZone = false;
-    private bool victoryAchieved = false;
-
-    private VisualElement rootVisualElement;
-    private VisualElement Victoria;
-    private VisualElement Hud;
-    //private VideoPlayer victoryVideo;
-    private Button aceptarButton;
-
+    [Header("Player")]
+    private GameObject playerObj;
     private InputProvider inputProvider;
 
-    private void OnEnable()
+    [Header("Configuracion")]
+    [SerializeField] private float victoryDistance = 10f;
+    [SerializeField] private float distance;
+
+    [SerializeField] private bool playerInZone = false;
+    [SerializeField] private bool victoryAchieved = false;
+
+    private VisualElement rootVisualElement;
+    private VisualElement victoriaVE;
+    private VisualElement hudVE;
+    private Button aceptarButton;
+
+    private void OnDisable()
     {
-        OnVIctoria();
+        // Limpiar el evento para evitar fugas de memoria o múltiples clics
+        if (aceptarButton != null)
+        {
+            aceptarButton.clicked -= QuitToMainMenu;
+        }
     }
+
     private void Update()
     {
-        if (commander = null)
+        // 1. Buscar referencias si aún no existen
+        if (commander == null)
         {
-            GameObject commnaderVanko = GameObject.FindGameObjectWithTag("EnemyFinal");
-            commander = commnaderVanko.transform;
+            GameObject commanderVanko = GameObject.FindGameObjectWithTag("EnemyFinal");
+            if (commanderVanko != null)
+            {
+                commander = commanderVanko.transform;
+            }
         }
-        if (!playerInZone || victoryAchieved || commander == null)
-            return;
 
-        // Comprobar distancia entre jugador y comandante
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player == null)
-            return;
-
-        float distance = Vector3.Distance(player.transform.position, commander.position);
-
-        // Comprobar condicion de victoria
-        if (distance <= victoryDistance || playerInZone == true)
+        if (playerObj == null)
         {
-            Win();
+            playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                // Obtener el InputProvider del jugador de forma segura
+                inputProvider = playerObj.GetComponent<InputProvider>();
+            }
+        }
+        if (playerObj != null && commander != null)
+        {
+            // 2. Comprobar si debemos verificar la distancia
+            if (!playerInZone || victoryAchieved || commander == null || playerObj == null)
+                return;
+
+            // 3. Comprobar distancia real entre el jugador y el comandante dentro de la zona
+            distance = Vector3.Distance(playerObj.transform.position, commander.position);
+
+            if (distance >= victoryDistance)
+            {
+                Win();
+            }
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playerInZone = true;
-
         }
     }
-    private void QuitToMainMenu()
+
+    private void OnTriggerExit(Collider other)
     {
-        Time.timeScale = 1f; // Restablecer siempre el tiempo antes de cambiar de escena
-        SceneManager.LoadScene("Menu");
+        if (other.CompareTag("Player"))
+        {
+            playerInZone = false;
+        }
     }
+
     private void Win()
     {
-        OnVIctoria();
-
         victoryAchieved = true;
-
         Debug.Log("¡VICTORIA!");
 
         // Detener al comandante
-        NavMeshAgent agent = commander.GetComponent<NavMeshAgent>();
+        if (commander != null)
+        {
+            NavMeshAgent agent = commander.GetComponent<NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.isStopped = true;
+            }
+        }
 
-        if (agent != null)
+        // Liberar el cursor si tenemos la referencia del InputProvider
+        if (inputProvider != null)
         {
-            agent.isStopped = true;
+            inputProvider.SetCursorState(true);
         }
-        inputProvider.SetCursorState(true);
-        // Mostrar pantalla de victoria
-        if (uiDocument != null)
+        else
         {
-            Victoria.style.display = DisplayStyle.Flex;
+            // Fallback por si no tiene el componente InputProvider
+            UnityEngine.Cursor.visible = true;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
         }
-        // Congelar el juego
+
+        // Mostrar la ventana de victoria y ocultar el HUD si aplica
+        if (victoriaVE != null)
+        {
+            victoriaVE.style.display = DisplayStyle.Flex;
+        }
+        if (hudVE != null)
+        {
+            hudVE.style.display = DisplayStyle.None;
+        }
+
+        // Congelar el tiempo del juego
         Time.timeScale = 0f;
     }
-    private void OnVIctoria()
+    public void VictoriaMenu()
     {
-        rootVisualElement = uiDocument.rootVisualElement;
-        Victoria = rootVisualElement.Q<VisualElement>("VictoriaVE");
-        Hud = rootVisualElement.Q<VisualElement>("HUDVE");
+        // Inicializar la UI de manera segura en Start
+        if (uiDocument != null)
+        {
+            rootVisualElement = uiDocument.rootVisualElement;
+            if (rootVisualElement != null)
+            {
+                victoriaVE = rootVisualElement.Q<VisualElement>("VictoriaVE");
+                hudVE = rootVisualElement.Q<VisualElement>("HUDVE");
+                aceptarButton = rootVisualElement.Q<Button>("AceptarButton");
 
-        aceptarButton = rootVisualElement.Q<Button>("AceptarButton");
+                if (aceptarButton != null)
+                {
+                    aceptarButton.clicked += QuitToMainMenu;
+                }
+            }
+        }
+        else { Debug.Log("No encuentro uiDocument"); }
+    }
 
-        aceptarButton.clicked += QuitToMainMenu;
+    private void QuitToMainMenu()
+    {
+        Time.timeScale = 1f; // Restablecer el tiempo antes de cambiar de escena
+        SceneManager.LoadScene("Menu");
     }
 }

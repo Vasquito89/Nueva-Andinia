@@ -35,7 +35,7 @@ public class AscensorController : MonoBehaviour
         transform.position = posicionPlantaBaja.position;
         posicionObjetivo = posicionPlantaBaja.position;
 
-        if(audioSource != null ) {audioSource.Play();}
+        //if(audioSource != null ) {audioSource.Play();}
     }
 
     void LateUpdate()

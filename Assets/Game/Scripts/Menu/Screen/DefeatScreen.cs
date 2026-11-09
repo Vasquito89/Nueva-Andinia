@@ -16,19 +16,26 @@ namespace NuevaAndinia.Defeat
         {
             uiDocument = GetComponent<UIDocument>();
         }
-        private void OnEnable()
-        {
-            rootVisualElement = uiDocument.rootVisualElement;
-            pauseVE = rootVisualElement.Q<VisualElement>("PauseVE");
-            Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
-            menuButton = rootVisualElement.Q<Button>("MenuButton");
-
-            menuButton.clicked += QuitToMainMenu;
-        }
+        
         private void QuitToMainMenu()
         {
             Time.timeScale = 1f; // Restablecer siempre el tiempo antes de cambiar de escena
             SceneManager.LoadScene("Menu");
+        }
+        public void DefeatMenu()
+        {
+            if (uiDocument != null || menuButton != null)
+            {
+                rootVisualElement = uiDocument.rootVisualElement;
+                Derrota = rootVisualElement.Q<VisualElement>("DerrotaVE");
+                menuButton = rootVisualElement.Q<Button>("MenuButton");
+
+                if (menuButton != null) menuButton.clicked += QuitToMainMenu; else { Debug.Log("No encontre el boton"); }
+            }
+            else
+            {
+                Debug.Log("No encontre uidocument");
+            }
         }
     }
 }

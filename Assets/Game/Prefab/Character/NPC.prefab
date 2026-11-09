@@ -3904,7 +3904,7 @@ MonoBehaviour:
   velocity: 2
   objectives: []
   distance: 2
-  animator: {fileID: 3495334312958286269}
+  animator: {fileID: 8273887998926375954}
   animationParameter: isWalking
 --- !u!54 &1968117061629975730
 Rigidbody:

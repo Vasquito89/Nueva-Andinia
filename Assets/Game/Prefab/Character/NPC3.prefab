@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6606003050217953408}
   - component: {fileID: 4717368089893206236}
   - component: {fileID: 6054842089301723091}
+  - component: {fileID: 491708571241119386}
   m_Layer: 12
   m_Name: NPC3
   m_TagString: Untagged
@@ -134,6 +135,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &491708571241119386
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8099524840996129854}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!1001 &3674884421099330055
 PrefabInstance:
   m_ObjectHideFlags: 0
