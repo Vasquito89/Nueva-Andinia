@@ -29,6 +29,8 @@ public class EnemyAI : MonoBehaviour
     private Transform player;
     private PlayerController playerController;
     private NavMeshAgent agent;
+    private Animator animator;
+
     private bool playerDetected = false;
     private Transform patrolTarget;
     private Vector3 lastPatrolDestination;
@@ -43,9 +45,14 @@ public class EnemyAI : MonoBehaviour
     private const float PlayerSearchInterval = 1f;
     private const float PatrolRepathThreshold = 0.5f;
 
+    // Parámetros de animación (hashes para optimización)
+    private static readonly int IsWalkingHash = Animator.StringToHash("isWalking");
+    private static readonly int IsRunningHash = Animator.StringToHash("isRunning");
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -150,6 +157,34 @@ public class EnemyAI : MonoBehaviour
                 patrolResumeNeeded = false;
                 SetPatrolDestination();
             }
+        }
+        UpdateAnimations();
+    }
+    private void UpdateAnimations()
+    {
+        if (animator == null) return;
+
+        // Determinar si se está moviendo activamente
+        float currentSpeed = agent.velocity.magnitude;
+        bool isMoving = agent.isOnNavMesh && currentSpeed > 0.1f && agent.remainingDistance > agent.stoppingDistance;
+
+        if (!isMoving)
+        {
+            // Idle
+            animator.SetBool(IsWalkingHash, false);
+            animator.SetBool(IsRunningHash, false);
+        }
+        else if (playerDetected || Time.time - lastSeenTime < loseSightDuration)
+        {
+            // Persecución / Búsqueda -> Running
+            animator.SetBool(IsWalkingHash, true);
+            animator.SetBool(IsRunningHash, true);
+        }
+        else
+        {
+            // Patrullaje -> Walking
+            animator.SetBool(IsWalkingHash, true);
+            animator.SetBool(IsRunningHash, false);
         }
     }
 

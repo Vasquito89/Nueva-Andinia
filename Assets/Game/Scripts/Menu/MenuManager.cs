@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static Navigation;
@@ -89,6 +90,9 @@ public class MenuManager : MonoBehaviour
         optionVE.style.display = DisplayStyle.None;
 
         matchButton.Focus();
+
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
     }
     public void OnExit() => Application.Quit();
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8916360036433283440}
   - component: {fileID: 1325037908267730929}
   - component: {fileID: 3522733548113009354}
+  - component: {fileID: 7796107452524990492}
   m_Layer: 6
   m_Name: Door_2A
   m_TagString: Untagged
@@ -150,6 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073c70fc73bd0004092c82e72499bf0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
+  isOpen: 0
+  openAnimationName: DoorOpen
+  closeAnimationName: DoorClose
 --- !u!95 &3522733548113009354
 Animator:
   serializedVersion: 7
@@ -172,6 +176,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!208 &7796107452524990492
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3784975644127368396}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &5843363150499777
 PrefabInstance:
   m_ObjectHideFlags: 0

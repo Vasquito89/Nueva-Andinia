@@ -133,7 +133,7 @@ namespace NuevaAndinia.Inputs
         public void SetCursorState(bool newState)
         {
             Cursor.lockState = newState ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = !newState;
+            Cursor.visible = newState;
         }
     }
 }
